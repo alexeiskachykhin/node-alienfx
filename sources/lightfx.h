@@ -4,6 +4,7 @@
 
 
 struct _LIGHTFX_API {
+    bool IsAvailable;
     LFX2INITIALIZE Initialize;
     LFX2RELEASE Release;
     LFX2RESET Reset;
