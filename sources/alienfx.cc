@@ -1,13 +1,13 @@
 #include <node.h>
 #include <v8.h>
-#include "lightfx.h"
+#include "alienfxApi.h"
 
 using namespace v8;
 
 Handle<Value> Initialize(const Arguments& args) {
     HandleScope scope;
     
-    LFX_RESULT result = LIGHTFX_API.Initialize();
+    LFX_RESULT result = ALIENFX_API.Initialize();
 
     return scope.Close(Number::New(result));
 }
@@ -15,7 +15,7 @@ Handle<Value> Initialize(const Arguments& args) {
 Handle<Value> Release(const Arguments& args) {
     HandleScope scope;
 
-    LFX_RESULT result = LIGHTFX_API.Release();
+    LFX_RESULT result = ALIENFX_API.Release();
 
     return scope.Close(Number::New(result));
 }
@@ -23,7 +23,7 @@ Handle<Value> Release(const Arguments& args) {
 Handle<Value> Reset(const Arguments& args) {
     HandleScope scope;
 
-    LFX_RESULT result = LIGHTFX_API.Reset();
+    LFX_RESULT result = ALIENFX_API.Reset();
 
     return scope.Close(Number::New(result));
 }
@@ -31,7 +31,7 @@ Handle<Value> Reset(const Arguments& args) {
 Handle<Value> Update(const Arguments& args) {
     HandleScope scope;
 
-    LFX_RESULT result = LIGHTFX_API.Update();
+    LFX_RESULT result = ALIENFX_API.Update();
 
     return scope.Close(Number::New(result));
 }
@@ -47,13 +47,13 @@ Handle<Value> Light(const Arguments& args) {
 
     if (!args[0]->IsUint32())
     {
-        Local<Value> exception = Exception::TypeError(String::New("First argument must be an integer"));
+        Local<Value> exception = Exception::TypeError(String::New("First argument must be an integer."));
         ThrowException(exception);
     }
 
     if (!args[1]->IsUint32())
     {
-        Local<Value> exception = Exception::TypeError(String::New("Second argument must be an integer"));
+        Local<Value> exception = Exception::TypeError(String::New("Second argument must be an integer."));
         ThrowException(exception);
     }
 
@@ -61,7 +61,7 @@ Handle<Value> Light(const Arguments& args) {
     unsigned int locationMask = args[0]->Uint32Value();
     unsigned int colorValue = args[1]->Uint32Value();
 
-    LFX_RESULT result = LIGHTFX_API.Light(locationMask, colorValue);
+    LFX_RESULT result = ALIENFX_API.Light(locationMask, colorValue);
 
     return scope.Close(Number::New(result));
 }

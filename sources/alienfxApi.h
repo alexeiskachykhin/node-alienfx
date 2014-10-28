@@ -3,7 +3,7 @@
 #include <LFX2.h>;
 
 
-struct _LIGHTFX_API {
+struct _ALIENFX_API {
     bool IsAvailable;
     LFX2INITIALIZE Initialize;
     LFX2RELEASE Release;
@@ -12,4 +12,4 @@ struct _LIGHTFX_API {
     LFX2LIGHT Light;
 };
 
-extern _LIGHTFX_API LIGHTFX_API;
+extern _ALIENFX_API ALIENFX_API;
