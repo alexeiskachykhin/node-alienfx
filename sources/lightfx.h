@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LFX2.h";
+#include <LFX2.h>;
 
 
 struct _LIGHTFX_API {
