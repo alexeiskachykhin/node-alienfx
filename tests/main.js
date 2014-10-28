@@ -1,4 +1,4 @@
-var extension = require('../build/Release/alienfx');
+var extension = require('bindings')('alienfx.node');
 
 exports.index = {
     hello: function (test) {
