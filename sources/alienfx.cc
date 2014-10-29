@@ -45,15 +45,15 @@ Handle<Value> Light(const Arguments& args) {
         ThrowException(exception);
     }
 
-    if (!args[0]->IsUint32())
+    if (!args[0]->IsNumber())
     {
-        Local<Value> exception = Exception::TypeError(String::New("First argument must be an integer."));
+        Local<Value> exception = Exception::TypeError(String::New("First argument must be a number."));
         ThrowException(exception);
     }
 
-    if (!args[1]->IsUint32())
+    if (!args[1]->IsNumber())
     {
-        Local<Value> exception = Exception::TypeError(String::New("Second argument must be an integer."));
+        Local<Value> exception = Exception::TypeError(String::New("Second argument must be a number."));
         ThrowException(exception);
     }
 
@@ -67,7 +67,7 @@ Handle<Value> Light(const Arguments& args) {
 }
 
 
-Handle<Value> CreateColorsObject() 
+Handle<Value> CreateColorsObject()
 {
     HandleScope scope;
 
@@ -86,6 +86,18 @@ Handle<Value> CreateColorsObject()
     return scope.Close(colors);
 }
 
+Handle<Value> CreateBrightnessObject()
+{
+    HandleScope scope;
+
+    Local<Object> brightness = Object::New();
+    brightness->Set(String::NewSymbol("FULL"), Number::New(LFX_FULL_BRIGHTNESS));
+    brightness->Set(String::NewSymbol("HALF"), Number::New(LFX_HALF_BRIGHTNESS));
+    brightness->Set(String::NewSymbol("MIN"), Number::New(LFX_MIN_BRIGHTNESS));
+
+    return scope.Close(brightness);
+}
+
 
 void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "initialize", Initialize);
@@ -96,6 +108,9 @@ void Init(Handle<Object> target) {
 
     Handle<Value> colors = CreateColorsObject();
     target->Set(String::NewSymbol("Colors"), colors);
+
+    Handle<Value> brightness = CreateBrightnessObject();
+    target->Set(String::NewSymbol("Brightness"), brightness);
 }
 
 NODE_MODULE(alienfx, Init)

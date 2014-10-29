@@ -47,7 +47,7 @@ exports.index = {
         extension.reset();
 
         var position = 0x07FFFFFF; // All lights
-        var color = 0xFF00FF00; // Green color + Full brightness
+        var color = extension.Colors.GREEN | extension.Brightness.FULL;
 
         extension.light(position, color);
         extension.update();
@@ -82,6 +82,19 @@ exports.index = {
         test.equal(0x00FF80FF, extension.Colors.PINK);
         test.equal(0x0000FFFF, extension.Colors.CYAN);
 
+        test.done();
+    },
+
+
+    'has brightness': function (test) {
+        test.equal('object', typeof extension.Brightness);
+        test.done();
+    },
+
+    'has predefined brightness': function (test) {
+        test.equal(0xFF000000, extension.Brightness.FULL);
+        test.equal(0x80000000, extension.Brightness.HALF);
+        test.equal(0x00000000, extension.Brightness.MIN);
         test.done();
     }
 };
