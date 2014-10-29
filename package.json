@@ -4,7 +4,7 @@
   "description": "NodeJS native extension for Dell AlienFX API.",
   "main": "index.js",
   "scripts": {
-    "test": "node ./node_modules/nodeunit/bin/nodeunit tests"
+    "test": "node ./node_modules/mocha/bin/mocha --reporter spec tests"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,8 @@
   },
   "homepage": "https://github.com/alexeiskachykhin/node-alienfx",
   "devDependencies": {
-    "nodeunit": "^0.9.0",
     "bindings": "^1.2.1",
-    "inquirer": "^0.8.0"
+    "inquirer": "^0.8.0",
+    "mocha": "^2.0.1"
   }
 }

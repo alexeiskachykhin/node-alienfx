@@ -1,100 +1,115 @@
 var extension = require('bindings')('alienfx.node');
+
+var assert = require('assert');
 var inquirer = require('inquirer');
 
-exports.index = {
-    'has initialize': function (test) {
-        test.equal('function', typeof extension.initialize);
-        test.done();
-    },
 
+describe('exports', function () {
 
-    'has release': function (test) {
-        test.equal('function', typeof extension.release);
-        test.done();
-    },
+    describe('initialize()', function () {
 
-
-    'has reset': function (test) {
-        test.equal('function', typeof extension.reset);
-        test.done();
-    },
-
-    'reset should reset the lights': function (test) {
-        extension.initialize();
-        extension.reset();
-        extension.update();
-
-        inquirer.prompt([{
-            type: 'confirm',
-            name: 'result',
-            message: 'Can you confirm that your AlienFX lights are turned off?'
-        }], function (answers) {
-            test.ok(answers.result);
-            test.done();
-
-            extension.release();
+        it('should be a function', function () {
+            assert.equal(typeof extension.initialize, 'function');
         });
-    },
+    });
 
 
-    'has light': function (test) {
-        test.equal('function', typeof extension.light);
-        test.done();
-    },
+    describe('release()', function () {
 
-    'light should color the lights': function (test) {
-        extension.initialize();
-        extension.reset();
-
-        var position = 0x07FFFFFF; // All lights
-        var color = extension.Color.GREEN | extension.Brightness.FULL;
-
-        extension.light(position, color);
-        extension.update();
-
-        inquirer.prompt([{
-            type: 'confirm',
-            name: 'result',
-            message: 'Can you confirm that your AlienFX lights are all turned green?'
-        }], function (answers) {
-            test.ok(answers.result);
-            test.done();
-
-            extension.release();
+        it('should be a function', function () {
+            assert.equal(typeof extension.release, 'function');
         });
-    },
+    });
 
 
-    'has color': function (test) {
-        test.equal('object', typeof extension.Color);
-        test.done();
-    },
+    describe('reset()', function () {
+        this.timeout(0);
 
-    'has predefined colors': function (test) {
-        test.equal(0x00000000, extension.Color.OFF);
-        test.equal(0x00000000, extension.Color.BLACK);
-        test.equal(0x00FF0000, extension.Color.RED);
-        test.equal(0x0000FF00, extension.Color.GREEN);
-        test.equal(0x000000FF, extension.Color.BLUE);
-        test.equal(0x00FFFFFF, extension.Color.WHITE);
-        test.equal(0x00FFFF00, extension.Color.YELLOW);
-        test.equal(0x00FF8000, extension.Color.ORANGE);
-        test.equal(0x00FF80FF, extension.Color.PINK);
-        test.equal(0x0000FFFF, extension.Color.CYAN);
+        it('should be a function', function () {
+            assert.equal(typeof extension.reset, 'function');
+        });
 
-        test.done();
-    },
+        it('should reset the lights', function (done) {
+            extension.initialize();
+            extension.reset();
+            extension.update();
+
+            inquirer.prompt([{
+                type: 'confirm',
+                name: 'result',
+                message: 'Can you confirm that your AlienFX lights are turned off?'
+            }], function (answers) {
+                extension.release();
+
+                assert.ok(answers.result);
+                done();
+            });
+        });
+    });
 
 
-    'has brightness': function (test) {
-        test.equal('object', typeof extension.Brightness);
-        test.done();
-    },
+    describe('light()', function () {
+        this.timeout(0);
 
-    'has predefined brightness': function (test) {
-        test.equal(0xFF000000, extension.Brightness.FULL);
-        test.equal(0x80000000, extension.Brightness.HALF);
-        test.equal(0x00000000, extension.Brightness.MIN);
-        test.done();
-    }
-};
+        it('should be a function', function () {
+            assert.equal(typeof extension.light, 'function');
+        });
+
+        it('should color the lights', function (done) {
+            extension.initialize();
+            extension.reset();
+
+            var position = 0x07FFFFFF; // All lights
+            var color = extension.Color.GREEN | extension.Brightness.FULL;
+
+            extension.light(position, color);
+            extension.update();
+
+            inquirer.prompt([{
+                type: 'confirm',
+                name: 'result',
+                message: 'Can you confirm that your AlienFX lights are all turned green?'
+            }], function (answers) {
+                extension.release();
+
+                assert.ok(answers.result);
+                done();
+            });
+        });
+    });
+
+
+    describe('Color', function () {
+
+        it('should be an object', function () {
+            assert.equal(typeof extension.Color, 'object');
+        });
+
+        it('should contain predefined colors constants', function () {
+            assert.equal(extension.Color.OFF, 0x00000000);
+            assert.equal(extension.Color.BLACK, 0x00000000);
+            assert.equal(extension.Color.RED, 0x00FF0000);
+            assert.equal(extension.Color.GREEN, 0x0000FF00);
+            assert.equal(extension.Color.BLUE, 0x000000FF);
+            assert.equal(extension.Color.WHITE, 0x00FFFFFF);
+            assert.equal(extension.Color.YELLOW, 0x00FFFF00);
+            assert.equal(extension.Color.ORANGE, 0x00FF8000);
+            assert.equal(extension.Color.PINK, 0x00FF80FF);
+            assert.equal(extension.Color.CYAN, 0x0000FFFF);
+        });
+    });
+
+
+    describe('Brightness', function () {
+
+        it('should be an object', function () {
+            assert.equal(typeof extension.Brightness, 'object');
+        });
+
+        it('should contain predefined brightness constants', function () {
+            assert.equal(extension.Brightness.FULL, 0xFF000000);
+            assert.equal(extension.Brightness.HALF, 0x80000000);
+            assert.equal(extension.Brightness.MIN, 0x00000000);
+        });
+    });
+});
