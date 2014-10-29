@@ -47,7 +47,7 @@ exports.index = {
         extension.reset();
 
         var position = 0x07FFFFFF; // All lights
-        var color = extension.Colors.GREEN | extension.Brightness.FULL;
+        var color = extension.Color.GREEN | extension.Brightness.FULL;
 
         extension.light(position, color);
         extension.update();
@@ -65,22 +65,22 @@ exports.index = {
     },
 
 
-    'has colors': function (test) {
-        test.equal('object', typeof extension.Colors);
+    'has color': function (test) {
+        test.equal('object', typeof extension.Color);
         test.done();
     },
 
     'has predefined colors': function (test) {
-        test.equal(0x00000000, extension.Colors.OFF);
-        test.equal(0x00000000, extension.Colors.BLACK);
-        test.equal(0x00FF0000, extension.Colors.RED);
-        test.equal(0x0000FF00, extension.Colors.GREEN);
-        test.equal(0x000000FF, extension.Colors.BLUE);
-        test.equal(0x00FFFFFF, extension.Colors.WHITE);
-        test.equal(0x00FFFF00, extension.Colors.YELLOW);
-        test.equal(0x00FF8000, extension.Colors.ORANGE);
-        test.equal(0x00FF80FF, extension.Colors.PINK);
-        test.equal(0x0000FFFF, extension.Colors.CYAN);
+        test.equal(0x00000000, extension.Color.OFF);
+        test.equal(0x00000000, extension.Color.BLACK);
+        test.equal(0x00FF0000, extension.Color.RED);
+        test.equal(0x0000FF00, extension.Color.GREEN);
+        test.equal(0x000000FF, extension.Color.BLUE);
+        test.equal(0x00FFFFFF, extension.Color.WHITE);
+        test.equal(0x00FFFF00, extension.Color.YELLOW);
+        test.equal(0x00FF8000, extension.Color.ORANGE);
+        test.equal(0x00FF80FF, extension.Color.PINK);
+        test.equal(0x0000FFFF, extension.Color.CYAN);
 
         test.done();
     },
