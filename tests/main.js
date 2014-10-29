@@ -62,5 +62,26 @@ exports.index = {
 
             extension.release();
         });
+    },
+
+
+    'has colors': function (test) {
+        test.equal('object', typeof extension.Colors);
+        test.done();
+    },
+
+    'has predefined colors': function (test) {
+        test.equal(0x00000000, extension.Colors.OFF);
+        test.equal(0x00000000, extension.Colors.BLACK);
+        test.equal(0x00FF0000, extension.Colors.RED);
+        test.equal(0x0000FF00, extension.Colors.GREEN);
+        test.equal(0x000000FF, extension.Colors.BLUE);
+        test.equal(0x00FFFFFF, extension.Colors.WHITE);
+        test.equal(0x00FFFF00, extension.Colors.YELLOW);
+        test.equal(0x00FF8000, extension.Colors.ORANGE);
+        test.equal(0x00FF80FF, extension.Colors.PINK);
+        test.equal(0x0000FFFF, extension.Colors.CYAN);
+
+        test.done();
     }
 };
