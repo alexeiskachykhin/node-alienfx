@@ -36,6 +36,14 @@ Handle<Value> Update(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> UpdateDefault(const Arguments& args) {
+    HandleScope scope;
+
+    LFX_RESULT result = ALIENFX_API.UpdateDefault();
+
+    return scope.Close(Number::New(result));
+}
+
 Handle<Value> Light(const Arguments& args) {
     HandleScope scope;
 
@@ -104,6 +112,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "release", Release);
     NODE_SET_METHOD(target, "reset", Reset);
     NODE_SET_METHOD(target, "update", Update);
+    NODE_SET_METHOD(target, "updateDefault", UpdateDefault);
     NODE_SET_METHOD(target, "light", Light);
 
     Handle<Value> color = CreateColorObject();

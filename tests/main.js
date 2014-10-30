@@ -79,6 +79,43 @@ describe('exports', function () {
     });
 
 
+    describe('update()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.update, 'function');
+        });
+    });
+
+    describe('updateDefault()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.updateDefault, 'function');
+        });
+
+        it('should set system power-on state', function (done) {
+            extension.initialize();
+            extension.reset();
+
+            var position = 0x07FFFFFF; // All lights
+            var color = extension.Color.RED | extension.Brightness.FULL;
+
+            extension.light(position, color);
+            extension.updateDefault();
+            extension.release();
+
+            inquirer.prompt([{
+                type: 'confirm',
+                name: 'result',
+                message: 'Can you confirm that your AlienFX lights are all turned red? (it may not work on some devices)'
+            }], function (answers) {
+                assert.ok(answers.result);
+                done();
+            });
+        });
+    });
+
+
     describe('Color', function () {
 
         it('should be an object', function () {

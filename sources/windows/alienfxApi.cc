@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "../alienfxApi.h";
+#include "../alienfxApi.h"
 
 
 _ALIENFX_API DiscoverAlienFxAPI()
@@ -15,6 +15,7 @@ _ALIENFX_API DiscoverAlienFxAPI()
         api.Release = (LFX2RELEASE)GetProcAddress(hLibrary, LFX_DLL_RELEASE);
         api.Reset = (LFX2RESET)GetProcAddress(hLibrary, LFX_DLL_RESET);
         api.Update = (LFX2UPDATE)GetProcAddress(hLibrary, LFX_DLL_UPDATE);
+        api.UpdateDefault = (LFX2UPDATEDEFAULT)GetProcAddress(hLibrary, LFX_DLL_UPDATEDEFAULT);
         api.Light = (LFX2LIGHT)GetProcAddress(hLibrary, LFX_DLL_LIGHT);
     }
 
