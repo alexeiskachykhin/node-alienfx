@@ -88,6 +88,27 @@ describe('exports: structural tests', function () {
     });
 
 
+    describe('DeviceType', function () {
+
+        it('should be an object', function () {
+            assert.equal(typeof extension.DeviceType, 'object');
+        });
+
+        it('should contain predefined device type constants', function () {
+            assert.equal(extension.DeviceType.UNKNOWN, 0x00);
+            assert.equal(extension.DeviceType.NOTEBOOK, 0x01);
+            assert.equal(extension.DeviceType.DESKTOP, 0x02);
+            assert.equal(extension.DeviceType.SERVER, 0x03);
+            assert.equal(extension.DeviceType.DISPLAY, 0x04);
+            assert.equal(extension.DeviceType.MOUSE, 0x05);
+            assert.equal(extension.DeviceType.KEYBOARD, 0x06);
+            assert.equal(extension.DeviceType.GAMEPAD, 0x07);
+            assert.equal(extension.DeviceType.SPEAKER, 0x08);
+            assert.equal(extension.DeviceType.OTHER, 0xFF);
+        });
+    });
+
+
     describe('getNumDevices()', function () {
 
         it('should be a function', function () {

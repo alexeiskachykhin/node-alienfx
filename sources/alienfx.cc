@@ -175,6 +175,25 @@ Handle<Value> CreateBrightnessObject()
     return scope.Close(brightness);
 }
 
+Handle<Value> CreateDeviceTypeObject()
+{
+    HandleScope scope;
+
+    Local<Object> deviceType = Object::New();
+    deviceType->Set(String::NewSymbol("UNKNOWN"), Number::New(LFX_DEVTYPE_UNKNOWN));
+    deviceType->Set(String::NewSymbol("NOTEBOOK"), Number::New(LFX_DEVTYPE_NOTEBOOK));
+    deviceType->Set(String::NewSymbol("DESKTOP"), Number::New(LFX_DEVTYPE_DESKTOP));
+    deviceType->Set(String::NewSymbol("SERVER"), Number::New(LFX_DEVTYPE_SERVER));
+    deviceType->Set(String::NewSymbol("DISPLAY"), Number::New(LFX_DEVTYPE_DISPLAY));
+    deviceType->Set(String::NewSymbol("MOUSE"), Number::New(LFX_DEVTYPE_MOUSE));
+    deviceType->Set(String::NewSymbol("KEYBOARD"), Number::New(LFX_DEVTYPE_KEYBOARD));
+    deviceType->Set(String::NewSymbol("GAMEPAD"), Number::New(LFX_DEVTYPE_GAMEPAD));
+    deviceType->Set(String::NewSymbol("SPEAKER"), Number::New(LFX_DEVTYPE_SPEAKER));
+    deviceType->Set(String::NewSymbol("OTHER"), Number::New(LFX_DEVTYPE_OTHER));
+
+    return scope.Close(deviceType);
+}
+
 
 void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "initialize", Initialize);
@@ -191,6 +210,9 @@ void Init(Handle<Object> target) {
 
     Handle<Value> brightness = CreateBrightnessObject();
     target->Set(String::NewSymbol("Brightness"), brightness);
+
+    Handle<Value> deviceType = CreateDeviceTypeObject();
+    target->Set(String::NewSymbol("DeviceType"), deviceType);
 }
 
 NODE_MODULE(alienfx, Init)
