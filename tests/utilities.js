@@ -1,7 +1,7 @@
 var inquirer = require('inquirer');
 
 
-function prompt(message, callback) {
+function confirmPrompt(message, callback) {
     inquirer.prompt([{
         type: 'confirm',
         name: 'result',
@@ -11,18 +11,43 @@ function prompt(message, callback) {
     });
 }
 
-function promptAboutHardware(callback) {
-    prompt('Can you confirm that your hardware is compatible with AlienFX?', callback);
+function checkboxPrompt(message, choices, callback) {
+    inquirer.prompt([{
+        type: 'checkbox',
+        name: 'result',
+        message: message,
+        choices: choices
+    }], function (answers) {
+        var result = [];
+
+        choices.forEach(function (choice, choiceIndex) {
+            result[choiceIndex] = false;
+
+            answers.result.forEach(function (answer) {
+                if (choice === answer) {
+                    result[choiceIndex] = true;
+                }
+            });
+        });
+
+        callback(result);
+    });
 }
 
+
 function promptAboutLights(color, callback) {
-    prompt('Can you confirm that your AlienFX lights are ' + color + '?', callback);
+    confirmPrompt('Can you confirm that your AlienFX lights are ' + color + '?', callback);
 }
+
+function promptAboutTests(choices, callback) {
+    checkboxPrompt('Select tests', choices, callback);
+}
+
 
 
 module.exports = exports = {
     ask: {
         lightsAre: promptAboutLights,
-        hasHardware: promptAboutHardware
+        whichTestsToRun: promptAboutTests
     }
 };

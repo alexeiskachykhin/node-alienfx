@@ -8,7 +8,7 @@ In order to debug extension in Visual Studio, open ```build/Release/binding.sln`
 | Property          | Value                                                |
 | ----------------- |------------------------------------------------------|
 | Command           | node.exe                                             |
-| Command Arguments | ./node_modules/mocha/bin/mocha --reporter spec tests |
+| Command Arguments | ./tests/all.js                                       |
 | Working Directory | $(ProjectDir)..\                                     |
 
 
