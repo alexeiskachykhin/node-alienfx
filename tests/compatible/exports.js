@@ -91,8 +91,8 @@ describe('exports: compatible hardware tests', function () {
             extension.initialize();
 
             assert.doesNotThrow(function () {
-                var number_of_devices = extension.getNumDevices();
-                console.info('Your system has %d AlienFX compatible devices.', number_of_devices);
+                var numberOfDevices = extension.getNumDevices();
+                console.info('Your system has %d AlienFX compatible devices.', numberOfDevices);
             });
 
             extension.release();
@@ -111,7 +111,6 @@ describe('exports: compatible hardware tests', function () {
 
         it('should get description of a device', function () {
             extension.initialize();
-            extension.reset();
 
             var description = extension.getDeviceDescription(0);
             console.info('Description of your system:', description);
@@ -119,6 +118,22 @@ describe('exports: compatible hardware tests', function () {
             extension.release();
 
             assert.notEqual(description, null);
+        });
+    });
+
+
+    describe('getNumLights()', function () {
+        this.timeout(0);
+
+        it('should get number of lights on a device', function () {
+            extension.initialize();
+            
+            assert.doesNotThrow(function () {
+                var numberOfLights = extension.getNumLights(0);
+                console.info('Your device has %d lights.', numberOfLights);
+            });
+
+            extension.release();
         });
     });
 });

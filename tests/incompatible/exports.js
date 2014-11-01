@@ -52,4 +52,18 @@ describe('exports: incompatible hardware tests', function () {
     describe('getDeviceDescription()', function () {
 
     });
+
+    describe('getNumLights()', function () {
+        this.timeout(0);
+
+        it('should fail if hardware not supported', function () {
+            extension.initialize();
+
+            assert.throws(function () {
+                extension.getNumLights(0);
+            }, Error);
+
+            extension.release();
+        });
+    });
 });

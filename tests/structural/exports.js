@@ -123,4 +123,12 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getDeviceDescription, 'function');
         });
     });
+
+
+    describe('getNumLights()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getNumLights, 'function');
+        });
+    });
 });

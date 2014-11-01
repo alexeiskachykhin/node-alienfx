@@ -80,10 +80,10 @@ Handle<Value> GetNumDevices(const Arguments& args)
 {
     HandleScope scope;
 
-    unsigned int number_of_devices = 0;
+    unsigned int numberOfDevices = 0;
 
 
-    LFX_RESULT result = ALIENFX_API.GetNumDevices(&number_of_devices);
+    LFX_RESULT result = ALIENFX_API.GetNumDevices(&numberOfDevices);
 
     if (result == LFX_ERROR_NOINIT)
     {
@@ -103,7 +103,7 @@ Handle<Value> GetNumDevices(const Arguments& args)
         ThrowException(exception);
     }
 
-    return scope.Close(Number::New(number_of_devices));
+    return scope.Close(Number::New(numberOfDevices));
 }
 
 Handle<Value> GetDeviceDescription(const Arguments& args)
@@ -141,6 +141,56 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
     description->Set(String::NewSymbol("type"), Number::New(deviceType));
 
     return scope.Close(description);
+}
+
+Handle<Value> GetNumLights(const Arguments& args)
+{
+    HandleScope scope;
+
+
+    if (args.Length() < 1)
+    {
+        Local<Value> exception = Exception::Error(String::New("Function expects 1 parameter."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
+        ThrowException(exception);
+    }
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int numberOfLights = 0;
+
+    LFX_RESULT result = ALIENFX_API.GetNumLights(deviceIndex, &numberOfLights);
+
+    if (result == LFX_ERROR_NOINIT)
+    {
+        Local<Value> exception = Exception::Error(String::New("AlienFX is not initialized. Call initialize() prior to accessing AlienFX functionality."));
+        ThrowException(exception);
+    }
+
+    if (result == LFX_ERROR_NODEVS)
+    {
+        Local<Value> exception = Exception::Error(String::New("There are no AlienFX devices at specified index."));
+        ThrowException(exception);
+    }
+
+    if (result == LFX_ERROR_NOLIGHTS)
+    {
+        Local<Value> exception = Exception::Error(String::New("There are no lights available at specified device index."));
+        ThrowException(exception);
+    }
+
+    if (result == LFX_FAILURE)
+    {
+        Local<Value> exception = Exception::Error(String::New("AlienFX call failed for unknown reason."));
+        ThrowException(exception);
+    }
+
+    return scope.Close(Number::New(numberOfLights));
 }
 
 
@@ -204,6 +254,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "light", Light);
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
+    NODE_SET_METHOD(target, "getNumLights", GetNumLights);
 
     Handle<Value> color = CreateColorObject();
     target->Set(String::NewSymbol("Color"), color);
