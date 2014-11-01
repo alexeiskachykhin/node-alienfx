@@ -113,7 +113,7 @@ describe('exports: compatible hardware tests', function () {
             extension.initialize();
 
             var description = extension.getDeviceDescription(0);
-            console.info('Description of your system:', description);
+            console.info('Description of a first device:', description);
 
             extension.release();
 
@@ -131,6 +131,22 @@ describe('exports: compatible hardware tests', function () {
             assert.doesNotThrow(function () {
                 var numberOfLights = extension.getNumLights(0);
                 console.info('Your device has %d lights.', numberOfLights);
+            });
+
+            extension.release();
+        });
+    });
+
+
+    describe.only('getLightDescription()', function () {
+        this.timeout(0);
+
+        it('should get description of a light', function () {
+            extension.initialize();
+
+            assert.doesNotThrow(function () {
+                var description = extension.getLightDescription(0, 0);
+                console.info('Description of first light of first device:', description);
             });
 
             extension.release();

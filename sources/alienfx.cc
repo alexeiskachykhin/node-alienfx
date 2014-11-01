@@ -129,15 +129,16 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
     unsigned char deviceType = 0;
     std::string deviceDescription(256, 0);
 
+
     LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
-        deviceIndex, 
+        deviceIndex,
         (char *)deviceDescription.c_str(),
         deviceDescription.size(), 
         &deviceType);
 
 
     Local<Object> description = Object::New();
-    description->Set(String::NewSymbol("model"), String::New((char *)deviceDescription.c_str()));
+    description->Set(String::NewSymbol("model"), String::New(deviceDescription.c_str()));
     description->Set(String::NewSymbol("type"), Number::New(deviceType));
 
     return scope.Close(description);
@@ -191,6 +192,46 @@ Handle<Value> GetNumLights(const Arguments& args)
     }
 
     return scope.Close(Number::New(numberOfLights));
+}
+
+Handle<Value> GetLightDescription(const Arguments& args)
+{
+    HandleScope scope;
+
+
+    if (args.Length() < 1)
+    {
+        Local<Value> exception = Exception::Error(String::New("Function expects 2 parameters."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[1]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
+        ThrowException(exception);
+    }
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+
+    std::string lightDescription(256, 0);
+
+
+    LFX_RESULT result = ALIENFX_API.GetLightDescription(
+        deviceIndex,
+        lightIndex,
+        (char *)lightDescription.c_str(),
+        lightDescription.size());
+
+
+    return scope.Close(String::New(lightDescription.c_str()));
 }
 
 
@@ -255,6 +296,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
+    NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
 
     Handle<Value> color = CreateColorObject();
     target->Set(String::NewSymbol("Color"), color);

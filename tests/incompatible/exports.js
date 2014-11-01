@@ -53,6 +53,7 @@ describe('exports: incompatible hardware tests', function () {
 
     });
 
+
     describe('getNumLights()', function () {
         this.timeout(0);
 
@@ -65,5 +66,10 @@ describe('exports: incompatible hardware tests', function () {
 
             extension.release();
         });
+    });
+
+
+    describe('getLightDescription()', function () {
+
     });
 });

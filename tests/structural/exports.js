@@ -131,4 +131,12 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumLights, 'function');
         });
     });
+
+
+    describe('getLightDescription()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightDescription, 'function');
+        });
+    });
 });
