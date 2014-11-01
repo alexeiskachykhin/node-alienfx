@@ -69,7 +69,7 @@ describe('exports: compatible hardware tests', function () {
             extension.initialize();
             extension.reset();
 
-            var position = 0x07FFFFFF; // All lights
+            var position = extension.Position.ALL;
             var color = extension.Color.RED | extension.Brightness.FULL;
 
             extension.light(position, color);
@@ -138,7 +138,7 @@ describe('exports: compatible hardware tests', function () {
     });
 
 
-    describe.only('getLightDescription()', function () {
+    describe('getLightDescription()', function () {
         this.timeout(0);
 
         it('should get description of a light', function () {

@@ -285,6 +285,57 @@ Handle<Value> CreateDeviceTypeObject()
     return scope.Close(deviceType);
 }
 
+Handle<Value> CreatePositionObject()
+{
+    HandleScope scope;
+
+    Local<Object> position = Object::New();
+
+    // Near Z-plane light definitions
+    position->Set(String::NewSymbol("FRONT_LOWER_LEFT"), Number::New(LFX_FRONT_LOWER_LEFT));
+    position->Set(String::NewSymbol("FRONT_LOWER_CENTER"), Number::New(LFX_FRONT_LOWER_CENTER));
+    position->Set(String::NewSymbol("FRONT_LOWER_RIGHT"), Number::New(LFX_FRONT_LOWER_RIGHT));
+    position->Set(String::NewSymbol("FRONT_MIDDLE_LEFT"), Number::New(LFX_FRONT_MIDDLE_LEFT));
+    position->Set(String::NewSymbol("FRONT_MIDDLE_CENTER"), Number::New(LFX_FRONT_MIDDLE_CENTER));
+    position->Set(String::NewSymbol("FRONT_MIDDLE_RIGHT"), Number::New(LFX_FRONT_MIDDLE_RIGHT));
+    position->Set(String::NewSymbol("FRONT_UPPER_LEFT"), Number::New(LFX_FRONT_UPPER_LEFT));
+    position->Set(String::NewSymbol("FRONT_UPPER_CENTER"), Number::New(LFX_FRONT_UPPER_CENTER));
+    position->Set(String::NewSymbol("FRONT_UPPER_RIGHT"), Number::New(LFX_FRONT_UPPER_RIGHT));
+
+    // Mid Z-plane light definitions
+    position->Set(String::NewSymbol("MIDDLE_LOWER_LEFT"), Number::New(LFX_MIDDLE_LOWER_LEFT));
+    position->Set(String::NewSymbol("MIDDLE_LOWER_CENTER"), Number::New(LFX_MIDDLE_LOWER_CENTER));
+    position->Set(String::NewSymbol("MIDDLE_LOWER_RIGHT"), Number::New(LFX_MIDDLE_LOWER_RIGHT));
+    position->Set(String::NewSymbol("MIDDLE_MIDDLE_LEFT"), Number::New(LFX_MIDDLE_MIDDLE_LEFT));
+    position->Set(String::NewSymbol("MIDDLE_MIDDLE_CENTER"), Number::New(LFX_MIDDLE_MIDDLE_CENTER));
+    position->Set(String::NewSymbol("MIDDLE_MIDDLE_RIGHT"), Number::New(LFX_MIDDLE_MIDDLE_RIGHT));
+    position->Set(String::NewSymbol("MIDDLE_UPPER_LEFT"), Number::New(LFX_MIDDLE_UPPER_LEFT));
+    position->Set(String::NewSymbol("MIDDLE_UPPER_CENTER"), Number::New(LFX_MIDDLE_UPPER_CENTER));
+    position->Set(String::NewSymbol("MIDDLE_UPPER_RIGHT"), Number::New(LFX_MIDDLE_UPPER_RIGHT));
+
+    // Far Z-plane light definitions
+    position->Set(String::NewSymbol("REAR_LOWER_LEFT"), Number::New(LFX_REAR_LOWER_LEFT));
+    position->Set(String::NewSymbol("REAR_LOWER_CENTER"), Number::New(LFX_REAR_LOWER_CENTER));
+    position->Set(String::NewSymbol("REAR_LOWER_RIGHT"), Number::New(LFX_REAR_LOWER_RIGHT));
+    position->Set(String::NewSymbol("REAR_MIDDLE_LEFT"), Number::New(LFX_REAR_MIDDLE_LEFT));
+    position->Set(String::NewSymbol("REAR_MIDDLE_CENTER"), Number::New(LFX_REAR_MIDDLE_CENTER));
+    position->Set(String::NewSymbol("REAR_MIDDLE_RIGHT"), Number::New(LFX_REAR_MIDDLE_RIGHT));
+    position->Set(String::NewSymbol("REAR_UPPER_LEFT"), Number::New(LFX_REAR_UPPER_LEFT));
+    position->Set(String::NewSymbol("REAR_UPPER_CENTER"), Number::New(LFX_REAR_UPPER_CENTER));
+    position->Set(String::NewSymbol("REAR_UPPER_RIGHT"), Number::New(LFX_REAR_UPPER_RIGHT));
+
+    // Combination bit masks
+    position->Set(String::NewSymbol("ALL"), Number::New(LFX_ALL));
+    position->Set(String::NewSymbol("ALL_RIGHT"), Number::New(LFX_ALL_RIGHT));
+    position->Set(String::NewSymbol("ALL_LEFT"), Number::New(LFX_ALL_LEFT));
+    position->Set(String::NewSymbol("ALL_UPPER"), Number::New(LFX_ALL_UPPER));
+    position->Set(String::NewSymbol("ALL_LOWER"), Number::New(LFX_ALL_LOWER));
+    position->Set(String::NewSymbol("ALL_FRONT"), Number::New(LFX_ALL_FRONT));
+    position->Set(String::NewSymbol("ALL_REAR"), Number::New(LFX_ALL_REAR));
+
+    return scope.Close(position);
+}
+
 
 void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "initialize", Initialize);
@@ -306,6 +357,9 @@ void Init(Handle<Object> target) {
 
     Handle<Value> deviceType = CreateDeviceTypeObject();
     target->Set(String::NewSymbol("DeviceType"), deviceType);
+
+    Handle<Value> position = CreatePositionObject();
+    target->Set(String::NewSymbol("Position"), position);
 }
 
 NODE_MODULE(alienfx, Init)
