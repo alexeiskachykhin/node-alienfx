@@ -74,6 +74,36 @@ Handle<Value> Light(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> GetNumDevices(const Arguments& args)
+{
+    HandleScope scope;
+
+    unsigned int number_of_devices = 0;
+
+
+    LFX_RESULT result = ALIENFX_API.GetNumDevices(&number_of_devices);
+
+    if (result == LFX_ERROR_NOINIT)
+    {
+        Local<Value> exception = Exception::Error(String::New("AlienFX is not initialized. Call initialize() prior to accessing AlienFX functionality."));
+        ThrowException(exception);
+    }
+
+    if (result == LFX_ERROR_NODEVS)
+    {
+        Local<Value> exception = Exception::Error(String::New("No AlienFX compatible devices are available."));
+        ThrowException(exception);
+    }
+
+    if (result == LFX_FAILURE)
+    {
+        Local<Value> exception = Exception::Error(String::New("AlienFX call failed for unknown reason."));
+        ThrowException(exception);
+    }
+
+    return scope.Close(Number::New(number_of_devices));
+}
+
 
 Handle<Value> CreateColorObject()
 {
@@ -114,6 +144,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "update", Update);
     NODE_SET_METHOD(target, "updateDefault", UpdateDefault);
     NODE_SET_METHOD(target, "light", Light);
+    NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
 
     Handle<Value> color = CreateColorObject();
     target->Set(String::NewSymbol("Color"), color);

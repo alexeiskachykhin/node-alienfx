@@ -17,6 +17,7 @@ _ALIENFX_API DiscoverAlienFxAPI()
         api.Update = (LFX2UPDATE)GetProcAddress(hLibrary, LFX_DLL_UPDATE);
         api.UpdateDefault = (LFX2UPDATEDEFAULT)GetProcAddress(hLibrary, LFX_DLL_UPDATEDEFAULT);
         api.Light = (LFX2LIGHT)GetProcAddress(hLibrary, LFX_DLL_LIGHT);
+        api.GetNumDevices = (LFX2GETNUMDEVICES)GetProcAddress(hLibrary, LFX_DLL_GETNUMDEVICES);
     }
 
     return api;

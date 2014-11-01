@@ -1,7 +1,7 @@
 var extension = require('bindings')('alienfx.node');
 
 var assert = require('assert');
-var inquirer = require('inquirer');
+var utilities = require('./utilities');
 
 
 describe('exports', function () {
@@ -34,14 +34,10 @@ describe('exports', function () {
             extension.reset();
             extension.update();
 
-            inquirer.prompt([{
-                type: 'confirm',
-                name: 'result',
-                message: 'Can you confirm that your AlienFX lights are turned off?'
-            }], function (answers) {
+            utilities.ask.lightsAre('all turned off', function (answer) {
                 extension.release();
 
-                assert.ok(answers.result);
+                assert.ok(answer);
                 done();
             });
         });
@@ -65,14 +61,10 @@ describe('exports', function () {
             extension.light(position, color);
             extension.update();
 
-            inquirer.prompt([{
-                type: 'confirm',
-                name: 'result',
-                message: 'Can you confirm that your AlienFX lights are all turned green?'
-            }], function (answers) {
+            utilities.ask.lightsAre('all turned green', function (answer) {
                 extension.release();
 
-                assert.ok(answers.result);
+                assert.ok(answer);
                 done();
             });
         });
@@ -104,12 +96,8 @@ describe('exports', function () {
             extension.updateDefault();
             extension.release();
 
-            inquirer.prompt([{
-                type: 'confirm',
-                name: 'result',
-                message: 'Can you confirm that your AlienFX lights are all turned red? (it may not work on some devices)'
-            }], function (answers) {
-                assert.ok(answers.result);
+            utilities.ask.lightsAre('all turned red (it may not work on some hardware)', function (answer) {
+                assert.ok(answer);
                 done();
             });
         });
@@ -147,6 +135,60 @@ describe('exports', function () {
             assert.equal(extension.Brightness.FULL, 0xFF000000);
             assert.equal(extension.Brightness.HALF, 0x80000000);
             assert.equal(extension.Brightness.MIN, 0x00000000);
+        });
+    });
+
+
+    describe('getNumDevices()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getNumDevices, 'function');
+        });
+
+        it('should return a number of compatible devices', function (done) {
+            utilities.ask.hasHardware(function (answer) {
+                if (answer) {
+                    extension.initialize();
+
+                    assert.doesNotThrow(function () {
+                        var number_of_devices = extension.getNumDevices();
+                        console.info('Your system has %d AlienFX compatible devices.', number_of_devices);
+                    });
+
+                    extension.release();
+                }
+                else {
+                    assert.ok(true);
+                }
+
+                done();
+            });
+        });
+
+        it('should fail if system is not initialized', function () {
+            assert.throws(function () {
+                extension.getNumDevices();
+            }, Error);
+        });
+
+        it('should fail if hardware not supported', function (done) {
+            utilities.ask.hasHardware(function (answer) {
+                if (answer) {
+                    assert.ok(true);
+                }
+                else {
+                    extension.initialize();
+
+                    assert.throws(function () {
+                        extension.getNumDevices();
+                    }, Error);
+
+                    extension.release();
+                }
+
+                done();
+            });
         });
     });
 });
