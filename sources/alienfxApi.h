@@ -12,6 +12,7 @@ struct _ALIENFX_API {
     LFX2UPDATEDEFAULT UpdateDefault;
     LFX2LIGHT Light;
     LFX2GETNUMDEVICES GetNumDevices;
+    LFX2GETDEVDESC GetDeviceDescription;
 };
 
 extern _ALIENFX_API ALIENFX_API;

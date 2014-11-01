@@ -1,5 +1,7 @@
 #include <node.h>
 #include <v8.h>
+#include <string>
+
 #include "alienfxApi.h"
 
 using namespace v8;
@@ -104,6 +106,43 @@ Handle<Value> GetNumDevices(const Arguments& args)
     return scope.Close(Number::New(number_of_devices));
 }
 
+Handle<Value> GetDeviceDescription(const Arguments& args)
+{
+    HandleScope scope;
+
+
+    if (args.Length() < 1)
+    {
+        Local<Value> exception = Exception::Error(String::New("Function expects 1 parameter."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
+        ThrowException(exception);
+    }
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+
+    unsigned char deviceType = 0;
+    std::string deviceDescription(256, 0);
+
+    LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
+        deviceIndex, 
+        (char *)deviceDescription.c_str(),
+        deviceDescription.size(), 
+        &deviceType);
+
+
+    Local<Object> description = Object::New();
+    description->Set(String::NewSymbol("model"), String::New((char *)deviceDescription.c_str()));
+    description->Set(String::NewSymbol("type"), Number::New(deviceType));
+
+    return scope.Close(description);
+}
+
 
 Handle<Value> CreateColorObject()
 {
@@ -145,6 +184,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "updateDefault", UpdateDefault);
     NODE_SET_METHOD(target, "light", Light);
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
+    NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
 
     Handle<Value> color = CreateColorObject();
     target->Set(String::NewSymbol("Color"), color);

@@ -191,4 +191,23 @@ describe('exports', function () {
             });
         });
     });
+
+
+    describe.only('getDeviceDescription()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getDeviceDescription, 'function');
+        });
+
+        it('should get description of a device', function () {
+            extension.initialize();
+            extension.reset();
+
+            var description = extension.getDeviceDescription(0);
+            console.info('Description of your system:', description);
+
+            assert.notEqual(description, null);
+        });
+    });
 });
