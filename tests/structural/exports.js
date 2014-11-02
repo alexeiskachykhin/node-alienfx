@@ -179,6 +179,14 @@ describe('exports: structural tests', function () {
     });
 
 
+    describe('isAvailable', function () {
+
+        it('should be a boolean', function () {
+            assert.equal(typeof extension.isAvailable, 'boolean');
+        });
+    });
+
+
     describe('getNumDevices()', function () {
 
         it('should be a function', function () {

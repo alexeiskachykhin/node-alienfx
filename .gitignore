@@ -30,3 +30,6 @@
 # Node
 node_modules/
 build/
+
+# Visual Studio
+*.dat

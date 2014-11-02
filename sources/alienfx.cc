@@ -525,6 +525,9 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "setLightColor", SetLightColor);
 
 
+    target->Set(String::NewSymbol("isAvailable"), Boolean::New(ALIENFX_API.IsAvailable));
+
+
     Handle<Value> color = CreateColorObject();
     target->Set(String::NewSymbol("Color"), color);
 
