@@ -4,7 +4,7 @@ var assert = require('assert');
 var utilities = require('../utilities');
 
 
-describe('exports: compatible hardware tests', function () {
+describe('exports: behavioral tests', function () {
 
     describe('initialize()', function () {
 
