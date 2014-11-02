@@ -1,16 +1,6 @@
 var inquirer = require('inquirer');
 
 
-function confirmPrompt(message, callback) {
-    inquirer.prompt([{
-        type: 'confirm',
-        name: 'result',
-        message: message
-    }], function (answers) {
-        callback(answers.result);
-    });
-}
-
 function checkboxPrompt(message, choices, callback) {
     inquirer.prompt([{
         type: 'checkbox',
@@ -35,19 +25,47 @@ function checkboxPrompt(message, choices, callback) {
 }
 
 
-function promptAboutLights(color, callback) {
-    confirmPrompt('Can you confirm that your AlienFX lights are ' + color + '?', callback);
-}
-
 function promptAboutTests(choices, callback) {
     checkboxPrompt('Select tests', choices, callback);
 }
 
 
+function checkLightsColor(extension, color) {
+    var result = true;
+
+    var devices = {};
+    extension.getNumDevices(devices);
+
+    for (var deviceIndex = 0; deviceIndex < devices.result; deviceIndex++) {
+        var lights = {};
+        extension.getNumLights(deviceIndex, lights);
+
+        for (var lightIndex = 0; lightIndex < lights.result; lightIndex++) {
+            var currentColor = {};
+            extension.getLightColor(deviceIndex, lightIndex, currentColor);
+
+            var isEqual =
+                (currentColor.red === color.red &&
+                currentColor.green === color.green &&
+                currentColor.blue === color.blue &&
+                currentColor.brightness === color.brightness);
+
+            if (!isEqual) {
+                return false;
+            }
+        }
+    }
+
+    return result;
+}
+
+
+
 
 module.exports = exports = {
     ask: {
-        lightsAre: promptAboutLights,
         whichTestsToRun: promptAboutTests
-    }
+    },
+
+    lightsAre: checkLightsColor
 };

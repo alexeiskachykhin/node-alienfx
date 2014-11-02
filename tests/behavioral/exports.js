@@ -19,17 +19,19 @@ describe('exports: behavioral tests', function () {
     describe('reset()', function () {
         this.timeout(0);
 
-        it('should reset the lights', function (done) {
+        it('should reset the lights', function () {
             extension.initialize();
             extension.reset();
             extension.update();
 
-            utilities.ask.lightsAre('all turned off', function (answer) {
-                extension.release();
+            assert.ok(utilities.lightsAre(extension, {
+                red: 0x00,
+                green: 0x00,
+                blue: 0x00,
+                brightness: 0xFF
+            }));
 
-                assert.ok(answer);
-                done();
-            });
+            extension.release();
         });
     });
 
@@ -37,7 +39,7 @@ describe('exports: behavioral tests', function () {
     describe('light()', function () {
         this.timeout(0);
 
-        it('should color the lights', function (done) {
+        it('should color the lights', function () {
             extension.initialize();
             extension.reset();
 
@@ -47,12 +49,14 @@ describe('exports: behavioral tests', function () {
             extension.light(position, color);
             extension.update();
 
-            utilities.ask.lightsAre('all turned green', function (answer) {
-                extension.release();
+            assert.ok(utilities.lightsAre(extension, {
+                red: 0x00,
+                green: 0xFF,
+                blue: 0x00,
+                brightness: 0xFF
+            }));
 
-                assert.ok(answer);
-                done();
-            });
+            extension.release();
         });
     });
 
@@ -65,7 +69,7 @@ describe('exports: behavioral tests', function () {
     describe('updateDefault()', function () {
         this.timeout(0);
 
-        it('should set system power-on state', function (done) {
+        it('should set system power-on state', function () {
             extension.initialize();
             extension.reset();
 
@@ -74,12 +78,15 @@ describe('exports: behavioral tests', function () {
 
             extension.light(position, color);
             extension.updateDefault();
-            extension.release();
+            
+            assert.ok(utilities.lightsAre(extension, {
+                red: 0xFF,
+                green: 0x00,
+                blue: 0x00,
+                brightness: 0xFF
+            }));
 
-            utilities.ask.lightsAre('all turned red (it may not work on some hardware)', function (answer) {
-                assert.ok(answer);
-                done();
-            });
+            extension.release();
         });
     });
 
@@ -217,7 +224,7 @@ describe('exports: behavioral tests', function () {
     });
 
 
-    describe.only('setLightColor()', function () {
+    describe('setLightColor()', function () {
         this.timeout(0);
 
         it('should set color of a light', function () {
