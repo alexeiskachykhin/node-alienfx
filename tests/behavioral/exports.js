@@ -6,6 +6,25 @@ var utilities = require('../utilities');
 
 describe('exports: behavioral tests', function () {
 
+    describe.only('getVersion()', function () {
+        this.timeout(0);
+
+        it('should get api version', function () {
+            extension.initialize();
+
+            var version = {};
+            var result = extension.getVersion(version);
+
+            assert.equal(result, extension.Result.SUCCESS);
+            assert.equal(typeof version.result, 'string');
+
+            console.info('API version is: %s', version.result);
+
+            extension.release();
+        });
+    });
+
+
     describe('initialize()', function () {
 
     });

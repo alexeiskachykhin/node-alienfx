@@ -5,6 +5,14 @@ var assert = require('assert');
 
 describe('exports: structural tests', function () {
 
+    describe('getVersion()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getVersion, 'function');
+        });
+    });
+
+
     describe('initialize()', function () {
 
         it('should be a function', function () {

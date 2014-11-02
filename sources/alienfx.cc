@@ -6,6 +6,39 @@
 
 using namespace v8;
 
+Handle<Value> GetVersion(const Arguments& args) {
+    HandleScope scope;
+
+
+    if (args.Length() < 1)
+    {
+        Local<Value> exception = Exception::TypeError(String::New("Function expects 1 parameter."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsObject())
+    {
+        Local<Value> exception = Exception::TypeError(String::New("First argument must be an object."));
+        ThrowException(exception);
+    }
+
+
+    std::string version(LFX_DEF_STRING_SIZE, 0);
+
+
+    LFX_RESULT result = ALIENFX_API.GetVersion(
+        (char *)version.c_str(),
+        version.size());
+
+    if (result == LFX_SUCCESS) {
+        Local<Object> out = Local<Object>::Cast(args[0]);
+        out->Set(String::NewSymbol("result"), String::New(version.c_str()));
+    }
+
+
+    return scope.Close(Number::New(result));
+}
+
 Handle<Value> Initialize(const Arguments& args) {
     HandleScope scope;
     
@@ -510,6 +543,7 @@ Handle<Value> CreateResutObject()
 
 
 void Init(Handle<Object> target) {
+    NODE_SET_METHOD(target, "getVersion", GetVersion);
     NODE_SET_METHOD(target, "initialize", Initialize);
     NODE_SET_METHOD(target, "release", Release);
     NODE_SET_METHOD(target, "reset", Reset);

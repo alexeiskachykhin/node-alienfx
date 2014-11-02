@@ -5,6 +5,7 @@
 
 struct _ALIENFX_API {
     bool IsAvailable;
+    LFX2GETVERSION GetVersion;
     LFX2INITIALIZE Initialize;
     LFX2RELEASE Release;
     LFX2RESET Reset;

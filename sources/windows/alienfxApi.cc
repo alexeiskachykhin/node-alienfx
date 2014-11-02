@@ -11,6 +11,7 @@ _ALIENFX_API DiscoverAlienFxAPI()
     if (hLibrary)
     {
         api.IsAvailable = true;
+        api.GetVersion = (LFX2GETVERSION)GetProcAddress(hLibrary, LFX_DLL_GETVERSION);
         api.Initialize = (LFX2INITIALIZE)GetProcAddress(hLibrary, LFX_DLL_INITIALIZE);
         api.Release = (LFX2RELEASE)GetProcAddress(hLibrary, LFX_DLL_RELEASE);
         api.Reset = (LFX2RESET)GetProcAddress(hLibrary, LFX_DLL_RESET);
