@@ -1,5 +1,5 @@
 var extension = require('bindings')('alienfx.node');
-var utilities = require('./utilities');
+
 
 if (extension.isAvailable) {
     var result = extension.initialize();
@@ -65,27 +65,27 @@ if (extension.isAvailable) {
                 }
 
 
-                console.info("Light: %d\tDescription: %s\tColor: %j", lightIndex, lightDescription.result, color);
+                console.info('Light: %d\tDescription: %s\tColor: %j', lightIndex, lightDescription.result, color);
             }
         }
 
 
-        utilities.waitForKeyPress(function () {
+        require('./utilities').waitForKeyPress(function () {
             extension.release();
         });
     }
     else {
         switch (result) {
             case extension.Result.NODEVS:
-                console.log("There are no AlienFX devices available.")
+                console.error('There are no AlienFX devices available.');
                 break;
 
             default:
-                console.log("There was an error initializing the AlienFX device.")
+                console.error('There was an error initializing the AlienFX device.');
                 break;
         }
     }
 }
 else {
-    console.log("Failed to load LightFX.dll.");
+    console.error('Failed to load LightFX.dll.');
 }
