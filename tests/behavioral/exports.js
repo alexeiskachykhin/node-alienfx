@@ -41,7 +41,7 @@ describe('exports: behavioral tests', function () {
             extension.initialize();
             extension.reset();
 
-            var position = 0x07FFFFFF; // All lights
+            var position = extension.Position.ALL;
             var color = extension.Color.GREEN | extension.Brightness.FULL;
 
             extension.light(position, color);
