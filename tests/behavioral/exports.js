@@ -6,7 +6,7 @@ var utilities = require('../utilities');
 
 describe('exports: behavioral tests', function () {
 
-    describe.only('getVersion()', function () {
+    describe('getVersion()', function () {
         this.timeout(0);
 
         it('should get api version', function () {
