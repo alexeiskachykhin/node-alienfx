@@ -188,7 +188,7 @@ describe('exports: behavioral tests', function () {
     });
 
 
-    describe.only('getLightColor()', function () {
+    describe('getLightColor()', function () {
         this.timeout(0);
 
         it('should get color of a light', function () {
