@@ -80,30 +80,33 @@ Handle<Value> GetNumDevices(const Arguments& args)
 {
     HandleScope scope;
 
+
+    if (args.Length() < 1)
+    {
+        Local<Value> exception = Exception::TypeError(String::New("Function expects 1 parameter."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsObject())
+    {
+        Local<Value> exception = Exception::TypeError(String::New("First argument must be an object."));
+        ThrowException(exception);
+    }
+
+
     unsigned int numberOfDevices = 0;
 
 
     LFX_RESULT result = ALIENFX_API.GetNumDevices(&numberOfDevices);
 
-    if (result == LFX_ERROR_NOINIT)
+    if (result == LFX_SUCCESS)
     {
-        Local<Value> exception = Exception::Error(String::New("AlienFX is not initialized. Call initialize() prior to accessing AlienFX functionality."));
-        ThrowException(exception);
+        Local<Object> out = Local<Object>::Cast(args[0]);
+        out->Set(String::NewSymbol("result"), Number::New(numberOfDevices));
     }
 
-    if (result == LFX_ERROR_NODEVS)
-    {
-        Local<Value> exception = Exception::Error(String::New("No AlienFX compatible devices are available."));
-        ThrowException(exception);
-    }
 
-    if (result == LFX_FAILURE)
-    {
-        Local<Value> exception = Exception::Error(String::New("AlienFX call failed for unknown reason."));
-        ThrowException(exception);
-    }
-
-    return scope.Close(Number::New(numberOfDevices));
+    return scope.Close(Number::New(result));
 }
 
 Handle<Value> GetDeviceDescription(const Arguments& args)
@@ -111,15 +114,21 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
     HandleScope scope;
 
 
-    if (args.Length() < 1)
+    if (args.Length() < 2)
     {
-        Local<Value> exception = Exception::Error(String::New("Function expects 1 parameter."));
+        Local<Value> exception = Exception::Error(String::New("Function expects 2 parameters."));
         ThrowException(exception);
     }
 
     if (!args[0]->IsNumber())
     {
         Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[1]->IsObject())
+    {
+        Local<Value> exception = Exception::Error(String::New("Second argument must be an object."));
         ThrowException(exception);
     }
 
@@ -133,15 +142,18 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
     LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
         deviceIndex,
         (char *)deviceDescription.c_str(),
-        deviceDescription.size(), 
+        deviceDescription.size(),
         &deviceType);
 
+    if (result == LFX_SUCCESS)
+    {
+        Local<Object> out = Local<Object>::Cast(args[1]);
+        out->Set(String::NewSymbol("model"), String::New(deviceDescription.c_str()));
+        out->Set(String::NewSymbol("type"), Number::New(deviceType));
+    }
 
-    Local<Object> description = Object::New();
-    description->Set(String::NewSymbol("model"), String::New(deviceDescription.c_str()));
-    description->Set(String::NewSymbol("type"), Number::New(deviceType));
 
-    return scope.Close(description);
+    return scope.Close(Number::New(result));
 }
 
 Handle<Value> GetNumLights(const Arguments& args)
@@ -149,9 +161,9 @@ Handle<Value> GetNumLights(const Arguments& args)
     HandleScope scope;
 
 
-    if (args.Length() < 1)
+    if (args.Length() < 2)
     {
-        Local<Value> exception = Exception::Error(String::New("Function expects 1 parameter."));
+        Local<Value> exception = Exception::Error(String::New("Function expects 2 parameters."));
         ThrowException(exception);
     }
 
@@ -161,37 +173,27 @@ Handle<Value> GetNumLights(const Arguments& args)
         ThrowException(exception);
     }
 
+    if (!args[1]->IsObject())
+    {
+        Local<Value> exception = Exception::Error(String::New("Second argument must be an object."));
+        ThrowException(exception);
+    }
+
 
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int numberOfLights = 0;
 
+
     LFX_RESULT result = ALIENFX_API.GetNumLights(deviceIndex, &numberOfLights);
 
-    if (result == LFX_ERROR_NOINIT)
+    if (result == LFX_SUCCESS)
     {
-        Local<Value> exception = Exception::Error(String::New("AlienFX is not initialized. Call initialize() prior to accessing AlienFX functionality."));
-        ThrowException(exception);
+        Local<Object> out = Local<Object>::Cast(args[1]);
+        out->Set(String::NewSymbol("result"), Number::New(numberOfLights));
     }
 
-    if (result == LFX_ERROR_NODEVS)
-    {
-        Local<Value> exception = Exception::Error(String::New("There are no AlienFX devices at specified index."));
-        ThrowException(exception);
-    }
 
-    if (result == LFX_ERROR_NOLIGHTS)
-    {
-        Local<Value> exception = Exception::Error(String::New("There are no lights available at specified device index."));
-        ThrowException(exception);
-    }
-
-    if (result == LFX_FAILURE)
-    {
-        Local<Value> exception = Exception::Error(String::New("AlienFX call failed for unknown reason."));
-        ThrowException(exception);
-    }
-
-    return scope.Close(Number::New(numberOfLights));
+    return scope.Close(Number::New(result));
 }
 
 Handle<Value> GetLightDescription(const Arguments& args)
@@ -199,9 +201,9 @@ Handle<Value> GetLightDescription(const Arguments& args)
     HandleScope scope;
 
 
-    if (args.Length() < 1)
+    if (args.Length() < 3)
     {
-        Local<Value> exception = Exception::Error(String::New("Function expects 2 parameters."));
+        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
         ThrowException(exception);
     }
 
@@ -214,6 +216,12 @@ Handle<Value> GetLightDescription(const Arguments& args)
     if (!args[1]->IsNumber())
     {
         Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[2]->IsObject())
+    {
+        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
         ThrowException(exception);
     }
 
@@ -230,8 +238,13 @@ Handle<Value> GetLightDescription(const Arguments& args)
         (char *)lightDescription.c_str(),
         lightDescription.size());
 
+    if (result == LFX_SUCCESS)
+    {
+        Local<Object> out = Local<Object>::Cast(args[2]);
+        out->Set(String::NewSymbol("result"), String::New(lightDescription.c_str()));
+    }
 
-    return scope.Close(String::New(lightDescription.c_str()));
+    return scope.Close(Number::New(result));
 }
 
 

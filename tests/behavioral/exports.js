@@ -90,18 +90,16 @@ describe('exports: compatible hardware tests', function () {
         it('should return a number of compatible devices', function () {
             extension.initialize();
 
-            assert.doesNotThrow(function () {
-                var numberOfDevices = extension.getNumDevices();
-                console.info('Your system has %d AlienFX compatible devices.', numberOfDevices);
-            });
+            var out = {};
+            var result = extension.getNumDevices(out);
 
             extension.release();
-        });
 
-        it('should fail if system is not initialized', function () {
-            assert.throws(function () {
-                extension.getNumDevices();
-            }, Error);
+
+            assert.equal(result, 0x00);
+            assert.equal(typeof out.result, 'number');
+
+            console.info('Your system has %d AlienFX compatible devices.', out.result);
         });
     });
 
@@ -112,12 +110,17 @@ describe('exports: compatible hardware tests', function () {
         it('should get description of a device', function () {
             extension.initialize();
 
-            var description = extension.getDeviceDescription(0);
-            console.info('Description of a first device:', description);
+            var out = {};
+            var result = extension.getDeviceDescription(0, out);
 
             extension.release();
 
-            assert.notEqual(description, null);
+
+            assert.equal(result, 0x00);
+            assert.equal(typeof out.model, 'string');
+            assert.equal(typeof out.type, 'number');
+
+            console.info('Description of a first device:', out);
         });
     });
 
@@ -128,12 +131,16 @@ describe('exports: compatible hardware tests', function () {
         it('should get number of lights on a device', function () {
             extension.initialize();
             
-            assert.doesNotThrow(function () {
-                var numberOfLights = extension.getNumLights(0);
-                console.info('Your device has %d lights.', numberOfLights);
-            });
+            var out = {};
+            var result = extension.getNumLights(0, out);
 
             extension.release();
+
+
+            assert.equal(result, 0x00);
+            assert.equal(typeof out.result, 'number');
+
+            console.info('Your device has %d lights.', out.result);
         });
     });
 
@@ -144,12 +151,16 @@ describe('exports: compatible hardware tests', function () {
         it('should get description of a light', function () {
             extension.initialize();
 
-            assert.doesNotThrow(function () {
-                var description = extension.getLightDescription(0, 0);
-                console.info('Description of first light of first device:', description);
-            });
+            var out = {};
+            var result = extension.getLightDescription(0, 0, out);
 
             extension.release();
+
+
+            assert.equal(result, 0x00);
+            assert.equal(typeof out.result, 'string');
+
+            console.info('Description of first light of first device:', out.result);
         });
     });
 });

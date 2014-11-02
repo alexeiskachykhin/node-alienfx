@@ -8,13 +8,11 @@ var mocha = new Mocha({
 
 utilities.ask.whichTestsToRun([
     'Structural Tests',
-    'Tests for Compatible Hardware',
-    'Tests for Incompatible Hardware'], function (answers) {
+    'Behavioral Tests'], function (answers) {
 
     var testModules = {
         'tests/structural/exports.js': answers[0],
-        'tests/compatible/exports.js': answers[1],
-        'tests/incompatible/exports.js': answers[2]
+        'tests/behavioral/exports.js': answers[1]
     };
 
 
