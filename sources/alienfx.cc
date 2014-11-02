@@ -247,6 +247,55 @@ Handle<Value> GetLightDescription(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> GetLightLocation(const Arguments& args)
+{
+    HandleScope scope;
+
+
+    if (args.Length() < 3)
+    {
+        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[1]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[2]->IsObject())
+    {
+        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
+        ThrowException(exception);
+    }
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+
+    LFX_POSITION lightLocation = {0};
+
+
+    LFX_RESULT result = ALIENFX_API.GetLightLocation(deviceIndex, lightIndex, &lightLocation);
+
+    if (result == LFX_SUCCESS)
+    {
+        Local<Object> out = Local<Object>::Cast(args[2]);
+        out->Set(String::NewSymbol("result"), Number::New(sizeof LFX_POSITION));
+    }
+
+
+    return scope.Close(Number::New(result));
+}
+
+
 
 Handle<Value> CreateColorObject()
 {
@@ -361,6 +410,8 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
     NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
+    NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
+
 
     Handle<Value> color = CreateColorObject();
     target->Set(String::NewSymbol("Color"), color);

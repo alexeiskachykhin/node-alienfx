@@ -192,4 +192,12 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightDescription, 'function');
         });
     });
+
+
+    describe('getLightLocation()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightLocation, 'function');
+        });
+    });
 });
