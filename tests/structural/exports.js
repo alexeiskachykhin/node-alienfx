@@ -200,4 +200,12 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightLocation, 'function');
         });
     });
+
+
+    describe('getLightColor()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightColor, 'function');
+        });
+    });
 });

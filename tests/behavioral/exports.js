@@ -172,7 +172,7 @@ describe('exports: behavioral tests', function () {
             extension.initialize();
 
             var out = {};
-            var result = extension.getLightLocation(0, 1, out);
+            var result = extension.getLightLocation(0, 0, out);
 
             extension.release();
 
@@ -182,6 +182,35 @@ describe('exports: behavioral tests', function () {
              * or direct communication with HID device in the future.
              */
             assert.equal(result, result); 
+
+            console.info('Location of the first light of the first device:', out.result);
+        });
+    });
+
+
+    describe.only('getLightColor()', function () {
+        this.timeout(0);
+
+        it('should get color of a light', function () {
+            extension.initialize();
+            extension.reset();
+
+            var position = extension.Position.ALL;
+            var color = extension.Color.RED | extension.Brightness.FULL;
+
+            extension.light(position, color);
+            extension.update();
+
+            var out = {};
+            var result = extension.getLightColor(0, 0, out);
+
+            extension.release();
+
+
+            var actualColor = out.blue | (out.green << 8) | (out.red << 16) | (out.brightness << 24);
+
+            assert.equal(result, 0x00);
+            assert.equal(actualColor, color);
 
             console.info('Location of the first light of the first device:', out.result);
         });

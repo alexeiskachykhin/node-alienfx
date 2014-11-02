@@ -295,6 +295,57 @@ Handle<Value> GetLightLocation(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> GetLightColor(const Arguments& args)
+{
+    HandleScope scope;
+
+
+    if (args.Length() < 3)
+    {
+        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
+        ThrowException(exception);
+    }
+
+    if (!args[0]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[1]->IsNumber())
+    {
+        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
+        ThrowException(exception);
+    }
+
+    if (!args[2]->IsObject())
+    {
+        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
+        ThrowException(exception);
+    }
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+
+    LFX_COLOR lightColor = { 0 };
+
+
+    LFX_RESULT result = ALIENFX_API.GetLightColor(deviceIndex, lightIndex, &lightColor);
+
+    if (result == LFX_SUCCESS)
+    {
+        Local<Object> out = Local<Object>::Cast(args[2]);
+        out->Set(String::NewSymbol("red"), Number::New(lightColor.red));
+        out->Set(String::NewSymbol("green"), Number::New(lightColor.green));
+        out->Set(String::NewSymbol("blue"), Number::New(lightColor.blue));
+        out->Set(String::NewSymbol("brightness"), Number::New(lightColor.brightness));
+    }
+
+
+    return scope.Close(Number::New(result));
+}
+
 
 
 Handle<Value> CreateColorObject()
@@ -411,6 +462,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
     NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
     NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
+    NODE_SET_METHOD(target, "getLightColor", GetLightColor);
 
 
     Handle<Value> color = CreateColorObject();
