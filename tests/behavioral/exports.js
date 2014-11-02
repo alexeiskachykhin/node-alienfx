@@ -215,4 +215,33 @@ describe('exports: behavioral tests', function () {
             console.info('Location of the first light of the first device:', out.result);
         });
     });
+
+
+    describe.only('setLightColor()', function () {
+        this.timeout(0);
+
+        it('should set color of a light', function () {
+            extension.initialize();
+            extension.reset();
+
+            var color = {
+                red: 0xFF,
+                green: 0x00,
+                blue: 0x00,
+                brightness: 0xFF
+            };
+
+            var result = extension.setLightColor(0, 0, color);
+            extension.update();
+
+
+            var out = {};
+            extension.getLightColor(0, 0, out);
+            extension.release();
+
+
+            assert.equal(result, 0x00);
+            assert.deepEqual(out, color);
+        });
+    });
 });

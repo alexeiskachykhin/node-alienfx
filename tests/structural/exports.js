@@ -208,4 +208,12 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightColor, 'function');
         });
     });
+
+
+    describe('setLightColor()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.setLightColor, 'function');
+        });
+    });
 });
