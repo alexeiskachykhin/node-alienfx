@@ -136,7 +136,7 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
     unsigned int deviceIndex = args[0]->Uint32Value();
 
     unsigned char deviceType = 0;
-    std::string deviceDescription(256, 0);
+    std::string deviceDescription(LFX_DEF_STRING_SIZE, 0);
 
 
     LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
@@ -229,7 +229,7 @@ Handle<Value> GetLightDescription(const Arguments& args)
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
 
-    std::string lightDescription(256, 0);
+    std::string lightDescription(LFX_DEF_STRING_SIZE, 0);
 
 
     LFX_RESULT result = ALIENFX_API.GetLightDescription(
@@ -493,6 +493,21 @@ Handle<Value> CreatePositionObject()
     return scope.Close(position);
 }
 
+Handle<Value> CreateResutObject()
+{
+    HandleScope scope;
+
+    Local<Object> result = Object::New();
+    result->Set(String::NewSymbol("SUCCESS"), Number::New(LFX_SUCCESS));
+    result->Set(String::NewSymbol("FAILURE"), Number::New(LFX_FAILURE));
+    result->Set(String::NewSymbol("NOINIT"), Number::New(LFX_ERROR_NOINIT));
+    result->Set(String::NewSymbol("NODEVS"), Number::New(LFX_ERROR_NODEVS));
+    result->Set(String::NewSymbol("NOLIGHTS"), Number::New(LFX_ERROR_NOLIGHTS));
+    result->Set(String::NewSymbol("BUFFSIZE"), Number::New(LFX_ERROR_BUFFSIZE));
+
+    return scope.Close(result);
+}
+
 
 void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "initialize", Initialize);
@@ -521,6 +536,9 @@ void Init(Handle<Object> target) {
 
     Handle<Value> position = CreatePositionObject();
     target->Set(String::NewSymbol("Position"), position);
+
+    Handle<Value> result = CreateResutObject();
+    target->Set(String::NewSymbol("Result"), result);
 }
 
 NODE_MODULE(alienfx, Init)

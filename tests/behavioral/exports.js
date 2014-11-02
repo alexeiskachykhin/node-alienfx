@@ -103,7 +103,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, 0x00);
+            assert.equal(result, extension.Result.SUCCESS);
             assert.equal(typeof out.result, 'number');
 
             console.info('Your system has %d AlienFX compatible devices.', out.result);
@@ -123,7 +123,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, 0x00);
+            assert.equal(result, extension.Result.SUCCESS);
             assert.equal(typeof out.model, 'string');
             assert.equal(typeof out.type, 'number');
 
@@ -144,7 +144,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, 0x00);
+            assert.equal(result, extension.Result.SUCCESS);
             assert.equal(typeof out.result, 'number');
 
             console.info('Your device has %d lights.', out.result);
@@ -164,7 +164,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, 0x00);
+            assert.equal(result, extension.Result.SUCCESS);
             assert.equal(typeof out.result, 'string');
 
             console.info('Description of the first light of the first device:', out.result);
@@ -216,7 +216,7 @@ describe('exports: behavioral tests', function () {
 
             var actualColor = out.blue | (out.green << 8) | (out.red << 16) | (out.brightness << 24);
 
-            assert.equal(result, 0x00);
+            assert.equal(result, extension.Result.SUCCESS);
             assert.equal(actualColor, color);
 
             console.info('Location of the first light of the first device:', out.result);
@@ -247,7 +247,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, 0x00);
+            assert.equal(result, extension.Result.SUCCESS);
             assert.deepEqual(out, color);
         });
     });

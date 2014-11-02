@@ -162,6 +162,23 @@ describe('exports: structural tests', function () {
     });
 
 
+    describe('Result', function () {
+
+        it('should be an object', function () {
+            assert.equal(typeof extension.Result, 'object');
+        });
+
+        it('should contain predefined result constants', function () {
+            assert.equal(extension.Result.SUCCESS, 0x00);
+            assert.equal(extension.Result.FAILURE, 0x01);
+            assert.equal(extension.Result.NOINIT, 0x02);
+            assert.equal(extension.Result.NODEVS, 0x03);
+            assert.equal(extension.Result.NOLIGHTS, 0x04);
+            assert.equal(extension.Result.BUFFSIZE, 0x05);
+        });
+    });
+
+
     describe('getNumDevices()', function () {
 
         it('should be a function', function () {
