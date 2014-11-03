@@ -297,6 +297,26 @@ describe('exports: structural tests', function () {
         it('should be a function', function () {
             assert.equal(typeof extension.getNumDevices, 'function');
         });
+
+        it('should require atleast 1 parameter', function () {
+            assert.doesNotThrow(function () {
+                extension.getNumDevices({});
+            });
+
+            assert.throws(function () {
+                extension.getNumDevices();
+            }, Error);
+        });
+
+        it('should require first parameter of type object', function () {
+            assert.doesNotThrow(function () {
+                extension.getNumDevices({});
+            });
+
+            assert.throws(function () {
+                extension.getNumDevices(0);
+            }, TypeError);
+        });
     });
 
 

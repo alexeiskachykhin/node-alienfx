@@ -7,7 +7,8 @@
 using namespace v8;
 
 
-Handle<Value> GetVersion(const Arguments& args) {
+Handle<Value> GetVersion(const Arguments& args)
+{
     Contracts::RequireNumberOfArguments(args, 1);
     Contracts::RequireObjectArgument(args, 0);
 
@@ -29,7 +30,8 @@ Handle<Value> GetVersion(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> Initialize(const Arguments& args) {
+Handle<Value> Initialize(const Arguments& args)
+{
     HandleScope scope;
     
     LFX_RESULT result = ALIENFX_API.Initialize();
@@ -37,7 +39,8 @@ Handle<Value> Initialize(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> Release(const Arguments& args) {
+Handle<Value> Release(const Arguments& args)
+{
     HandleScope scope;
 
     LFX_RESULT result = ALIENFX_API.Release();
@@ -45,7 +48,8 @@ Handle<Value> Release(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> Reset(const Arguments& args) {
+Handle<Value> Reset(const Arguments& args)
+{
     HandleScope scope;
 
     LFX_RESULT result = ALIENFX_API.Reset();
@@ -53,7 +57,8 @@ Handle<Value> Reset(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> Update(const Arguments& args) {
+Handle<Value> Update(const Arguments& args)
+{
     HandleScope scope;
 
     LFX_RESULT result = ALIENFX_API.Update();
@@ -61,7 +66,8 @@ Handle<Value> Update(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> UpdateDefault(const Arguments& args) {
+Handle<Value> UpdateDefault(const Arguments& args)
+{
     HandleScope scope;
 
     LFX_RESULT result = ALIENFX_API.UpdateDefault();
@@ -69,7 +75,8 @@ Handle<Value> UpdateDefault(const Arguments& args) {
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> Light(const Arguments& args) {
+Handle<Value> Light(const Arguments& args)
+{
     Contracts::RequireNumberOfArguments(args, 2);
     Contracts::RequireNumberArgument(args, 0);
     Contracts::RequireNumberArgument(args, 1);
@@ -86,21 +93,10 @@ Handle<Value> Light(const Arguments& args) {
 
 Handle<Value> GetNumDevices(const Arguments& args)
 {
+    Contracts::RequireNumberOfArguments(args, 1);
+    Contracts::RequireObjectArgument(args, 0);
+
     HandleScope scope;
-
-
-    if (args.Length() < 1)
-    {
-        Local<Value> exception = Exception::TypeError(String::New("Function expects 1 parameter."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsObject())
-    {
-        Local<Value> exception = Exception::TypeError(String::New("First argument must be an object."));
-        ThrowException(exception);
-    }
-
 
     unsigned int numberOfDevices = 0;
 
