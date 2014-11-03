@@ -1,26 +1,17 @@
 #include <node.h>
-#include <v8.h>
 #include <string>
 
 #include "alienfxApi.h"
+#include "contracts.h"
 
 using namespace v8;
+
 
 Handle<Value> GetVersion(const Arguments& args) {
     HandleScope scope;
 
-
-    if (args.Length() < 1)
-    {
-        Local<Value> exception = Exception::TypeError(String::New("Function expects 1 parameter."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsObject())
-    {
-        Local<Value> exception = Exception::TypeError(String::New("First argument must be an object."));
-        ThrowException(exception);
-    }
+    Contracts::RequireNumberOfArguments(args, 1);
+    Contracts::RequireObjectArgument(args, 1);
 
 
     std::string version(LFX_DEF_STRING_SIZE, 0);

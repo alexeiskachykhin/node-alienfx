@@ -10,6 +10,26 @@ describe('exports: structural tests', function () {
         it('should be a function', function () {
             assert.equal(typeof extension.getVersion, 'function');
         });
+
+        it('should require atleast 1 parameter', function () {
+            assert.doesNotThrow(function () {
+                extension.getVersion({});
+            });
+
+            assert.throws(function () {
+                extension.getVersion();
+            }, Error);
+        });
+
+        it('should require first parameter of type object', function () {
+            assert.doesNotThrow(function () {
+                extension.getVersion({});
+            });
+
+            assert.throws(function () {
+                extension.getVersion(0);
+            }, TypeError);
+        });
     });
 
 
