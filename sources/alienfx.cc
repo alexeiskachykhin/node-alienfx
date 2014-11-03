@@ -8,11 +8,10 @@ using namespace v8;
 
 
 Handle<Value> GetVersion(const Arguments& args) {
-    HandleScope scope;
-
     Contracts::RequireNumberOfArguments(args, 1);
-    Contracts::RequireObjectArgument(args, 1);
+    Contracts::RequireObjectArgument(args, 0);
 
+    HandleScope scope;
 
     std::string version(LFX_DEF_STRING_SIZE, 0);
 
@@ -71,26 +70,11 @@ Handle<Value> UpdateDefault(const Arguments& args) {
 }
 
 Handle<Value> Light(const Arguments& args) {
+    Contracts::RequireNumberOfArguments(args, 2);
+    Contracts::RequireNumberArgument(args, 0);
+    Contracts::RequireNumberArgument(args, 1);
+
     HandleScope scope;
-
-    if (args.Length() < 2)
-    {
-        Local<Value> exception = Exception::TypeError(String::New("Function expects 2 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::TypeError(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsNumber())
-    {
-        Local<Value> exception = Exception::TypeError(String::New("Second argument must be a number."));
-        ThrowException(exception);
-    }
-
 
     unsigned int locationMask = args[0]->Uint32Value();
     unsigned int colorValue = args[1]->Uint32Value();

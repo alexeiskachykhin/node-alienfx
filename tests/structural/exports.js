@@ -6,6 +6,7 @@ var assert = require('assert');
 describe('exports: structural tests', function () {
 
     describe('getVersion()', function () {
+        this.timeout(0);
 
         it('should be a function', function () {
             assert.equal(typeof extension.getVersion, 'function');
@@ -34,17 +35,33 @@ describe('exports: structural tests', function () {
 
 
     describe('initialize()', function () {
+        this.timeout(0);
 
         it('should be a function', function () {
             assert.equal(typeof extension.initialize, 'function');
+        });
+
+        it('should not require any parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.initialize();
+            });
+
+            extension.release();
         });
     });
 
 
     describe('release()', function () {
+        this.timeout(0);
 
         it('should be a function', function () {
             assert.equal(typeof extension.release, 'function');
+        });
+
+        it('should not require any parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.release();
+            });
         });
     });
 
@@ -54,6 +71,12 @@ describe('exports: structural tests', function () {
         it('should be a function', function () {
             assert.equal(typeof extension.reset, 'function');
         });
+
+        it('should not require any parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.reset();
+            });
+        });
     });
 
 
@@ -61,6 +84,48 @@ describe('exports: structural tests', function () {
 
         it('should be a function', function () {
             assert.equal(typeof extension.light, 'function');
+        });
+
+        it('should require atleast 2 parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.light(0, 0);
+            });
+
+            assert.throws(function () {
+                extension.light();
+            }, Error);
+
+            assert.throws(function () {
+                extension.light(0);
+            }, Error);
+        });
+
+        it('should require first parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.light(0, 0);
+            });
+
+            assert.throws(function () {
+                extension.light({}, 0);
+            }, TypeError);
+        });
+
+        it('should require second parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.light(0, 0);
+            });
+
+            assert.throws(function () {
+                extension.light(0, {});
+            }, TypeError);
+        });
+
+        it('should allow negative numbers as second parameter', function () {
+            var color = (0x80000000 | 0);
+
+            assert.doesNotThrow(function () {
+                extension.light(0, color);
+            });
         });
     });
 
@@ -70,6 +135,12 @@ describe('exports: structural tests', function () {
         it('should be a function', function () {
             assert.equal(typeof extension.update, 'function');
         });
+
+        it('should not require any parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.update();
+            });
+        });
     });
 
 
@@ -77,6 +148,12 @@ describe('exports: structural tests', function () {
 
         it('should be a function', function () {
             assert.equal(typeof extension.updateDefault, 'function');
+        });
+
+        it('should not require any parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.updateDefault();
+            });
         });
     });
 
