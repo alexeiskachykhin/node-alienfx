@@ -5,9 +5,9 @@ var utilities = require('../utilities');
 
 
 describe('exports: behavioral tests', function () {
+    this.timeout(0);
 
     describe('getVersion()', function () {
-        this.timeout(0);
 
         it('should get api version', function () {
             extension.initialize();
@@ -15,8 +15,8 @@ describe('exports: behavioral tests', function () {
             var version = {};
             var result = extension.getVersion(version);
 
-            assert.equal(result, extension.Result.SUCCESS);
-            assert.equal(typeof version.result, 'string');
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(typeof version.result, 'string');
 
             console.info('API version is: %s', version.result);
 
@@ -27,16 +27,27 @@ describe('exports: behavioral tests', function () {
 
     describe('initialize()', function () {
 
+        it('should initialize a system', function () {
+            var result = extension.initialize();
+            extension.release();
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+        });
     });
 
 
     describe('release()', function () {
 
+        it('should release a system', function () {
+            extension.initialize();
+            var result = extension.release();
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+        });
     });
 
 
     describe('reset()', function () {
-        this.timeout(0);
 
         it('should reset the lights', function () {
             extension.initialize();
@@ -56,7 +67,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('light()', function () {
-        this.timeout(0);
 
         it('should color the lights', function () {
             extension.initialize();
@@ -82,11 +92,17 @@ describe('exports: behavioral tests', function () {
 
     describe('update()', function () {
 
+        it('should send updates to a hardware', function () {
+            extension.initialize();
+            var result = extension.update();
+            extension.release();
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+        });
     });
 
 
     describe('updateDefault()', function () {
-        this.timeout(0);
 
         it('should set system power-on state', function () {
             extension.initialize();
@@ -111,7 +127,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('getNumDevices()', function () {
-        this.timeout(0);
 
         it('should return a number of compatible devices', function () {
             extension.initialize();
@@ -122,8 +137,8 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, extension.Result.SUCCESS);
-            assert.equal(typeof out.result, 'number');
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(typeof out.result, 'number');
 
             console.info('Your system has %d AlienFX compatible devices.', out.result);
         });
@@ -131,7 +146,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('getDeviceDescription()', function () {
-        this.timeout(0);
 
         it('should get description of a device', function () {
             extension.initialize();
@@ -142,9 +156,9 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, extension.Result.SUCCESS);
-            assert.equal(typeof out.model, 'string');
-            assert.equal(typeof out.type, 'number');
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(typeof out.model, 'string');
+            assert.strictEqual(typeof out.type, 'number');
 
             console.info('Description of a first device:', out);
         });
@@ -152,7 +166,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('getNumLights()', function () {
-        this.timeout(0);
 
         it('should get number of lights on a device', function () {
             extension.initialize();
@@ -163,8 +176,8 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, extension.Result.SUCCESS);
-            assert.equal(typeof out.result, 'number');
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(typeof out.result, 'number');
 
             console.info('Your device has %d lights.', out.result);
         });
@@ -172,7 +185,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('getLightDescription()', function () {
-        this.timeout(0);
 
         it('should get description of a light', function () {
             extension.initialize();
@@ -183,8 +195,8 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, extension.Result.SUCCESS);
-            assert.equal(typeof out.result, 'string');
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(typeof out.result, 'string');
 
             console.info('Description of the first light of the first device:', out.result);
         });
@@ -192,7 +204,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('getLightLocation()', function () {
-        this.timeout(0);
 
         it('should get location of a light', function () {
             extension.initialize();
@@ -207,7 +218,7 @@ describe('exports: behavioral tests', function () {
              * of GetLightLocation, so for now, this test is useless. Might fallback to .NET version
              * or direct communication with HID device in the future.
              */
-            assert.equal(result, result); 
+            assert.strictEqual(result, result); 
 
             console.info('Location of the first light of the first device:', out.result);
         });
@@ -215,7 +226,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('getLightColor()', function () {
-        this.timeout(0);
 
         it('should get color of a light', function () {
             extension.initialize();
@@ -235,8 +245,8 @@ describe('exports: behavioral tests', function () {
 
             var actualColor = out.blue | (out.green << 8) | (out.red << 16) | (out.brightness << 24);
 
-            assert.equal(result, extension.Result.SUCCESS);
-            assert.equal(actualColor, color);
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(actualColor, color);
 
             console.info('Location of the first light of the first device:', out.result);
         });
@@ -244,7 +254,6 @@ describe('exports: behavioral tests', function () {
 
 
     describe('setLightColor()', function () {
-        this.timeout(0);
 
         it('should set color of a light', function () {
             extension.initialize();
@@ -266,7 +275,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            assert.equal(result, extension.Result.SUCCESS);
+            assert.strictEqual(result, extension.Result.SUCCESS);
             assert.deepEqual(out, color);
         });
     });
