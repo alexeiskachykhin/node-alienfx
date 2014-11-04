@@ -592,13 +592,13 @@ describe('exports: structural tests', function () {
                 extension.setLightColor();
             }, Error);
 
-            //assert.throws(function () {
-            //    extension.setLightColor(0);
-            //}, Error);
+            assert.throws(function () {
+                extension.setLightColor(0);
+            }, Error);
 
-            //assert.throws(function () {
-            //    extension.setLightColor(0, 0);
-            //}, Error);
+            assert.throws(function () {
+                extension.setLightColor(0, 0);
+            }, Error);
         });
 
         it('should require first parameter of type number', function () {
