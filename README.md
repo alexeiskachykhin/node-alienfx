@@ -1,3 +1,5 @@
+![node-alienfx](http://media.alienwarearena.com/media_photo_show/abstract-black_0039gf7050.jpg "node-alienfx")
+
 #node-alienfx
 
 NodeJS native extension for Dell AlienFX API.
