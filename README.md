@@ -1,4 +1,4 @@
-![node-alienfx](http://media.alienwarearena.com/media_photo_show/abstract-black_0039gf7050.jpg "node-alienfx")
+![node-alienfx](https://cloud.githubusercontent.com/assets/2787454/4907835/c203d0e2-6464-11e4-8895-a855b1fc9897.jpg "node-alienfx")
 
 #node-alienfx
 
