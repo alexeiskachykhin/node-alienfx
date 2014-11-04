@@ -3,8 +3,10 @@
 using namespace v8;
 
 
-void Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumberOfArguments)
+Handle<Value> Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumberOfArguments)
 {
+    HandleScope scope;
+
     if (args.Length() < requiredNumberOfArguments)
     {
         char exceptionMessage[32];
@@ -12,11 +14,17 @@ void Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumb
 
         Local<Value> exception = Exception::Error(String::New(exceptionMessage));
         ThrowException(exception);
+
+        return scope.Close(Undefined());
     }
+
+    return scope.Close(Handle<Value>());
 }
 
-void Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
+Handle<Value> Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
 {
+    HandleScope scope;
+
     if (!args[argumentIndex]->IsObject())
     {
         char exceptionMessage[64];
@@ -24,11 +32,17 @@ void Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
 
         Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
         ThrowException(exception);
+
+        return scope.Close(Undefined());
     }
+
+    return scope.Close(Handle<Value>());
 }
 
-void Contracts::RequireNumberArgument(const v8::Arguments& args, int argumentIndex)
+Handle<Value> Contracts::RequireNumberArgument(const v8::Arguments& args, int argumentIndex)
 {
+    HandleScope scope;
+
     if (!args[argumentIndex]->IsNumber())
     {
         char exceptionMessage[64];
@@ -36,5 +50,9 @@ void Contracts::RequireNumberArgument(const v8::Arguments& args, int argumentInd
 
         Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
         ThrowException(exception);
+
+        return scope.Close(Undefined());
     }
+
+    return scope.Close(Handle<Value>());
 }

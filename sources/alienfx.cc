@@ -9,10 +9,11 @@ using namespace v8;
 
 Handle<Value> GetVersion(const Arguments& args)
 {
-    Contracts::RequireNumberOfArguments(args, 1);
-    Contracts::RequireObjectArgument(args, 0);
-
     HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
+    REQUIRE_OBJECT(scope, args, 0);
+
 
     std::string version(LFX_DEF_STRING_SIZE, 0);
 
@@ -77,11 +78,12 @@ Handle<Value> UpdateDefault(const Arguments& args)
 
 Handle<Value> Light(const Arguments& args)
 {
-    Contracts::RequireNumberOfArguments(args, 2);
-    Contracts::RequireNumberArgument(args, 0);
-    Contracts::RequireNumberArgument(args, 1);
-
     HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+
 
     unsigned int locationMask = args[0]->Uint32Value();
     unsigned int colorValue = args[1]->Uint32Value();
@@ -93,10 +95,11 @@ Handle<Value> Light(const Arguments& args)
 
 Handle<Value> GetNumDevices(const Arguments& args)
 {
-    Contracts::RequireNumberOfArguments(args, 1);
-    Contracts::RequireObjectArgument(args, 0);
-
     HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
+    REQUIRE_OBJECT(scope, args, 0);
+
 
     unsigned int numberOfDevices = 0;
 
@@ -117,28 +120,12 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
 {
     HandleScope scope;
 
-
-    if (args.Length() < 2)
-    {
-        Local<Value> exception = Exception::Error(String::New("Function expects 2 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsObject())
-    {
-        Local<Value> exception = Exception::Error(String::New("Second argument must be an object."));
-        ThrowException(exception);
-    }
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_OBJECT(scope, args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
-
     unsigned char deviceType = 0;
     std::string deviceDescription(LFX_DEF_STRING_SIZE, 0);
 
@@ -164,24 +151,9 @@ Handle<Value> GetNumLights(const Arguments& args)
 {
     HandleScope scope;
 
-
-    if (args.Length() < 2)
-    {
-        Local<Value> exception = Exception::Error(String::New("Function expects 2 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsObject())
-    {
-        Local<Value> exception = Exception::Error(String::New("Second argument must be an object."));
-        ThrowException(exception);
-    }
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_OBJECT(scope, args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -204,30 +176,10 @@ Handle<Value> GetLightDescription(const Arguments& args)
 {
     HandleScope scope;
 
-
-    if (args.Length() < 3)
-    {
-        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[2]->IsObject())
-    {
-        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
-        ThrowException(exception);
-    }
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_OBJECT(scope, args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -255,30 +207,10 @@ Handle<Value> GetLightLocation(const Arguments& args)
 {
     HandleScope scope;
 
-
-    if (args.Length() < 3)
-    {
-        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[2]->IsObject())
-    {
-        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
-        ThrowException(exception);
-    }
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_OBJECT(scope, args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -303,30 +235,10 @@ Handle<Value> GetLightColor(const Arguments& args)
 {
     HandleScope scope;
 
-
-    if (args.Length() < 3)
-    {
-        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[2]->IsObject())
-    {
-        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
-        ThrowException(exception);
-    }
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_OBJECT(scope, args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -354,30 +266,10 @@ Handle<Value> SetLightColor(const Arguments& args)
 {
     HandleScope scope;
 
-
-    if (args.Length() < 3)
-    {
-        Local<Value> exception = Exception::Error(String::New("Function expects 3 parameters."));
-        ThrowException(exception);
-    }
-
-    if (!args[0]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("First argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[1]->IsNumber())
-    {
-        Local<Value> exception = Exception::Error(String::New("Second argument must be a number."));
-        ThrowException(exception);
-    }
-
-    if (!args[2]->IsObject())
-    {
-        Local<Value> exception = Exception::Error(String::New("Third argument must be an object."));
-        ThrowException(exception);
-    }
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_OBJECT(scope, args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
