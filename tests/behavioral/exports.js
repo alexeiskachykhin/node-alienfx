@@ -239,7 +239,7 @@ describe('exports: behavioral tests', function () {
             extension.release();
 
 
-            /* Current version of AlienFX.dll doesn't provide any meningfull implementation 
+            /* AlienFX.dll (version 2.1.0) doesn't provide any meningfull implementation 
              * of GetLightLocation, so for now, this test is useless. Might fallback to .NET version
              * or direct communication with HID device in the future.
              */
