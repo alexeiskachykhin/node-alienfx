@@ -90,6 +90,31 @@ describe('exports: behavioral tests', function () {
     });
 
 
+    describe('actionColor()', function () {
+
+        it.only('should set action for lights', function () {
+            extension.initialize();
+            extension.reset();
+
+            var position = extension.Position.ALL;
+            var action = extension.Action.MORPH;
+            var color = extension.Color.GREEN | extension.Brightness.FULL;
+
+            extension.actionColor(position, action, color);
+            extension.update();
+
+            assert.ok(utilities.lightsAre(extension, {
+                red: 0x00,
+                green: 0xFF,
+                blue: 0x00,
+                brightness: 0xFF
+            }));
+
+            extension.release();
+        });
+    });
+
+
     describe('update()', function () {
 
         it('should send updates to a hardware', function () {

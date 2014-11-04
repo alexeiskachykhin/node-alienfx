@@ -93,6 +93,25 @@ Handle<Value> Light(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> ActionColor(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_NUMBER(scope, args, 2);
+
+
+    unsigned int locationMask = args[0]->Uint32Value();
+    unsigned int action = args[1]->Uint32Value();
+    unsigned int colorValue = args[2]->Uint32Value();
+
+    LFX_RESULT result = ALIENFX_API.ActionColor(locationMask, action, colorValue);
+
+    return scope.Close(Number::New(result));
+}
+
 Handle<Value> GetNumDevices(const Arguments& args)
 {
     HandleScope scope;
@@ -404,6 +423,19 @@ Handle<Value> CreateResutObject()
     return scope.Close(result);
 }
 
+Handle<Value> CreateActionObject()
+{
+    HandleScope scope;
+
+    Local<Object> action = Object::New();
+    action->Set(String::NewSymbol("MORPH"), Number::New(LFX_ACTION_MORPH));
+    action->Set(String::NewSymbol("PULSE"), Number::New(LFX_ACTION_PULSE));
+    action->Set(String::NewSymbol("COLOR"), Number::New(LFX_ACTION_COLOR));
+
+    return scope.Close(action);
+}
+
+
 
 void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "getVersion", GetVersion);
@@ -413,6 +445,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "update", Update);
     NODE_SET_METHOD(target, "updateDefault", UpdateDefault);
     NODE_SET_METHOD(target, "light", Light);
+    NODE_SET_METHOD(target, "actionColor", ActionColor);
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
@@ -439,6 +472,9 @@ void Init(Handle<Object> target) {
 
     Handle<Value> result = CreateResutObject();
     target->Set(String::NewSymbol("Result"), result);
+
+    Handle<Value> action = CreateActionObject();
+    target->Set(String::NewSymbol("Action"), action);
 }
 
 NODE_MODULE(alienfx, Init)

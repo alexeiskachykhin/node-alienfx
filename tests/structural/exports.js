@@ -130,6 +130,66 @@ describe('exports: structural tests', function () {
     });
 
 
+    describe('actionColor()', function () {
+
+        it('should be a function', function () {
+            assert.strictEqual(typeof extension.actionColor, 'function');
+        });
+
+        it('should require atleast 3 parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColor(0, extension.Action.COLOR, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColor();
+            }, Error);
+
+            assert.throws(function () {
+                extension.actionColor(0, extension.Action.COLOR);
+            }, Error);
+        });
+
+        it('should require first parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColor(0, extension.Action.COLOR, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColor({}, extension.Action.COLOR, 0);
+            }, TypeError);
+        });
+
+        it('should require second parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColor(0, extension.Action.COLOR, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColor(0, {}, 0);
+            }, TypeError);
+        });
+
+        it('should require third parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColor(0, extension.Action.COLOR, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColor(0, extension.Action.COLOR, {});
+            }, TypeError);
+        });
+
+        it('should allow negative numbers as third parameter', function () {
+            var color = (0x80000000 | 0);
+
+            assert.doesNotThrow(function () {
+                extension.actionColor(0, extension.Action.COLOR, color);
+            });
+        });
+    });
+
+
     describe('update()', function () {
 
         it('should be a function', function () {
@@ -280,6 +340,20 @@ describe('exports: structural tests', function () {
             assert.equal(extension.Result.NODEVS, 0x03);
             assert.equal(extension.Result.NOLIGHTS, 0x04);
             assert.equal(extension.Result.BUFFSIZE, 0x05);
+        });
+    });
+
+
+    describe('Action', function () {
+        
+        it('should be an object', function () {
+            assert.equal(typeof extension.Action, 'object');
+        });
+
+        it('should contain predefined action constants', function () {
+            assert.equal(extension.Action.MORPH, 0x00000001);
+            assert.equal(extension.Action.PULSE, 0x00000002);
+            assert.equal(extension.Action.COLOR, 0x00000003);
         });
     });
 
@@ -646,4 +720,5 @@ describe('exports: structural tests', function () {
             }, TypeError);
         });
     });
+
 });
