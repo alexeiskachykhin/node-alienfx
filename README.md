@@ -23,6 +23,25 @@ Compatibility
 
 Currently we are bound to operating systems that AlienFX.dll can run on. Strictly speaking it is possible to bypass [AlienFX][AlienFX] API and talk directly to the underlaying hardware, which requires us to send byte arrays to USB HID device. This will allow to support wider range of operating systems, but it is significantly harder to implement and what's more important, all of the device differences have to be handled. Awesome libraries implemented this way exist [pyalienfx][pyalienfx]. Please let me know if you really interested to see this module working on Linux. 
 
+Example
+-------
+Example folder contains line-by-line ported examples from [AlienFX][AlienFX] SDK.
+
+```javascript
+var alienfx = require('alienfx');
+
+alienfx.initialize();
+alienfx.reset();
+
+var position = alienfx.Position.ALL;
+var color = alienfx.Color.GREEN | alienfx.Brightness.FULL;
+
+alienfx.light(position, color);
+alienfx.update();
+
+alienfx.release();
+```
+
 Build & Test
 -----
 Install [node-gyp]:
