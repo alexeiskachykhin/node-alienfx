@@ -33,7 +33,7 @@ npm install -g node-gyp
 Build:
 ```javascript
 node-gyp configure
-node-gyp install
+node-gyp build
 ```
 
 Test:
