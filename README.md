@@ -42,6 +42,10 @@ alienfx.update();
 alienfx.release();
 ```
 
+API
+---
+Please, consult with tests and native AlienFX documentation to get sense of `node-alienfx` API.  
+
 Build & Test
 -----
 Install [node-gyp]:
