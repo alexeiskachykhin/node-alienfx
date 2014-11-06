@@ -6,11 +6,20 @@ node-alienfx
 [Node.js][Node] native extension for Dell [AlienFX][AlienFX] API.
 
 
-This module offers bindings for AlienFX API provided by AlienFX.dll. The main desing goal of this project is to keep JavaScript bindings close to their native counterparts as much as possible. It allows line-by-line porting of existing AlienFX enabled apps to [Node.js][Node]. Provided APIs feels bit alien to JavaScript so high-level wrapper around [node-alienfx][node-alienfx] is comming soon. Stay tuned.
+This module offers bindings for AlienFX API provided by AlienFX.dll. The main desing goal of this project is to keep JavaScript bindings close to their native counterparts as much as possible. It allows line-by-line porting of existing AlienFX enabled apps to [Node.js][Node]. Provided APIs feels bit alien to JavaScript so high-level wrapper around `node-alienfx` is comming soon. Stay tuned.
 
 Installation
 ------------
 NPM package is comming soon...
+
+Compatibility
+-------------
+**Operating Systems**: Windows
+
+**Node**: 0.10.26
+
+
+Currently we are bound to operating systems that AlienFX.dll can run on. Strictly speaking it is possible to bypass [AlienFX][AlienFX] API and talk directly to the underlaying hardware, which requires us to send byte arrays to USB HID device. This will allow to support wider range of operating systems, but it is significantly harder to implement and what's more important, all of the device differences have to be handled. Please let me know if you really interested to see this module working on Linux.
 
 Debugging
 ---------
@@ -28,4 +37,3 @@ This will allow to run unit tests with Visual Studio native debugger attached ev
 
 [Node]: http://nodejs.org
 [AlienFX]: http://www.alienware.com/landings/alienfx/
-[node-alienfx]: https://github.com/alexeiskachykhin/node-alienfx
