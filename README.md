@@ -10,6 +10,8 @@ This module offers bindings for AlienFX API provided by AlienFX.dll. The main de
 
 Installation
 ------------
+First of all make sure that AlienFX.dll is installed on your system, the easiest way to do so - install Alienware Command Center.
+
 NPM package is comming soon...
 
 Compatibility
@@ -20,6 +22,24 @@ Compatibility
 
 
 Currently we are bound to operating systems that AlienFX.dll can run on. Strictly speaking it is possible to bypass [AlienFX][AlienFX] API and talk directly to the underlaying hardware, which requires us to send byte arrays to USB HID device. This will allow to support wider range of operating systems, but it is significantly harder to implement and what's more important, all of the device differences have to be handled. Awesome libraries implemented this way exist [pyalienfx][pyalienfx]. Please let me know if you really interested to see this module working on Linux. 
+
+Build & Test
+-----
+Install [node-gyp]:
+```javascript
+npm install -g node-gyp
+```
+
+Build:
+```javascript
+node-gyp configure
+node-gyp install
+```
+
+Test:
+```javascript
+npm test
+```
 
 Debugging
 ---------
@@ -38,3 +58,4 @@ This will allow to run unit tests with Visual Studio native debugger attached ev
 [Node]: http://nodejs.org
 [AlienFX]: http://www.alienware.com/landings/alienfx/
 [pyalienfx]: https://code.google.com/p/pyalienfx/
+[node-gyp]: https://github.com/TooTallNate/node-gyp
