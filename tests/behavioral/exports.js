@@ -392,4 +392,21 @@ describe('exports: behavioral tests', function () {
             assert.deepEqual(out, primaryColor);
         });
     });
+
+
+    describe('setTiming()', function () {
+
+        it('should set timing of an action', function () {
+            extension.initialize();
+            extension.reset();
+
+            var result = extension.setTiming(200);
+
+            extension.update();
+            extension.release();
+
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+        });
+    });
 });

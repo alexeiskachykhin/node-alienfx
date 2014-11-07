@@ -933,4 +933,33 @@ describe('exports: structural tests', function () {
             }, TypeError);
         });
     });
+
+
+    describe('setTiming()', function () {
+
+        it('should be a function', function () {
+            assert.strictEqual(typeof extension.setTiming, 'function');
+        });
+
+        it('should require atleast 1 argument', function () {
+            assert.doesNotThrow(function () {
+                extension.setTiming(200);
+            });
+
+            assert.throws(function () {
+                extension.setTiming();
+            }, Error);
+        });
+
+        it('should require first argument of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.setTiming(200);
+            });
+
+            assert.throws(function () {
+                extension.setTiming(null);
+            }, TypeError);
+        });
+    });
+
 });

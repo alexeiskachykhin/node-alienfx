@@ -395,6 +395,21 @@ Handle<Value> SetLightActionColorEx(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> SetTiming(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
+    REQUIRE_NUMBER(scope, args, 0);
+
+
+    int timing = args[0]->Int32Value();
+
+    LFX_RESULT result = ALIENFX_API.SetTiming(timing);
+
+    return scope.Close(Number::New(result));
+}
+
 
 Handle<Value> CreateColorObject()
 {
@@ -544,6 +559,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "setLightColor", SetLightColor);
     NODE_SET_METHOD(target, "setLightActionColor", SetLightActionColor);
     NODE_SET_METHOD(target, "setLightActionColorEx", SetLightActionColorEx);
+    NODE_SET_METHOD(target, "setTiming", SetTiming);
 
 
     target->Set(String::NewSymbol("isAvailable"), Boolean::New(ALIENFX_API.IsAvailable));
