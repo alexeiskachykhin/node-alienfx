@@ -12,7 +12,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getVersion, 'function');
         });
 
-        it('should require atleast 1 parameter', function () {
+        it('should require atleast 1 argument', function () {
             assert.doesNotThrow(function () {
                 extension.getVersion({});
             });
@@ -22,13 +22,13 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type object', function () {
+        it('should require first argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getVersion({});
             });
 
             assert.throws(function () {
-                extension.getVersion(0);
+                extension.getVersion(null);
             }, TypeError);
         });
     });
@@ -41,7 +41,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.initialize, 'function');
         });
 
-        it('should not require any parameters', function () {
+        it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.initialize();
             });
@@ -58,7 +58,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.release, 'function');
         });
 
-        it('should not require any parameters', function () {
+        it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.release();
             });
@@ -72,7 +72,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.reset, 'function');
         });
 
-        it('should not require any parameters', function () {
+        it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.reset();
             });
@@ -86,7 +86,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.light, 'function');
         });
 
-        it('should require atleast 2 parameters', function () {
+        it('should require atleast 2 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.light(0, 0);
             });
@@ -100,27 +100,27 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.light(0, 0);
             });
 
             assert.throws(function () {
-                extension.light({}, 0);
+                extension.light(null, 0);
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.light(0, 0);
             });
 
             assert.throws(function () {
-                extension.light(0, {});
+                extension.light(0, null);
             }, TypeError);
         });
 
-        it('should allow negative numbers as second parameter', function () {
+        it('should allow negative numbers as second argument', function () {
             var color = (0x80000000 | 0);
 
             assert.doesNotThrow(function () {
@@ -136,7 +136,7 @@ describe('exports: structural tests', function () {
             assert.strictEqual(typeof extension.actionColor, 'function');
         });
 
-        it('should require atleast 3 parameters', function () {
+        it('should require atleast 3 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.actionColor(0, extension.Action.COLOR, 0);
             });
@@ -150,37 +150,37 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColor(0, extension.Action.COLOR, 0);
             });
 
             assert.throws(function () {
-                extension.actionColor({}, extension.Action.COLOR, 0);
+                extension.actionColor(null, extension.Action.COLOR, 0);
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColor(0, extension.Action.COLOR, 0);
             });
 
             assert.throws(function () {
-                extension.actionColor(0, {}, 0);
+                extension.actionColor(0, null, 0);
             }, TypeError);
         });
 
-        it('should require third parameter of type number', function () {
+        it('should require third argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColor(0, extension.Action.COLOR, 0);
             });
 
             assert.throws(function () {
-                extension.actionColor(0, extension.Action.COLOR, {});
+                extension.actionColor(0, extension.Action.COLOR, null);
             }, TypeError);
         });
 
-        it('should allow negative numbers as third parameter', function () {
+        it('should allow negative numbers as third argument', function () {
             var color = (0x80000000 | 0);
 
             assert.doesNotThrow(function () {
@@ -196,7 +196,7 @@ describe('exports: structural tests', function () {
             assert.strictEqual(typeof extension.actionColorEx, 'function');
         });
 
-        it('should require atleast 4 parameters', function () {
+        it('should require atleast 4 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
             });
@@ -214,37 +214,37 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
             });
 
             assert.throws(function () {
-                extension.actionColorEx({}, extension.Action.COLOR, 0, 0);
+                extension.actionColorEx(null, extension.Action.COLOR, 0, 0);
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
             });
 
             assert.throws(function () {
-                extension.actionColorEx(0, {}, 0, 0);
+                extension.actionColorEx(0, null, 0, 0);
             }, TypeError);
         });
 
-        it('should require third parameter of type number', function () {
+        it('should require third argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
             });
 
             assert.throws(function () {
-                extension.actionColorEx(0, extension.Action.COLOR, {}, 0);
+                extension.actionColorEx(0, extension.Action.COLOR, null, 0);
             }, TypeError);
         });
 
-        it('should allow negative numbers as third parameter', function () {
+        it('should allow negative numbers as third argument', function () {
             var color = (0x80000000 | 0);
 
             assert.doesNotThrow(function () {
@@ -252,17 +252,17 @@ describe('exports: structural tests', function () {
             });
         });
 
-        it('should require fourth parameter of type number', function () {
+        it('should require fourth argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
             });
 
             assert.throws(function () {
-                extension.actionColorEx(0, extension.Action.COLOR, 0, {});
+                extension.actionColorEx(0, extension.Action.COLOR, 0, null);
             }, TypeError);
         });
 
-        it('should allow negative numbers as fourth parameter', function () {
+        it('should allow negative numbers as fourth argument', function () {
             var color = (0x80000000 | 0);
 
             assert.doesNotThrow(function () {
@@ -278,7 +278,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.update, 'function');
         });
 
-        it('should not require any parameters', function () {
+        it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.update();
             });
@@ -292,7 +292,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.updateDefault, 'function');
         });
 
-        it('should not require any parameters', function () {
+        it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.updateDefault();
             });
@@ -454,7 +454,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumDevices, 'function');
         });
 
-        it('should require atleast 1 parameter', function () {
+        it('should require atleast 1 argument', function () {
             assert.doesNotThrow(function () {
                 extension.getNumDevices({});
             });
@@ -464,13 +464,13 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type object', function () {
+        it('should require first argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getNumDevices({});
             });
 
             assert.throws(function () {
-                extension.getNumDevices(0);
+                extension.getNumDevices(null);
             }, TypeError);
         });
     });
@@ -482,7 +482,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getDeviceDescription, 'function');
         });
 
-        it('should require atleast 2 parameters', function () {
+        it('should require atleast 2 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.getDeviceDescription(0, {});
             });
@@ -496,23 +496,23 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getDeviceDescription(0, {});
             });
 
             assert.throws(function () {
-                extension.getDeviceDescription({}, {});
+                extension.getDeviceDescription(null, {});
             }, TypeError);
         });
 
-        it('should require second parameter of type object', function () {
+        it('should require second argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getDeviceDescription(0, {});
             });
 
             assert.throws(function () {
-                extension.getDeviceDescription(0, 0);
+                extension.getDeviceDescription(0, null);
             }, TypeError);
         });
     });
@@ -524,7 +524,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumLights, 'function');
         });
 
-        it('should require atleast 2 parameters', function () {
+        it('should require atleast 2 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.getNumLights(0, {});
             });
@@ -538,23 +538,23 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getNumLights(0, {});
             });
 
             assert.throws(function () {
-                extension.getNumLights({}, {});
+                extension.getNumLights(null, {});
             }, TypeError);
         });
 
-        it('should require second parameter of type object', function () {
+        it('should require second argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getNumLights(0, {});
             });
 
             assert.throws(function () {
-                extension.getNumLights(0, 0);
+                extension.getNumLights(0, null);
             }, TypeError);
         });
     });
@@ -566,7 +566,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightDescription, 'function');
         });
 
-        it('should require atleast 3 parameters', function () {
+        it('should require atleast 3 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.getLightDescription(0, 0, {});
             });
@@ -584,33 +584,33 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getLightDescription(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightDescription({}, 0, {});
+                extension.getLightDescription(null, 0, {});
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getLightDescription(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightDescription(0, {}, {});
+                extension.getLightDescription(0, null, {});
             }, TypeError);
         });
 
-        it('should require third parameter of type object', function () {
+        it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getLightDescription(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightDescription(0, 0, 0);
+                extension.getLightDescription(0, 0, null);
             }, TypeError);
         });
     });
@@ -622,7 +622,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightLocation, 'function');
         });
 
-        it('should require atleast 3 parameters', function () {
+        it('should require atleast 3 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.getLightLocation(0, 0, {});
             });
@@ -640,27 +640,27 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getLightLocation(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation({}, 0, {});
+                extension.getLightLocation(null, 0, {});
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getLightLocation(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(0, {}, {});
+                extension.getLightLocation(0, null, {});
             }, TypeError);
         });
 
-        it('should require third parameter of type object', function () {
+        it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getLightLocation(0, 0, {});
             });
@@ -678,7 +678,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightColor, 'function');
         });
 
-        it('should require atleast 3 parameters', function () {
+        it('should require atleast 3 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.getLightColor(0, 0, {});
             });
@@ -696,33 +696,33 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getLightColor(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor({}, 0, {});
+                extension.getLightColor(null, 0, {});
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.getLightColor(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(0, {}, {});
+                extension.getLightColor(0, null, {});
             }, TypeError);
         });
 
-        it('should require third parameter of type object', function () {
+        it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.getLightColor(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(0, 0, 0);
+                extension.getLightColor(0, 0, null);
             }, TypeError);
         });
     });
@@ -734,7 +734,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.setLightColor, 'function');
         });
 
-        it('should require atleast 3 parameters', function () {
+        it('should require atleast 3 arguments', function () {
             assert.doesNotThrow(function () {
                 extension.setLightColor(0, 0, {
                     red: 0x00,
@@ -757,7 +757,7 @@ describe('exports: structural tests', function () {
             }, Error);
         });
 
-        it('should require first parameter of type number', function () {
+        it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.setLightColor(0, 0, {
                     red: 0x00,
@@ -768,11 +768,11 @@ describe('exports: structural tests', function () {
             });
 
             assert.throws(function () {
-                extension.setLightColor({}, 0, {});
+                extension.setLightColor(null, 0, {});
             }, TypeError);
         });
 
-        it('should require second parameter of type number', function () {
+        it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
                 extension.setLightColor(0, 0, {
                     red: 0x00,
@@ -783,11 +783,11 @@ describe('exports: structural tests', function () {
             });
 
             assert.throws(function () {
-                extension.setLightColor(0, {}, {});
+                extension.setLightColor(0, null, {});
             }, TypeError);
         });
 
-        it('should require third parameter of type object', function () {
+        it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
                 extension.setLightColor(0, 0, {
                     red: 0x00,
@@ -798,7 +798,7 @@ describe('exports: structural tests', function () {
             });
 
             assert.throws(function () {
-                extension.setLightColor(0, 0, 0);
+                extension.setLightColor(0, 0, null);
             }, TypeError);
         });
     });
