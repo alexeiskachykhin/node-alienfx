@@ -10,7 +10,7 @@ describe('exports: behavioral tests', function () {
     describe('getVersion()', function () {
 
         it('should get api version', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var version = {};
             var result = extension.getVersion(version);
@@ -27,8 +27,23 @@ describe('exports: behavioral tests', function () {
 
     describe('initialize()', function () {
 
+        it('should initialize a system', function (done) {
+            extension.initialize(function (err, data) {
+                extension.release();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                done();
+            });
+
+            
+        });
+    });
+
+
+    describe('initializeSync()', function () {
+
         it('should initialize a system', function () {
-            var result = extension.initialize();
+            var result = extension.initializeSync();
             extension.release();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -39,7 +54,7 @@ describe('exports: behavioral tests', function () {
     describe('release()', function () {
 
         it('should release a system', function () {
-            extension.initialize();
+            extension.initializeSync();
             var result = extension.release();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -50,7 +65,7 @@ describe('exports: behavioral tests', function () {
     describe('reset()', function () {
 
         it('should reset the lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
             extension.update();
 
@@ -69,7 +84,7 @@ describe('exports: behavioral tests', function () {
     describe('light()', function () {
 
         it('should color the lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -93,7 +108,7 @@ describe('exports: behavioral tests', function () {
     describe('actionColor()', function () {
 
         it('should set action for lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -118,7 +133,7 @@ describe('exports: behavioral tests', function () {
     describe('actionColorEx()', function () {
 
         it('should set action and both colors for lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -144,7 +159,7 @@ describe('exports: behavioral tests', function () {
     describe('update()', function () {
 
         it('should send updates to a hardware', function () {
-            extension.initialize();
+            extension.initializeSync();
             var result = extension.update();
             extension.release();
 
@@ -156,7 +171,7 @@ describe('exports: behavioral tests', function () {
     describe('updateDefault()', function () {
 
         it('should set system power-on state', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -180,7 +195,7 @@ describe('exports: behavioral tests', function () {
     describe('getNumDevices()', function () {
 
         it('should return a number of compatible devices', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
             var result = extension.getNumDevices(out);
@@ -199,7 +214,7 @@ describe('exports: behavioral tests', function () {
     describe('getDeviceDescription()', function () {
 
         it('should get description of a device', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
             var result = extension.getDeviceDescription(0, out);
@@ -219,7 +234,7 @@ describe('exports: behavioral tests', function () {
     describe('getNumLights()', function () {
 
         it('should get number of lights on a device', function () {
-            extension.initialize();
+            extension.initializeSync();
             
             var out = {};
             var result = extension.getNumLights(0, out);
@@ -238,7 +253,7 @@ describe('exports: behavioral tests', function () {
     describe('getLightDescription()', function () {
 
         it('should get description of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
             var result = extension.getLightDescription(0, 0, out);
@@ -257,7 +272,7 @@ describe('exports: behavioral tests', function () {
     describe('getLightLocation()', function () {
 
         it('should get location of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
             var result = extension.getLightLocation(0, 0, out);
@@ -279,7 +294,7 @@ describe('exports: behavioral tests', function () {
     describe('getLightColor()', function () {
 
         it('should get color of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -305,7 +320,7 @@ describe('exports: behavioral tests', function () {
     describe('setLightColor()', function () {
 
         it('should set color of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var color = {
@@ -333,7 +348,7 @@ describe('exports: behavioral tests', function () {
     describe('setLightActionColor()', function () {
 
         it('should set action of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var color = {
@@ -361,7 +376,7 @@ describe('exports: behavioral tests', function () {
     describe('setLightActionColorEx()', function () {
 
         it('should set action and both colors of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var primaryColor = {
@@ -397,7 +412,7 @@ describe('exports: behavioral tests', function () {
     describe('setTiming()', function () {
 
         it('should set timing of an action', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var result = extension.setTiming(200);

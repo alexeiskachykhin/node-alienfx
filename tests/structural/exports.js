@@ -42,9 +42,55 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.initialize, 'function');
         });
 
+        it('should not require atleast 1 argument', function (done) {
+            assert.throws(function () {
+                extension.initialize();
+            }, Error);
+
+            assert.doesNotThrow(function () {
+                extension.initialize(function () {
+                    extension.release();
+                    done();
+                });
+            });
+        });
+
+        it('should require first argument of type function', function (done) {
+            assert.throws(function () {
+                extension.initialize(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.initialize(function () {
+                    extension.release();
+                    done();
+                });
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.initialize(function () {
+                extension.release();
+                done();
+            });
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('initializeSync()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.initializeSync, 'function');
+        });
+
         it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
-                extension.initialize();
+                extension.initializeSync();
             });
 
             extension.release();
