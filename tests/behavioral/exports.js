@@ -92,7 +92,7 @@ describe('exports: behavioral tests', function () {
 
     describe('actionColor()', function () {
 
-        it.only('should set action for lights', function () {
+        it('should set action for lights', function () {
             extension.initialize();
             extension.reset();
 
@@ -101,6 +101,32 @@ describe('exports: behavioral tests', function () {
             var color = extension.Color.GREEN | extension.Brightness.FULL;
 
             extension.actionColor(position, action, color);
+            extension.update();
+
+            assert.ok(utilities.lightsAre(extension, {
+                red: 0x00,
+                green: 0xFF,
+                blue: 0x00,
+                brightness: 0xFF
+            }));
+
+            extension.release();
+        });
+    });
+
+
+    describe('actionColorEx()', function () {
+
+        it('should set action and both colors for lights', function () {
+            extension.initialize();
+            extension.reset();
+
+            var position = extension.Position.ALL;
+            var action = extension.Action.MORPH;
+            var primaryColor = extension.Color.GREEN | extension.Brightness.FULL;
+            var secondaryColor = extension.Color.RED | extension.Brightness.FULL;
+
+            extension.actionColorEx(position, action, primaryColor, secondaryColor);
             extension.update();
 
             assert.ok(utilities.lightsAre(extension, {

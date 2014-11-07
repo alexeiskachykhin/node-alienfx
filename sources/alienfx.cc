@@ -112,6 +112,27 @@ Handle<Value> ActionColor(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> ActionColorEx(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 4);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_NUMBER(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 3);
+
+
+    unsigned int locationMask = args[0]->Uint32Value();
+    unsigned int action = args[1]->Uint32Value();
+    unsigned int primaryColorValue = args[2]->Uint32Value();
+    unsigned int secondaryColorValue = args[3]->Uint32Value();
+
+    LFX_RESULT result = ALIENFX_API.ActionColorEx(locationMask, action, primaryColorValue, secondaryColorValue);
+
+    return scope.Close(Number::New(result));
+}
+
 Handle<Value> GetNumDevices(const Arguments& args)
 {
     HandleScope scope;
@@ -446,6 +467,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "updateDefault", UpdateDefault);
     NODE_SET_METHOD(target, "light", Light);
     NODE_SET_METHOD(target, "actionColor", ActionColor);
+    NODE_SET_METHOD(target, "actionColorEx", ActionColorEx);
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);

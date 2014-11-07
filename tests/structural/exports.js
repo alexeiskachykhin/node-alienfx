@@ -190,6 +190,88 @@ describe('exports: structural tests', function () {
     });
 
 
+    describe('actionColorEx()', function () {
+
+        it('should be a function', function () {
+            assert.strictEqual(typeof extension.actionColorEx, 'function');
+        });
+
+        it('should require atleast 4 parameters', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColorEx();
+            }, Error);
+
+            assert.throws(function () {
+                extension.actionColorEx(0, extension.Action.COLOR);
+            }, Error);
+
+            assert.throws(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0);
+            }, Error);
+        });
+
+        it('should require first parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColorEx({}, extension.Action.COLOR, 0, 0);
+            }, TypeError);
+        });
+
+        it('should require second parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColorEx(0, {}, 0, 0);
+            }, TypeError);
+        });
+
+        it('should require third parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, {}, 0);
+            }, TypeError);
+        });
+
+        it('should allow negative numbers as third parameter', function () {
+            var color = (0x80000000 | 0);
+
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, color, 0);
+            });
+        });
+
+        it('should require fourth parameter of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, 0);
+            });
+
+            assert.throws(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, {});
+            }, TypeError);
+        });
+
+        it('should allow negative numbers as fourth parameter', function () {
+            var color = (0x80000000 | 0);
+
+            assert.doesNotThrow(function () {
+                extension.actionColorEx(0, extension.Action.COLOR, 0, color);
+            });
+        });
+    });
+
+
     describe('update()', function () {
 
         it('should be a function', function () {
