@@ -14,10 +14,10 @@ if (extension.isAvailable) {
         extension.light(position, color);
 
 
-        var numberOfDevices = {};
-        extension.getNumDevices(numberOfDevices);
+        var out = {};
+        extension.getNumDevicesSync(out);
 
-        for (var deviceIndex = 0; deviceIndex < numberOfDevices.result; deviceIndex++) {
+        for (var deviceIndex = 0; deviceIndex < out.numberOfDevices; deviceIndex++) {
             var deviceDescription = {};
             extension.getDeviceDescription(deviceIndex, deviceDescription);
 

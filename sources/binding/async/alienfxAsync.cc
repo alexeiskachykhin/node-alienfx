@@ -98,9 +98,60 @@ Handle<Value> Release(const Arguments& args)
 }
 
 
+void GetNumDevicesAsync(uv_work_t* request)
+{
+    GetNumDevicesBaton* baton = static_cast<GetNumDevicesBaton*>(request->data);
+
+    LFX_RESULT result = ALIENFX_API.GetNumDevices(&baton->NumberOfDevices);
+
+    baton->Result = result;
+}
+
+void GetNumDevicesAsyncAfter(uv_work_t* request, int status)
+{
+    GetNumDevicesBaton* baton = static_cast<GetNumDevicesBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    
+    if (baton->Result == LFX_SUCCESS)
+    {
+        data->Set(String::NewSymbol("numberOfDevices"), Number::New(baton->NumberOfDevices));
+    }
+
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> GetNumDevices(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
+    REQUIRE_FUNCTION(scope, args, 0);
+
+
+    Handle<Function> callback = Handle<Function>::Cast(args[0]);
+
+    GetNumDevicesBaton* baton = new GetNumDevicesBaton();
+    baton->Request.data = baton;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, GetNumDevicesAsync, GetNumDevicesAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
 
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "initialize", Initialize);
     NODE_SET_METHOD(target, "release", Release);
+    NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
 }

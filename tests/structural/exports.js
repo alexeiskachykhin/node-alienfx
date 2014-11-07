@@ -544,23 +544,65 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumDevices, 'function');
         });
 
+        it('should require atleast 1 argument', function (done) {
+            assert.throws(function () {
+                extension.getNumDevices();
+            }, Error);
+
+            assert.doesNotThrow(function () {
+                extension.getNumDevices(function () {
+                    done();
+                });
+            });
+        });
+
+        it('should require first argument of type function', function (done) {
+            assert.throws(function () {
+                extension.getNumDevices(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getNumDevices(function () {
+                    done();
+                });
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getNumDevices(function () {
+                done();
+            });
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getNumDevicesSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getNumDevicesSync, 'function');
+        });
+
         it('should require atleast 1 argument', function () {
             assert.doesNotThrow(function () {
-                extension.getNumDevices({});
+                extension.getNumDevicesSync({});
             });
 
             assert.throws(function () {
-                extension.getNumDevices();
+                extension.getNumDevicesSync();
             }, Error);
         });
 
         it('should require first argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getNumDevices({});
+                extension.getNumDevicesSync({});
             });
 
             assert.throws(function () {
-                extension.getNumDevices(null);
+                extension.getNumDevicesSync(null);
             }, TypeError);
         });
     });

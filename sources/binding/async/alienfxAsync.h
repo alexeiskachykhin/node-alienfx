@@ -14,6 +14,10 @@ struct InitializeBaton: BaseBaton {};
 
 struct ReleaseBaton : BaseBaton {};
 
+struct GetNumDevicesBaton : BaseBaton {
+    unsigned int NumberOfDevices;
+};
+
 
 
 void InitAsyncBindings(const v8::Handle<v8::Object>& target);

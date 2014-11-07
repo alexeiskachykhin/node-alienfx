@@ -7,10 +7,10 @@ if (extension.isAvailable) {
     if (result === extension.Result.SUCCESS) {
         extension.reset();
 
-        var numberOfDevices = {};
-        extension.getNumDevices(numberOfDevices);
+        var out = {};
+        extension.getNumDevicesSync(out);
 
-        for (var deviceIndex = 0; deviceIndex < numberOfDevices.result; deviceIndex++) {
+        for (var deviceIndex = 0; deviceIndex < out.numberOfDevices; deviceIndex++) {
             var numberOfLights = {};
             extension.getNumLights(deviceIndex, numberOfLights);
 

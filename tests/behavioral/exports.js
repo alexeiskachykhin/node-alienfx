@@ -205,19 +205,37 @@ describe('exports: behavioral tests', function () {
 
     describe('getNumDevices()', function () {
 
+        it('should return a number of compatible devices', function (done) {
+            extension.initializeSync();
+
+            extension.getNumDevices(function (err, data) {
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.numberOfDevices, 'number');
+
+                console.info('Your system has %d AlienFX compatible devices.', data.numberOfDevices);
+
+                extension.releaseSync();
+                done();
+            });
+        });
+    });
+
+
+    describe('getNumDevicesSync()', function () {
+
         it('should return a number of compatible devices', function () {
             extension.initializeSync();
 
             var out = {};
-            var result = extension.getNumDevices(out);
+            var result = extension.getNumDevicesSync(out);
 
             extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.result, 'number');
+            assert.strictEqual(typeof out.numberOfDevices, 'number');
 
-            console.info('Your system has %d AlienFX compatible devices.', out.result);
+            console.info('Your system has %d AlienFX compatible devices.', out.numberOfDevices);
         });
     });
 
