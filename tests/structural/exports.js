@@ -1,6 +1,7 @@
 var extension = require('bindings')('alienfx.node');
 
 var assert = require('assert');
+var utilities = require('../utilities');
 
 
 describe('exports: structural tests', function () {
@@ -736,12 +737,7 @@ describe('exports: structural tests', function () {
 
         it('should require atleast 3 arguments', function () {
             assert.doesNotThrow(function () {
-                extension.setLightColor(0, 0, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightColor(0, 0, utilities.colors.NONE);
             });
 
             assert.throws(function () {
@@ -759,42 +755,27 @@ describe('exports: structural tests', function () {
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.setLightColor(0, 0, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightColor(0, 0, utilities.colors.NONE);
             });
 
             assert.throws(function () {
-                extension.setLightColor(null, 0, {});
+                extension.setLightColor(null, 0, utilities.colors.NONE);
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.setLightColor(0, 0, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightColor(0, 0, utilities.colors.NONE);
             });
 
             assert.throws(function () {
-                extension.setLightColor(0, null, {});
+                extension.setLightColor(0, null, utilities.colors.NONE);
             }, TypeError);
         });
 
         it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.setLightColor(0, 0, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightColor(0, 0, utilities.colors.NONE);
             });
 
             assert.throws(function () {
@@ -812,12 +793,7 @@ describe('exports: structural tests', function () {
 
         it('should require atleast 4 arguments', function () {
             assert.doesNotThrow(function () {
-                extension.setLightActionColor(0, 0, extension.Action.MORPH, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightActionColor(0, 0, extension.Action.MORPH, utilities.colors.NONE);
             });
 
             assert.throws(function () {
@@ -839,57 +815,37 @@ describe('exports: structural tests', function () {
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.setLightActionColor(0, 0, extension.Action.MORPH, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightActionColor(0, 0, extension.Action.MORPH, utilities.colors.NONE);
             });
 
             assert.throws(function () {
-                extension.setLightActionColor(null, 0, extension.Action.MORPH, {});
+                extension.setLightActionColor(null, 0, extension.Action.MORPH, utilities.colors.NONE);
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.setLightActionColor(0, 0, extension.Action.MORPH, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightActionColor(0, 0, extension.Action.MORPH, utilities.colors.NONE);
             });
 
             assert.throws(function () {
-                extension.setLightActionColor(0, null, extension.Action.MORPH, {});
+                extension.setLightActionColor(0, null, extension.Action.MORPH, utilities.colors.NONE);
             }, TypeError);
         });
 
         it('should require third argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.setLightActionColor(0, 0, extension.Action.MORPH, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightActionColor(0, 0, extension.Action.MORPH, utilities.colors.NONE);
             });
 
             assert.throws(function () {
-                extension.setLightActionColor(0, 0, null, {});
+                extension.setLightActionColor(0, 0, null, utilities.colors.NONE);
             }, TypeError);
         });
 
         it('should require fourth argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.setLightActionColor(0, 0, extension.Action.MORPH, {
-                    red: 0x00,
-                    green: 0x00,
-                    blue: 0x00,
-                    brightness: 0x00,
-                });
+                extension.setLightActionColor(0, 0, extension.Action.MORPH, utilities.colors.NONE);
             });
 
             assert.throws(function () {
@@ -898,4 +854,83 @@ describe('exports: structural tests', function () {
         });
     });
 
+
+    describe('setLightActionColorEx()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.setLightActionColorEx, 'function');
+        });
+
+        it('should require atleast 5 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            });
+
+            assert.throws(function () {
+                extension.setLightActionColorEx();
+            }, Error);
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0, 0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE);
+            }, Error);
+        });
+
+        it('should require first argument of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            });
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(null, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            }, TypeError);
+        });
+
+        it('should require second argument of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            });
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0, null, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            }, TypeError);
+        });
+
+        it('should require third argument of type number', function () {
+            assert.doesNotThrow(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            });
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0, 0, null, utilities.colors.NONE, utilities.colors.NONE);
+            }, TypeError);
+        });
+
+        it('should require fourth argument of type object', function () {
+            assert.doesNotThrow(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            });
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, null, utilities.colors.NONE);
+            }, TypeError);
+        });
+
+        it('should require fifth argument of type object', function () {
+            assert.doesNotThrow(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, utilities.colors.NONE);
+            });
+
+            assert.throws(function () {
+                extension.setLightActionColorEx(0, 0, extension.Action.MORPH, utilities.colors.NONE, null);
+            }, TypeError);
+        });
+    });
 });

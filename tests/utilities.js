@@ -63,6 +63,15 @@ function checkLightsColor(extension, color) {
 
 
 module.exports = exports = {
+    colors: {
+        NONE: {
+            red: 0,
+            green: 0,
+            blue: 0,
+            brightness: 0
+        }
+    },
+
     ask: {
         whichTestsToRun: promptAboutTests
     },

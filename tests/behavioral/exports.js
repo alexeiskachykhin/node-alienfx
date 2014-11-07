@@ -332,7 +332,7 @@ describe('exports: behavioral tests', function () {
 
     describe('setLightActionColor()', function () {
 
-        it('should set action of particular light', function () {
+        it('should set action of a light', function () {
             extension.initialize();
             extension.reset();
 
@@ -354,6 +354,42 @@ describe('exports: behavioral tests', function () {
 
             assert.strictEqual(result, extension.Result.SUCCESS);
             assert.deepEqual(out, color);
+        });
+    });
+
+
+    describe('setLightActionColorEx()', function () {
+
+        it('should set action and both colors of a light', function () {
+            extension.initialize();
+            extension.reset();
+
+            var primaryColor = {
+                red: 0xFF,
+                green: 0x00,
+                blue: 0x00,
+                brightness: 0xFF
+            };
+
+            var secondaryColor = {
+                red: 0x00,
+                green: 0xFF,
+                blue: 0x00,
+                brightness: 0xFF
+            };
+
+
+            var result = extension.setLightActionColorEx(0, 0, extension.Action.MORPH, primaryColor, secondaryColor);
+            extension.update();
+
+
+            var out = {};
+            extension.getLightColor(0, 0, out);
+            extension.release();
+
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.deepEqual(out, primaryColor);
         });
     });
 });
