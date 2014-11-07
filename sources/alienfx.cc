@@ -8,6 +8,24 @@ using namespace v8;
 using namespace std;
 
 
+
+void ObjectToColor(const Handle<Object> object, LFX_COLOR& color)
+{
+    color.red = object->Get(String::NewSymbol("red"))->Uint32Value();
+    color.green = object->Get(String::NewSymbol("green"))->Uint32Value();
+    color.blue = object->Get(String::NewSymbol("blue"))->Uint32Value();
+    color.brightness = object->Get(String::NewSymbol("brightness"))->Uint32Value();
+}
+
+void ColorToObject(const LFX_COLOR& color, Handle<Object> object)
+{
+    object->Set(String::NewSymbol("red"), Number::New(color.red));
+    object->Set(String::NewSymbol("green"), Number::New(color.green));
+    object->Set(String::NewSymbol("blue"), Number::New(color.blue));
+    object->Set(String::NewSymbol("brightness"), Number::New(color.brightness));
+}
+
+
 Handle<Value> GetVersion(const Arguments& args)
 {
     HandleScope scope;
@@ -241,6 +259,7 @@ Handle<Value> GetLightDescription(const Arguments& args)
         out->Set(String::NewSymbol("result"), String::New(lightDescription.c_str()));
     }
 
+
     return scope.Close(Number::New(result));
 }
 
@@ -257,7 +276,7 @@ Handle<Value> GetLightLocation(const Arguments& args)
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
 
-    LFX_POSITION lightLocation = {0};
+    LFX_POSITION lightLocation{ 0 };
 
 
     LFX_RESULT result = ALIENFX_API.GetLightLocation(deviceIndex, lightIndex, &lightLocation);
@@ -285,7 +304,7 @@ Handle<Value> GetLightColor(const Arguments& args)
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
 
-    LFX_COLOR lightColor = { 0 };
+    LFX_COLOR lightColor{ 0 };
 
 
     LFX_RESULT result = ALIENFX_API.GetLightColor(deviceIndex, lightIndex, &lightColor);
@@ -293,12 +312,8 @@ Handle<Value> GetLightColor(const Arguments& args)
     if (result == LFX_SUCCESS)
     {
         Local<Object> out = Local<Object>::Cast(args[2]);
-        out->Set(String::NewSymbol("red"), Number::New(lightColor.red));
-        out->Set(String::NewSymbol("green"), Number::New(lightColor.green));
-        out->Set(String::NewSymbol("blue"), Number::New(lightColor.blue));
-        out->Set(String::NewSymbol("brightness"), Number::New(lightColor.brightness));
+        ColorToObject(lightColor, out);
     }
-
 
     return scope.Close(Number::New(result));
 }
@@ -317,11 +332,9 @@ Handle<Value> SetLightColor(const Arguments& args)
     unsigned int lightIndex = args[1]->Uint32Value();
     Local<Object> color = Local<Object>::Cast(args[2]);
 
-    LFX_COLOR lightColor = { 0 };
-    lightColor.red = color->Get(String::NewSymbol("red"))->Uint32Value();
-    lightColor.green = color->Get(String::NewSymbol("green"))->Uint32Value();
-    lightColor.blue = color->Get(String::NewSymbol("blue"))->Uint32Value();
-    lightColor.brightness = color->Get(String::NewSymbol("brightness"))->Uint32Value();
+    LFX_COLOR lightColor{ 0 };
+    ObjectToColor(color, lightColor);
+
 
     LFX_RESULT result = ALIENFX_API.SetLightColor(deviceIndex, lightIndex, &lightColor);
 
@@ -342,15 +355,12 @@ Handle<Value> SetLightActionColor(const Arguments& args)
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
     unsigned int action = args[2]->Uint32Value();
-    Local<Object> primaryColor = Local<Object>::Cast(args[3]);
+    Local<Object> color = Local<Object>::Cast(args[3]);
 
-    LFX_COLOR primaryLightColor = { 0 };
-    primaryLightColor.red = primaryColor->Get(String::NewSymbol("red"))->Uint32Value();
-    primaryLightColor.green = primaryColor->Get(String::NewSymbol("green"))->Uint32Value();
-    primaryLightColor.blue = primaryColor->Get(String::NewSymbol("blue"))->Uint32Value();
-    primaryLightColor.brightness = primaryColor->Get(String::NewSymbol("brightness"))->Uint32Value();
+    LFX_COLOR lightColor{ 0 };
+    ObjectToColor(color, lightColor);
 
-    LFX_RESULT result = ALIENFX_API.SetLightActionColor(deviceIndex, lightIndex, action, &primaryLightColor);
+    LFX_RESULT result = ALIENFX_API.SetLightActionColor(deviceIndex, lightIndex, action, &lightColor);
 
     return scope.Close(Number::New(result));
 }
@@ -483,7 +493,6 @@ Handle<Value> CreateActionObject()
 
     return scope.Close(action);
 }
-
 
 
 void Init(Handle<Object> target) {
