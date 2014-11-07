@@ -39,7 +39,7 @@ bool Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
     return true;
 }
 
-bool Contracts::RequireNumberArgument(const v8::Arguments& args, int argumentIndex)
+bool Contracts::RequireNumberArgument(const Arguments& args, int argumentIndex)
 {
     HandleScope scope;
 
