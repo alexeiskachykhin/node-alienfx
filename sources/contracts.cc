@@ -3,7 +3,7 @@
 using namespace v8;
 
 
-Handle<Value> Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumberOfArguments)
+bool Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumberOfArguments)
 {
     HandleScope scope;
 
@@ -15,13 +15,13 @@ Handle<Value> Contracts::RequireNumberOfArguments(const Arguments& args, int req
         Local<Value> exception = Exception::Error(String::New(exceptionMessage));
         ThrowException(exception);
 
-        return scope.Close(Undefined());
+        return false;
     }
 
-    return scope.Close(Handle<Value>());
+    return true;
 }
 
-Handle<Value> Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
+bool Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
 {
     HandleScope scope;
 
@@ -33,13 +33,13 @@ Handle<Value> Contracts::RequireObjectArgument(const Arguments& args, int argume
         Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
         ThrowException(exception);
 
-        return scope.Close(Undefined());
+        return false;
     }
 
-    return scope.Close(Handle<Value>());
+    return true;
 }
 
-Handle<Value> Contracts::RequireNumberArgument(const v8::Arguments& args, int argumentIndex)
+bool Contracts::RequireNumberArgument(const v8::Arguments& args, int argumentIndex)
 {
     HandleScope scope;
 
@@ -51,8 +51,8 @@ Handle<Value> Contracts::RequireNumberArgument(const v8::Arguments& args, int ar
         Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
         ThrowException(exception);
 
-        return scope.Close(Undefined());
+        return false;
     }
 
-    return scope.Close(Handle<Value>());
+    return true;
 }
