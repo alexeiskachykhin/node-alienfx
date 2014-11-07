@@ -21,6 +21,7 @@ struct _ALIENFX_API {
     LFX2GETLIGHTLOC GetLightLocation;
     LFX2GETLIGHTCOL GetLightColor;
     LFX2SETLIGHTCOL SetLightColor;
+    LFX2SETLIGHTACTIONCOLOR SetLightActionColor;
 };
 
 extern _ALIENFX_API ALIENFX_API;

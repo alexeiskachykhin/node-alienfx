@@ -298,8 +298,6 @@ describe('exports: behavioral tests', function () {
 
             assert.strictEqual(result, extension.Result.SUCCESS);
             assert.strictEqual(actualColor, color);
-
-            console.info('Location of the first light of the first device:', out.result);
         });
     });
 
@@ -318,6 +316,34 @@ describe('exports: behavioral tests', function () {
             };
 
             var result = extension.setLightColor(0, 0, color);
+            extension.update();
+
+
+            var out = {};
+            extension.getLightColor(0, 0, out);
+            extension.release();
+
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.deepEqual(out, color);
+        });
+    });
+
+
+    describe('setLightActionColor()', function () {
+
+        it('should set action of particular light', function () {
+            extension.initialize();
+            extension.reset();
+
+            var color = {
+                red: 0xFF,
+                green: 0x00,
+                blue: 0x00,
+                brightness: 0xFF
+            };
+
+            var result = extension.setLightActionColor(0, 0, extension.Action.MORPH, color);
             extension.update();
 
 

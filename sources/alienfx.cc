@@ -328,6 +328,33 @@ Handle<Value> SetLightColor(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
+Handle<Value> SetLightActionColor(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 4);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_NUMBER(scope, args, 2);
+    REQUIRE_OBJECT(scope, args, 3);
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+    unsigned int action = args[2]->Uint32Value();
+    Local<Object> primaryColor = Local<Object>::Cast(args[3]);
+
+    LFX_COLOR primaryLightColor = { 0 };
+    primaryLightColor.red = primaryColor->Get(String::NewSymbol("red"))->Uint32Value();
+    primaryLightColor.green = primaryColor->Get(String::NewSymbol("green"))->Uint32Value();
+    primaryLightColor.blue = primaryColor->Get(String::NewSymbol("blue"))->Uint32Value();
+    primaryLightColor.brightness = primaryColor->Get(String::NewSymbol("brightness"))->Uint32Value();
+
+    LFX_RESULT result = ALIENFX_API.SetLightActionColor(deviceIndex, lightIndex, action, &primaryLightColor);
+
+    return scope.Close(Number::New(result));
+}
+
 
 Handle<Value> CreateColorObject()
 {
@@ -476,6 +503,7 @@ void Init(Handle<Object> target) {
     NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
     NODE_SET_METHOD(target, "getLightColor", GetLightColor);
     NODE_SET_METHOD(target, "setLightColor", SetLightColor);
+    NODE_SET_METHOD(target, "setLightActionColor", SetLightActionColor);
 
 
     target->Set(String::NewSymbol("isAvailable"), Boolean::New(ALIENFX_API.IsAvailable));
