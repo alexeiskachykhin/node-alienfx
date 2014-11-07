@@ -4,11 +4,15 @@
 #include "../../api/alienfxApi.h"
 
 
-struct InitializeBaton {
+struct BaseBaton {
     uv_work_t Request;
     v8::Persistent<v8::Function> Callback;
     LFX_RESULT Result;
 };
+
+struct InitializeBaton: BaseBaton {};
+
+struct ReleaseBaton : BaseBaton {};
 
 
 

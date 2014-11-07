@@ -20,7 +20,7 @@ describe('exports: behavioral tests', function () {
 
             console.info('API version is: %s', version.result);
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -29,13 +29,11 @@ describe('exports: behavioral tests', function () {
 
         it('should initialize a system', function (done) {
             extension.initialize(function (err, data) {
-                extension.release();
+                extension.releaseSync();
 
                 assert.strictEqual(data.result, extension.Result.SUCCESS);
                 done();
             });
-
-            
         });
     });
 
@@ -44,7 +42,7 @@ describe('exports: behavioral tests', function () {
 
         it('should initialize a system', function () {
             var result = extension.initializeSync();
-            extension.release();
+            extension.releaseSync();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
         });
@@ -53,9 +51,22 @@ describe('exports: behavioral tests', function () {
 
     describe('release()', function () {
 
+        it('should release a system', function (done) {
+            extension.initializeSync();
+
+            extension.release(function (err, data) {
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                done();
+            });
+        });
+    });
+
+
+    describe('releaseSync()', function () {
+
         it('should release a system', function () {
             extension.initializeSync();
-            var result = extension.release();
+            var result = extension.releaseSync();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
         });
@@ -76,7 +87,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -100,7 +111,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -125,7 +136,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -151,7 +162,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -161,7 +172,7 @@ describe('exports: behavioral tests', function () {
         it('should send updates to a hardware', function () {
             extension.initializeSync();
             var result = extension.update();
-            extension.release();
+            extension.releaseSync();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
         });
@@ -187,7 +198,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -200,7 +211,7 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getNumDevices(out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -219,7 +230,7 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getDeviceDescription(0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -239,7 +250,7 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getNumLights(0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -258,7 +269,7 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getLightDescription(0, 0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -277,7 +288,7 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getLightLocation(0, 0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             /* AlienFX.dll (version 2.1.0) doesn't provide any meningfull implementation 
@@ -306,7 +317,7 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getLightColor(0, 0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             var actualColor = out.blue | (out.green << 8) | (out.red << 16) | (out.brightness << 24);
@@ -336,7 +347,7 @@ describe('exports: behavioral tests', function () {
 
             var out = {};
             extension.getLightColor(0, 0, out);
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -364,7 +375,7 @@ describe('exports: behavioral tests', function () {
 
             var out = {};
             extension.getLightColor(0, 0, out);
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -400,7 +411,7 @@ describe('exports: behavioral tests', function () {
 
             var out = {};
             extension.getLightColor(0, 0, out);
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -418,7 +429,7 @@ describe('exports: behavioral tests', function () {
             var result = extension.setTiming(200);
 
             extension.update();
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);

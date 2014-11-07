@@ -59,7 +59,7 @@ Handle<Value> InitializeSync(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> Release(const Arguments& args)
+Handle<Value> ReleaseSync(const Arguments& args)
 {
     HandleScope scope;
 
@@ -545,7 +545,7 @@ void InitSyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "getVersion", GetVersion);
     NODE_SET_METHOD(target, "initializeSync", InitializeSync);
-    NODE_SET_METHOD(target, "release", Release);
+    NODE_SET_METHOD(target, "releaseSync", ReleaseSync);
     NODE_SET_METHOD(target, "reset", Reset);
     NODE_SET_METHOD(target, "update", Update);
     NODE_SET_METHOD(target, "updateDefault", UpdateDefault);

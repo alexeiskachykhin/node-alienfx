@@ -53,7 +53,54 @@ Handle<Value> Initialize(const Arguments& args)
 
 
 
+
+void ReleaseAsync(uv_work_t* request)
+{
+    InitializeBaton* baton = static_cast<InitializeBaton*>(request->data);
+
+    LFX_RESULT result = ALIENFX_API.Release();
+
+    baton->Result = result;
+}
+
+void ReleaseAsyncAfter(uv_work_t* request, int status)
+{
+    ReleaseBaton* baton = static_cast<ReleaseBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> Release(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
+    REQUIRE_FUNCTION(scope, args, 0);
+
+
+    Handle<Function> callback = Handle<Function>::Cast(args[0]);
+
+    ReleaseBaton* baton = new ReleaseBaton();
+    baton->Request.data = baton;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, ReleaseAsync, ReleaseAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
+
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "initialize", Initialize);
+    NODE_SET_METHOD(target, "release", Release);
 }

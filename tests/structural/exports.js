@@ -42,14 +42,14 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.initialize, 'function');
         });
 
-        it('should not require atleast 1 argument', function (done) {
+        it('should require atleast 1 argument', function (done) {
             assert.throws(function () {
                 extension.initialize();
             }, Error);
 
             assert.doesNotThrow(function () {
                 extension.initialize(function () {
-                    extension.release();
+                    extension.releaseSync();
                     done();
                 });
             });
@@ -62,7 +62,7 @@ describe('exports: structural tests', function () {
 
             assert.doesNotThrow(function () {
                 extension.initialize(function () {
-                    extension.release();
+                    extension.releaseSync();
                     done();
                 });
             });
@@ -72,7 +72,7 @@ describe('exports: structural tests', function () {
             var completed = false;
 
             extension.initialize(function () {
-                extension.release();
+                extension.releaseSync();
                 done();
             });
 
@@ -93,21 +93,64 @@ describe('exports: structural tests', function () {
                 extension.initializeSync();
             });
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
 
-    describe('release()', function () {
+    describe('release', function () {
         this.timeout(0);
 
         it('should be a function', function () {
             assert.equal(typeof extension.release, 'function');
         });
 
+        it('should require atleast 1 argument', function (done) {
+            assert.throws(function () {
+                extension.release();
+            }, Error);
+
+            assert.doesNotThrow(function () {
+                extension.release(function () {
+                    done();
+                });
+            });
+        });
+
+        it('should require first argument of type function', function (done) {
+            assert.throws(function () {
+                extension.release(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.release(function () {
+                    done();
+                });
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.release(function () {
+                done();
+            });
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('releaseSync()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.releaseSync, 'function');
+        });
+
         it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
-                extension.release();
+                extension.releaseSync();
             });
         });
     });

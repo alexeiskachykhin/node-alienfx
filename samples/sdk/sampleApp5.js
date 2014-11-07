@@ -44,7 +44,7 @@ if (extension.isAvailable) {
 
         setTimeout(function () {
             require('./utilities').waitForKeyPress(function () {
-                extension.release();
+                extension.releaseSync();
             });
         }, 15000);
     }

@@ -53,7 +53,7 @@ if (extension.isAvailable) {
 
 
         require('./utilities').waitForKeyPress(function () {
-            extension.release();
+            extension.releaseSync();
         });
     }
     else {

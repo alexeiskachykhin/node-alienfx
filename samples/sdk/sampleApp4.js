@@ -38,7 +38,7 @@ if (extension.isAvailable) {
 
         light(255, function () {
             require('./utilities').waitForKeyPress(function () {
-                extension.release();
+                extension.releaseSync();
             });
         });
     }
