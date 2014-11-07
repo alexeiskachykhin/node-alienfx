@@ -1,7 +1,7 @@
 #include <node.h>
 #include <string>
 
-#include "alienfxApi.h"
+#include "../api/alienfxApi.h"
 #include "contracts.h"
 
 using namespace v8;
