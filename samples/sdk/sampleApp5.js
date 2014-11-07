@@ -32,7 +32,7 @@ function morph() {
 
 
 if (extension.isAvailable) {
-    var result = extension.initialize();
+    var result = extension.initializeSync();
 
     if (result === extension.Result.SUCCESS) {
         extension.setTiming(100);

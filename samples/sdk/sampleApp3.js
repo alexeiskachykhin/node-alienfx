@@ -2,7 +2,7 @@ var extension = require('bindings')('alienfx.node');
 
 
 if (extension.isAvailable) {
-    var result = extension.initialize();
+    var result = extension.initializeSync();
 
     if (result === extension.Result.SUCCESS) {
         extension.reset();
