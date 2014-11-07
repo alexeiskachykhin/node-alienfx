@@ -5,6 +5,7 @@
 #include "contracts.h"
 
 using namespace v8;
+using namespace std;
 
 
 Handle<Value> GetVersion(const Arguments& args)
@@ -15,7 +16,7 @@ Handle<Value> GetVersion(const Arguments& args)
     REQUIRE_OBJECT(scope, args, 0);
 
 
-    std::string version(LFX_DEF_STRING_SIZE, 0);
+    string version(LFX_DEF_STRING_SIZE, 0);
 
 
     LFX_RESULT result = ALIENFX_API.GetVersion(
@@ -167,7 +168,7 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
 
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned char deviceType = 0;
-    std::string deviceDescription(LFX_DEF_STRING_SIZE, 0);
+    string deviceDescription(LFX_DEF_STRING_SIZE, 0);
 
 
     LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
@@ -225,7 +226,7 @@ Handle<Value> GetLightDescription(const Arguments& args)
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
 
-    std::string lightDescription(LFX_DEF_STRING_SIZE, 0);
+    string lightDescription(LFX_DEF_STRING_SIZE, 0);
 
 
     LFX_RESULT result = ALIENFX_API.GetLightDescription(
