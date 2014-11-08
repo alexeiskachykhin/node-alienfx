@@ -37,6 +37,11 @@ struct GetLightDescriptionBaton : BaseBaton {
     std::string LightDescription;
 };
 
+struct GetLightLocationBaton : BaseBaton {
+    unsigned int DeviceIndex;
+    unsigned int LightIndex;
+    LFX_POSITION LightLocation;
+};
 
 
 

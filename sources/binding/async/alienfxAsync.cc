@@ -354,6 +354,70 @@ Handle<Value> GetLightDescription(const Arguments& args)
 
 
 
+void GetLightLocationAsync(uv_work_t* request)
+{
+    GetLightLocationBaton* baton = static_cast<GetLightLocationBaton*>(request->data);
+
+    LFX_RESULT result = ALIENFX_API.GetLightLocation(
+        baton->DeviceIndex, 
+        baton->LightIndex, 
+        &baton->LightLocation);
+
+    baton->Result = result;
+}
+
+void GetLightLocationAsyncAfter(uv_work_t* request, int status)
+{
+    GetLightLocationBaton* baton = static_cast<GetLightLocationBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+
+    if (baton->Result == LFX_SUCCESS)
+    {
+        Handle<Object> location = Object::New();
+        location->Set(String::NewSymbol("x"), Number::New(baton->LightLocation.x));
+        location->Set(String::NewSymbol("y"), Number::New(baton->LightLocation.y));
+        location->Set(String::NewSymbol("z"), Number::New(baton->LightLocation.z));
+
+        data->Set(String::NewSymbol("lightLocation"), location);
+    }
+
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> GetLightLocation(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    OPTIONAL_FUNCTION(scope, args, 2);
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+    Handle<Function> callback = GetCallback(args, 2);
+
+    GetLightDescriptionBaton* baton = new GetLightDescriptionBaton();
+    baton->Request.data = baton;
+    baton->DeviceIndex = deviceIndex;
+    baton->LightIndex = lightIndex;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, GetLightDescriptionAsync, GetLightDescriptionAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "initialize", Initialize);
@@ -362,4 +426,5 @@ void InitAsyncBindings(const v8::Handle<v8::Object>& target)
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
     NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
+    NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
 }

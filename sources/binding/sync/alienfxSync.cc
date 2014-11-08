@@ -263,7 +263,7 @@ Handle<Value> GetLightDescriptionSync(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> GetLightLocation(const Arguments& args)
+Handle<Value> GetLightLocationSync(const Arguments& args)
 {
     HandleScope scope;
 
@@ -284,7 +284,13 @@ Handle<Value> GetLightLocation(const Arguments& args)
     if (result == LFX_SUCCESS)
     {
         Local<Object> out = Local<Object>::Cast(args[2]);
-        out->Set(String::NewSymbol("result"), Number::New(sizeof LFX_POSITION));
+
+        Handle<Object> location = Object::New();
+        location->Set(String::NewSymbol("x"), Number::New(lightLocation.x));
+        location->Set(String::NewSymbol("y"), Number::New(lightLocation.y));
+        location->Set(String::NewSymbol("z"), Number::New(lightLocation.z));
+
+        out->Set(String::NewSymbol("lightLocation"), location);
     }
 
 
@@ -556,7 +562,7 @@ void InitSyncBindings(const v8::Handle<v8::Object>& target)
     NODE_SET_METHOD(target, "getDeviceDescriptionSync", GetDeviceDescriptionSync);
     NODE_SET_METHOD(target, "getNumLightsSync", GetNumLightsSync);
     NODE_SET_METHOD(target, "getLightDescriptionSync", GetLightDescriptionSync);
-    NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
+    NODE_SET_METHOD(target, "getLightLocationSync", GetLightLocationSync);
     NODE_SET_METHOD(target, "getLightColor", GetLightColor);
     NODE_SET_METHOD(target, "setLightColor", SetLightColor);
     NODE_SET_METHOD(target, "setLightActionColor", SetLightActionColor);

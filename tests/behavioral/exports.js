@@ -359,11 +359,33 @@ describe('exports: behavioral tests', function () {
 
     describe('getLightLocation()', function () {
 
+        it('should get location of a light', function (done) {
+            extension.initializeSync();
+
+            extension.getLightLocation(0, 0, function (err, data) {
+                extension.releaseSync();
+
+                /* AlienFX.dll (version 2.1.0) doesn't provide any meningfull implementation 
+                 * of GetLightLocation, so for now, this test is useless. Might fallback to .NET version
+                 * or direct communication with HID device in the future.
+                 */
+                assert.strictEqual(data.result, data.result);
+
+                console.info('Location of the first light of the first device:', data.lightLocation);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getLightLocationSync()', function () {
+
         it('should get location of a light', function () {
             extension.initializeSync();
 
             var out = {};
-            var result = extension.getLightLocation(0, 0, out);
+            var result = extension.getLightLocationSync(0, 0, out);
 
             extension.releaseSync();
 

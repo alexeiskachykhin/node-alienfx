@@ -879,11 +879,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightLocation, 'function');
         });
 
-        it('should require atleast 3 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
-            });
-
+        it('should require atleast 2 arguments', function (done) {
             assert.throws(function () {
                 extension.getLightLocation();
             }, Error);
@@ -892,38 +888,102 @@ describe('exports: structural tests', function () {
                 extension.getLightLocation(0);
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getLightLocation(0, 0);
+                extension.getLightLocation(null, 0, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should require second argument of type number', function (done) {
+            assert.throws(function () {
+                extension.getLightLocation(0, null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should allow callback as a third argument', function (done) {
+            assert.throws(function () {
+                extension.getLightLocation(0, 0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getLightLocation(0, 0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getLightLocationSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightLocationSync, 'function');
+        });
+
+        it('should require atleast 3 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getLightLocationSync(0, 0, {});
+            });
+
+            assert.throws(function () {
+                extension.getLightLocationSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightLocationSync(0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightLocationSync(0, 0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
+                extension.getLightLocationSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(null, 0, {});
+                extension.getLightLocationSync(null, 0, {});
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
+                extension.getLightLocationSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(0, null, {});
+                extension.getLightLocationSync(0, null, {});
             }, TypeError);
         });
 
         it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
+                extension.getLightLocationSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(0, 0, 0);
+                extension.getLightLocationSync(0, 0, 0);
             }, TypeError);
         });
     });
