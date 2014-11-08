@@ -10,6 +10,7 @@ public:
     static bool RequireObjectArgument(const v8::Arguments& args, int argumentIndex);
     static bool RequireNumberArgument(const v8::Arguments& args, int argumentIndex);
     static bool RequireFunctionArgument(const v8::Arguments& args, int argumentIndex);
+    static bool OptionalFunctionArgument(const v8::Arguments& args, int argumentIndex);
 };
 
 
@@ -37,4 +38,9 @@ public:
         return scope.Close(Undefined()); \
     }
 
+#define OPTIONAL_FUNCTION(scope, args, argumentIndex) \
+    if (!Contracts::OptionalFunctionArgument(args, argumentIndex)) \
+    { \
+        return scope.Close(Undefined()); \
+    }
 

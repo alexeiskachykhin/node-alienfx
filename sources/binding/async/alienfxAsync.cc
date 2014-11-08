@@ -9,6 +9,32 @@ using namespace v8;
 using namespace std;
 
 
+
+Handle<Value> Empty(const Arguments& args)
+{
+    HandleScope scope;
+    return scope.Close(Undefined());
+}
+
+Handle<Function> GetCallback(const Arguments& args, int callbackArgumentIndex)
+{
+    HandleScope scope;
+    Handle<Function> callback;
+
+    if (callbackArgumentIndex < args.Length())
+    {
+        callback = Handle<Function>::Cast(args[callbackArgumentIndex]);
+    }
+    else
+    {
+        callback = FunctionTemplate::New(Empty)->GetFunction();
+    }
+
+    return scope.Close(callback);
+}
+
+
+
 void InitializeAsync(uv_work_t* request)
 {
     InitializeBaton* baton = static_cast<InitializeBaton*>(request->data);
@@ -37,11 +63,10 @@ Handle<Value> Initialize(const Arguments& args)
 {
     HandleScope scope;
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(scope, args, 0);
 
 
-    Handle<Function> callback = Handle<Function>::Cast(args[0]);
+    Handle<Function> callback = GetCallback(args, 0);
 
     InitializeBaton* baton = new InitializeBaton();
     baton->Request.data = baton;
@@ -83,11 +108,10 @@ Handle<Value> Release(const Arguments& args)
 {
     HandleScope scope;
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(scope, args, 0);
 
 
-    Handle<Function> callback = Handle<Function>::Cast(args[0]);
+    Handle<Function> callback = GetCallback(args, 0);
 
     ReleaseBaton* baton = new ReleaseBaton();
     baton->Request.data = baton;
@@ -133,11 +157,10 @@ Handle<Value> GetNumDevices(const Arguments& args)
 {
     HandleScope scope;
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(scope, args, 0);
 
 
-    Handle<Function> callback = Handle<Function>::Cast(args[0]);
+    Handle<Function> callback = GetCallback(args, 0);
 
     GetNumDevicesBaton* baton = new GetNumDevicesBaton();
     baton->Request.data = baton;
@@ -192,13 +215,13 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
 {
     HandleScope scope;
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
     REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_FUNCTION(scope, args, 1);
+    OPTIONAL_FUNCTION(scope, args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
-    Handle<Function> callback = Handle<Function>::Cast(args[1]);
+    Handle<Function> callback = GetCallback(args, 1);
 
     GetDeviceDescriptionBaton* baton = new GetDeviceDescriptionBaton();
     baton->Request.data = baton;

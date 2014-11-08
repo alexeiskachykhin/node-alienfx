@@ -61,7 +61,6 @@ function checkLightsColor(extension, color) {
 
 
 
-
 module.exports = exports = {
     colors: {
         NONE: {
@@ -70,6 +69,10 @@ module.exports = exports = {
             blue: 0,
             brightness: 0
         }
+    },
+
+    functions: {
+        empty: function () { }
     },
 
     ask: {

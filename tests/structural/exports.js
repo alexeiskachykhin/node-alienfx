@@ -42,20 +42,13 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.initialize, 'function');
         });
 
-        it('should require atleast 1 argument', function (done) {
-            assert.throws(function () {
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
                 extension.initialize();
             }, Error);
-
-            assert.doesNotThrow(function () {
-                extension.initialize(function () {
-                    extension.releaseSync();
-                    done();
-                });
-            });
         });
 
-        it('should require first argument of type function', function (done) {
+        it('should allow callback as a first argument', function (done) {
             assert.throws(function () {
                 extension.initialize(null);
             }, TypeError);
@@ -105,36 +98,26 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.release, 'function');
         });
 
-        it('should require atleast 1 argument', function (done) {
-            assert.throws(function () {
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
                 extension.release();
             }, Error);
-
-            assert.doesNotThrow(function () {
-                extension.release(function () {
-                    done();
-                });
-            });
         });
 
-        it('should require first argument of type function', function (done) {
+        it('should allow callback as a first argument', function (done) {
             assert.throws(function () {
                 extension.release(null);
             }, TypeError);
 
             assert.doesNotThrow(function () {
-                extension.release(function () {
-                    done();
-                });
+                extension.release(done);
             });
         });
 
         it('should not complete synchonously', function (done) {
             var completed = false;
 
-            extension.release(function () {
-                done();
-            });
+            extension.release(done);
 
             assert.strictEqual(completed, false);
         });
@@ -544,36 +527,26 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumDevices, 'function');
         });
 
-        it('should require atleast 1 argument', function (done) {
-            assert.throws(function () {
-                extension.getNumDevices();
-            }, Error);
-
+        it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
-                extension.getNumDevices(function () {
-                    done();
-                });
+                extension.getNumDevices();
             });
         });
 
-        it('should require first argument of type function', function (done) {
+        it('should allow callback as a first argument', function (done) {
             assert.throws(function () {
                 extension.getNumDevices(null);
             }, TypeError);
 
             assert.doesNotThrow(function () {
-                extension.getNumDevices(function () {
-                    done();
-                });
+                extension.getNumDevices(done);
             });
         });
 
         it('should not complete synchonously', function (done) {
             var completed = false;
 
-            extension.getNumDevices(function () {
-                done();
-            });
+            extension.getNumDevices(done);
 
             assert.strictEqual(completed, false);
         });
@@ -614,52 +587,40 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getDeviceDescription, 'function');
         });
 
-        it('should require atleast 2 arguments', function (done) {
+        it('should require atleast 1 argument', function (done) {
             assert.throws(function () {
                 extension.getDeviceDescription();
             }, Error);
 
-            assert.throws(function () {
-                extension.getDeviceDescription(0);
-            }, Error);
-
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, function () {
-                    done();
-                });
-            });
+                extension.getDeviceDescription(0, done);
+            }, Error);
         });
 
         it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getDeviceDescription(null, function () { });
+                extension.getDeviceDescription(null);
             }, TypeError);
 
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, function () {
-                    done();
-                });
+                extension.getDeviceDescription(0, done);
             });
         });
 
-        it('should require second argument of type function', function (done) {
+        it('should allow callback as a second argument', function (done) {
             assert.throws(function () {
                 extension.getDeviceDescription(0, null);
             }, TypeError);
 
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, function () {
-                    done();
-                });
+                extension.getDeviceDescription(0, done);
             });
         });
 
         it('should not complete synchonously', function (done) {
             var completed = false;
 
-            extension.getDeviceDescription(0, function () {
-                done();
-            });
+            extension.getDeviceDescription(0, done);
 
             assert.strictEqual(completed, false);
         });

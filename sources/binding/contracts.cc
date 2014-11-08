@@ -74,3 +74,15 @@ bool Contracts::RequireFunctionArgument(const Arguments& args, int argumentIndex
 
     return true;
 }
+
+bool Contracts::OptionalFunctionArgument(const v8::Arguments& args, int argumentIndex)
+{
+    HandleScope scope;
+
+    if (argumentIndex >= args.Length())
+    {
+        return true;
+    }
+
+    return RequireFunctionArgument(args, argumentIndex);
+}
