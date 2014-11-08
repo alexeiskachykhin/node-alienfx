@@ -209,12 +209,13 @@ describe('exports: behavioral tests', function () {
             extension.initializeSync();
 
             extension.getNumDevices(function (err, data) {
+                extension.releaseSync();
+
                 assert.strictEqual(data.result, extension.Result.SUCCESS);
                 assert.strictEqual(typeof data.numberOfDevices, 'number');
 
                 console.info('Your system has %d AlienFX compatible devices.', data.numberOfDevices);
-
-                extension.releaseSync();
+                
                 done();
             });
         });
@@ -240,13 +241,13 @@ describe('exports: behavioral tests', function () {
     });
 
 
-    describe('getDeviceDescription()', function () {
+    describe('getDeviceDescriptionSync()', function () {
 
         it('should get description of a device', function () {
             extension.initializeSync();
 
             var out = {};
-            var result = extension.getDeviceDescription(0, out);
+            var result = extension.getDeviceDescriptionSync(0, out);
 
             extension.releaseSync();
 
@@ -256,6 +257,26 @@ describe('exports: behavioral tests', function () {
             assert.strictEqual(typeof out.type, 'number');
 
             console.info('Description of a first device:', out);
+        });
+    });
+
+
+    describe('getDeviceDescription()', function () {
+
+        it('should get description of a device', function (done) {
+            extension.initializeSync();
+
+            extension.getDeviceDescription(0, function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.model, 'string');
+                assert.strictEqual(typeof data.type, 'number');
+
+                console.info('Description of a first device:', data);
+
+                done();
+            });
         });
     });
 

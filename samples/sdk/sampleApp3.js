@@ -19,7 +19,7 @@ if (extension.isAvailable) {
 
         for (var deviceIndex = 0; deviceIndex < out.numberOfDevices; deviceIndex++) {
             var deviceDescription = {};
-            extension.getDeviceDescription(deviceIndex, deviceDescription);
+            extension.getDeviceDescriptionSync(deviceIndex, deviceDescription);
 
             console.info('Description: %s', deviceDescription.model);
 

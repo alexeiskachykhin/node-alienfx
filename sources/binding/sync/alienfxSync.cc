@@ -175,7 +175,7 @@ Handle<Value> GetNumDevicesSync(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> GetDeviceDescription(const Arguments& args)
+Handle<Value> GetDeviceDescriptionSync(const Arguments& args)
 {
     HandleScope scope;
 
@@ -553,7 +553,7 @@ void InitSyncBindings(const v8::Handle<v8::Object>& target)
     NODE_SET_METHOD(target, "actionColor", ActionColor);
     NODE_SET_METHOD(target, "actionColorEx", ActionColorEx);
     NODE_SET_METHOD(target, "getNumDevicesSync", GetNumDevicesSync);
-    NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
+    NODE_SET_METHOD(target, "getDeviceDescriptionSync", GetDeviceDescriptionSync);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
     NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
     NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);

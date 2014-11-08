@@ -610,15 +610,11 @@ describe('exports: structural tests', function () {
 
     describe('getDeviceDescription()', function () {
 
-       it('should be a function', function () {
+        it('should be a function', function () {
             assert.equal(typeof extension.getDeviceDescription, 'function');
         });
 
-        it('should require atleast 2 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, {});
-            });
-
+        it('should require atleast 2 arguments', function (done) {
             assert.throws(function () {
                 extension.getDeviceDescription();
             }, Error);
@@ -626,25 +622,87 @@ describe('exports: structural tests', function () {
             assert.throws(function () {
                 extension.getDeviceDescription(0);
             }, Error);
+
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescription(0, function () {
+                    done();
+                });
+            });
+        });
+
+        it('should require first argument of type number', function (done) {
+            assert.throws(function () {
+                extension.getDeviceDescription(null, function () { });
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescription(0, function () {
+                    done();
+                });
+            });
+        });
+
+        it('should require second argument of type function', function (done) {
+            assert.throws(function () {
+                extension.getDeviceDescription(0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescription(0, function () {
+                    done();
+                });
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getDeviceDescription(0, function () {
+                done();
+            });
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getDeviceDescriptionSync()', function () {
+
+       it('should be a function', function () {
+            assert.equal(typeof extension.getDeviceDescriptionSync, 'function');
+        });
+
+        it('should require atleast 2 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescriptionSync(0, {});
+            });
+
+            assert.throws(function () {
+                extension.getDeviceDescriptionSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getDeviceDescriptionSync(0);
+            }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, {});
+                extension.getDeviceDescriptionSync(0, {});
             });
 
             assert.throws(function () {
-                extension.getDeviceDescription(null, {});
+                extension.getDeviceDescriptionSync(null, {});
             }, TypeError);
         });
 
         it('should require second argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, {});
+                extension.getDeviceDescriptionSync(0, {});
             });
 
             assert.throws(function () {
-                extension.getDeviceDescription(0, null);
+                extension.getDeviceDescriptionSync(0, null);
             }, TypeError);
         });
     });

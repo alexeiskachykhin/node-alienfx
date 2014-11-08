@@ -1,6 +1,8 @@
 #pragma once
 
 #include <node.h>
+#include <string>
+
 #include "../../api/alienfxApi.h"
 
 
@@ -16,6 +18,12 @@ struct ReleaseBaton : BaseBaton {};
 
 struct GetNumDevicesBaton : BaseBaton {
     unsigned int NumberOfDevices;
+};
+
+struct GetDeviceDescriptionBaton : BaseBaton {
+    unsigned int DeviceIndex;
+    std::string DeviceModel;
+    unsigned char DeviceType;
 };
 
 
