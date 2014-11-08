@@ -38,9 +38,9 @@ function checkLightsColor(extension, color) {
 
     for (var deviceIndex = 0; deviceIndex < devices.numberOfDevices; deviceIndex++) {
         var lights = {};
-        extension.getNumLights(deviceIndex, lights);
+        extension.getNumLightsSync(deviceIndex, lights);
 
-        for (var lightIndex = 0; lightIndex < lights.result; lightIndex++) {
+        for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
             var currentColor = {};
             extension.getLightColor(deviceIndex, lightIndex, currentColor);
 

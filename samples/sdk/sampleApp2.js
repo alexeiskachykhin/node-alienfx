@@ -18,10 +18,10 @@ if (extension.isAvailable) {
             console.info('Description: %s', deviceDescription.model);
 
 
-            var numberOfLights = {};
-            extension.getNumLights(deviceIndex, numberOfLights);
+            var lights = {};
+            extension.getNumLightsSync(deviceIndex, lights);
 
-            for (var lightIndex = 0; lightIndex < numberOfLights.result; lightIndex++) {
+            for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
                 var lightDescription = {};
                 result = extension.getLightDescription(deviceIndex, lightIndex, lightDescription);
 

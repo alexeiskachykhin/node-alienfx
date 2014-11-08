@@ -241,26 +241,6 @@ describe('exports: behavioral tests', function () {
     });
 
 
-    describe('getDeviceDescriptionSync()', function () {
-
-        it('should get description of a device', function () {
-            extension.initializeSync();
-
-            var out = {};
-            var result = extension.getDeviceDescriptionSync(0, out);
-
-            extension.releaseSync();
-
-
-            assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.model, 'string');
-            assert.strictEqual(typeof out.type, 'number');
-
-            console.info('Description of a first device:', out);
-        });
-    });
-
-
     describe('getDeviceDescription()', function () {
 
         it('should get description of a device', function (done) {
@@ -281,21 +261,60 @@ describe('exports: behavioral tests', function () {
     });
 
 
-    describe('getNumLights()', function () {
+    describe('getDeviceDescriptionSync()', function () {
 
-        it('should get number of lights on a device', function () {
+        it('should get description of a device', function () {
             extension.initializeSync();
-            
+
             var out = {};
-            var result = extension.getNumLights(0, out);
+            var result = extension.getDeviceDescriptionSync(0, out);
 
             extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.result, 'number');
+            assert.strictEqual(typeof out.model, 'string');
+            assert.strictEqual(typeof out.type, 'number');
 
-            console.info('Your device has %d lights.', out.result);
+            console.info('Description of a first device:', out);
+        });
+    });
+
+
+    describe('getNumLights()', function () {
+
+        it('should get number of lights on a device', function (done) {
+            extension.initializeSync();
+
+            extension.getNumLights(0, function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.numberOfLights, 'number');
+
+                console.info('Your device has %d lights.', data.numberOfLights);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getNumLightsSync()', function () {
+
+        it('should get number of lights on a device', function () {
+            extension.initializeSync();
+            
+            var out = {};
+            var result = extension.getNumLightsSync(0, out);
+
+            extension.releaseSync();
+
+
+            assert.strictEqual(result, extension.Result.SUCCESS);
+            assert.strictEqual(typeof out.numberOfLights, 'number');
+
+            console.info('Your device has %d lights.', out.numberOfLights);
         });
     });
 

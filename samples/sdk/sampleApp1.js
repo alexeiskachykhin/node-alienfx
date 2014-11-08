@@ -7,14 +7,14 @@ if (extension.isAvailable) {
     if (result === extension.Result.SUCCESS) {
         extension.reset();
 
-        var out = {};
-        extension.getNumDevicesSync(out);
+        var devices = {};
+        extension.getNumDevicesSync(devices);
 
-        for (var deviceIndex = 0; deviceIndex < out.numberOfDevices; deviceIndex++) {
-            var numberOfLights = {};
-            extension.getNumLights(deviceIndex, numberOfLights);
+        for (var deviceIndex = 0; deviceIndex < devices.numberOfDevices; deviceIndex++) {
+            var lights = {};
+            extension.getNumLightsSync(deviceIndex, lights);
 
-            for (var lightIndex = 0; lightIndex < numberOfLights.result; lightIndex++) {
+            for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
                 var redColor = {
                     red: 0xFF,
                     green: 0x00,
@@ -38,17 +38,17 @@ if (extension.isAvailable) {
         extension.update();
 
 
-        for (var deviceIndex = 0; deviceIndex < numberOfDevices.result; deviceIndex++) {
+        for (var deviceIndex = 0; deviceIndex < devices.numberOfDevices; deviceIndex++) {
             var deviceDescription = {};
             extension.getDeviceDescriptionSync(deviceIndex, deviceDescription);
 
             console.info('Description: %s', deviceDescription.model);
 
 
-            var numberOfLights = {};
-            extension.getNumLights(deviceIndex, numberOfLights);
+            var lights = {};
+            extension.getNumLightsSync(deviceIndex, lights);
 
-            for (var lightIndex = 0; lightIndex < numberOfLights.result; lightIndex++) {
+            for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
                 var lightDescription = {};
                 result = extension.getLightDescription(deviceIndex, lightIndex, lightDescription);
 

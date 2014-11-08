@@ -79,7 +79,6 @@ Handle<Value> Initialize(const Arguments& args)
 
 
 
-
 void ReleaseAsync(uv_work_t* request)
 {
     InitializeBaton* baton = static_cast<InitializeBaton*>(request->data);
@@ -121,6 +120,7 @@ Handle<Value> Release(const Arguments& args)
 
     return scope.Close(Undefined());
 }
+
 
 
 void GetNumDevicesAsync(uv_work_t* request)
@@ -235,10 +235,65 @@ Handle<Value> GetDeviceDescription(const Arguments& args)
 
 
 
+void GetNumLightsAsync(uv_work_t* request)
+{
+    GetNumLightsBaton* baton = static_cast<GetNumLightsBaton*>(request->data);
+
+    LFX_RESULT result = ALIENFX_API.GetNumLights(baton->DeviceIndex, &baton->NumberOfLights);
+
+    baton->Result = result;
+}
+
+void GetNumLightsAsyncAfter(uv_work_t* request, int status)
+{
+    GetNumLightsBaton* baton = static_cast<GetNumLightsBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+
+    if (baton->Result == LFX_SUCCESS)
+    {
+        data->Set(String::NewSymbol("numberOfLights"), Number::New(baton->NumberOfLights));
+    }
+
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> GetNumLights(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
+    REQUIRE_NUMBER(scope, args, 0);
+    OPTIONAL_FUNCTION(scope, args, 1);
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    Handle<Function> callback = GetCallback(args, 1);
+
+    GetNumLightsBaton* baton = new GetNumLightsBaton();
+    baton->Request.data = baton;
+    baton->DeviceIndex = deviceIndex;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, GetNumLightsAsync, GetNumLightsAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
+
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "initialize", Initialize);
     NODE_SET_METHOD(target, "release", Release);
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
+    NODE_SET_METHOD(target, "getNumLights", GetNumLights);
 }
