@@ -3,6 +3,7 @@
 
 #include "../contracts.h"
 #include "../async/alienfxAsync.h"
+#include "../objects/alienfxObjects.h"
 #include "../../api/alienfxApi.h"
 
 using namespace v8;
@@ -377,9 +378,7 @@ void GetLightLocationAsyncAfter(uv_work_t* request, int status)
     if (baton->Result == LFX_SUCCESS)
     {
         Handle<Object> location = Object::New();
-        location->Set(String::NewSymbol("x"), Number::New(baton->LightLocation.x));
-        location->Set(String::NewSymbol("y"), Number::New(baton->LightLocation.y));
-        location->Set(String::NewSymbol("z"), Number::New(baton->LightLocation.z));
+        PositionToObject(baton->LightLocation, location);
 
         data->Set(String::NewSymbol("lightLocation"), location);
     }
