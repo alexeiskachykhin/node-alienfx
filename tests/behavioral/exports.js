@@ -321,19 +321,38 @@ describe('exports: behavioral tests', function () {
 
     describe('getLightDescription()', function () {
 
+        it('should get description of a light', function (done) {
+            extension.initializeSync();
+
+            extension.getLightDescription(0, 0, function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.lightDescription, 'string');
+
+                console.info('Description of the first light of the first device:', data.lightDescription);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getLightDescriptionSync()', function () {
+
         it('should get description of a light', function () {
             extension.initializeSync();
 
             var out = {};
-            var result = extension.getLightDescription(0, 0, out);
+            var result = extension.getLightDescriptionSync(0, 0, out);
 
             extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.result, 'string');
+            assert.strictEqual(typeof out.lightDescription, 'string');
 
-            console.info('Description of the first light of the first device:', out.result);
+            console.info('Description of the first light of the first device:', out.lightDescription);
         });
     });
 

@@ -289,6 +289,71 @@ Handle<Value> GetNumLights(const Arguments& args)
 
 
 
+void GetLightDescriptionAsync(uv_work_t* request)
+{
+    GetLightDescriptionBaton* baton = static_cast<GetLightDescriptionBaton*>(request->data);
+
+
+    string lightDescription(LFX_DEF_STRING_SIZE, 0);
+
+    LFX_RESULT result = ALIENFX_API.GetLightDescription(
+        baton->DeviceIndex,
+        baton->LightIndex,
+        (char *)lightDescription.c_str(),
+        lightDescription.size());
+
+    baton->Result = result;
+    baton->LightDescription = lightDescription;
+}
+
+void GetLightDescriptionAsyncAfter(uv_work_t* request, int status)
+{
+    GetLightDescriptionBaton* baton = static_cast<GetLightDescriptionBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+
+    if (baton->Result == LFX_SUCCESS)
+    {
+        data->Set(String::NewSymbol("lightDescription"), String::New(baton->LightDescription.c_str()));
+    }
+
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> GetLightDescription(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    OPTIONAL_FUNCTION(scope, args, 2);
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+    Handle<Function> callback = GetCallback(args, 2);
+
+    GetLightDescriptionBaton* baton = new GetLightDescriptionBaton();
+    baton->Request.data = baton;
+    baton->DeviceIndex = deviceIndex;
+    baton->LightIndex = lightIndex;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, GetLightDescriptionAsync, GetLightDescriptionAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
+
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "initialize", Initialize);
@@ -296,4 +361,5 @@ void InitAsyncBindings(const v8::Handle<v8::Object>& target)
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
     NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
+    NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
 }

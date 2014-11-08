@@ -22,14 +22,14 @@ if (extension.isAvailable) {
             extension.getNumLightsSync(deviceIndex, lights);
 
             for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
-                var lightDescription = {};
-                result = extension.getLightDescription(deviceIndex, lightIndex, lightDescription);
+                var light = {};
+                result = extension.getLightDescriptionSync(deviceIndex, lightIndex, light);
 
                 if (result !== extension.Result.SUCCESS) {
                     continue;
                 }
 
-                console.info('Light: %d\tDescription: %s', lightIndex, lightDescription.result);
+                console.info('Light: %d\tDescription: %s', lightIndex, light.lightDescription);
             }
         }
 

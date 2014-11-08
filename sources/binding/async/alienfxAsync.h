@@ -31,6 +31,13 @@ struct GetNumLightsBaton : BaseBaton {
     unsigned int NumberOfLights;
 };
 
+struct GetLightDescriptionBaton : BaseBaton {
+    unsigned int DeviceIndex;
+    unsigned int LightIndex;
+    std::string LightDescription;
+};
+
+
 
 
 void InitAsyncBindings(const v8::Handle<v8::Object>& target);
