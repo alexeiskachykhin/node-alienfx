@@ -42,7 +42,7 @@ function checkLightsColor(extension, color) {
 
         for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
             var currentColor = {};
-            extension.getLightColor(deviceIndex, lightIndex, currentColor);
+            extension.getLightColorSync(deviceIndex, lightIndex, currentColor);
 
             var isEqual =
                 (currentColor.red === color.red &&

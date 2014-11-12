@@ -277,7 +277,7 @@ Handle<Value> GetLightLocationSync(const Arguments& args)
     return scope.Close(Number::New(result));
 }
 
-Handle<Value> GetLightColor(const Arguments& args)
+Handle<Value> GetLightColorSync(const Arguments& args)
 {
     HandleScope scope;
 
@@ -414,7 +414,7 @@ void InitSyncBindings(const v8::Handle<v8::Object>& target)
     NODE_SET_METHOD(target, "getNumLightsSync", GetNumLightsSync);
     NODE_SET_METHOD(target, "getLightDescriptionSync", GetLightDescriptionSync);
     NODE_SET_METHOD(target, "getLightLocationSync", GetLightLocationSync);
-    NODE_SET_METHOD(target, "getLightColor", GetLightColor);
+    NODE_SET_METHOD(target, "getLightColorSync", GetLightColorSync);
     NODE_SET_METHOD(target, "setLightColor", SetLightColor);
     NODE_SET_METHOD(target, "setLightActionColor", SetLightActionColor);
     NODE_SET_METHOD(target, "setLightActionColorEx", SetLightActionColorEx);

@@ -421,6 +421,32 @@ describe('exports: behavioral tests', function () {
 
     describe('getLightColor()', function () {
 
+        it('should get color of a light', function (done) {
+            extension.initializeSync();
+            extension.reset();
+
+            var position = extension.Position.ALL;
+            var color = extension.Color.RED | extension.Brightness.FULL;
+
+            extension.light(position, color);
+            extension.update();
+
+            extension.getLightColor(0, 0, function (err, data) {
+                extension.releaseSync();
+
+                var actualColor = data.lightColor.blue | (data.lightColor.green << 8) | (data.lightColor.red << 16) | (data.lightColor.brightness << 24);
+                
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(actualColor, color);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getLightColorSync()', function () {
+
         it('should get color of a light', function () {
             extension.initializeSync();
             extension.reset();
@@ -432,7 +458,7 @@ describe('exports: behavioral tests', function () {
             extension.update();
 
             var out = {};
-            var result = extension.getLightColor(0, 0, out);
+            var result = extension.getLightColorSync(0, 0, out);
 
             extension.releaseSync();
 
@@ -463,7 +489,7 @@ describe('exports: behavioral tests', function () {
 
 
             var out = {};
-            extension.getLightColor(0, 0, out);
+            extension.getLightColorSync(0, 0, out);
             extension.releaseSync();
 
 
@@ -491,7 +517,7 @@ describe('exports: behavioral tests', function () {
 
 
             var out = {};
-            extension.getLightColor(0, 0, out);
+            extension.getLightColorSync(0, 0, out);
             extension.releaseSync();
 
 
@@ -527,7 +553,7 @@ describe('exports: behavioral tests', function () {
 
 
             var out = {};
-            extension.getLightColor(0, 0, out);
+            extension.getLightColorSync(0, 0, out);
             extension.releaseSync();
 
 

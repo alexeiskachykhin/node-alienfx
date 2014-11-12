@@ -58,7 +58,7 @@ if (extension.isAvailable) {
 
 
                 var color = {};
-                result = extension.getLightColor(deviceIndex, lightIndex, color);
+                result = extension.getLightColorSync(deviceIndex, lightIndex, color);
 
                 if (result !== extension.Result.SUCCESS) {
                     continue;

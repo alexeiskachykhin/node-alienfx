@@ -470,6 +470,71 @@ Handle<Value> GetLightLocation(const Arguments& args)
 }
 
 
+
+void GetLightColorAsync(uv_work_t* request)
+{
+    GetLightColorBaton* baton = static_cast<GetLightColorBaton*>(request->data);
+
+    LFX_RESULT result = ALIENFX_API.GetLightColor(
+        baton->DeviceIndex,
+        baton->LightIndex,
+        &baton->LightColor);
+
+    baton->Result = result;
+}
+
+void GetLightColorAsyncAfter(uv_work_t* request, int status)
+{
+    GetLightColorBaton* baton = static_cast<GetLightColorBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+
+    if (baton->Result == LFX_SUCCESS)
+    {
+        Handle<Object> color = Object::New();
+        ColorToObject(baton->LightColor, color);
+
+        data->Set(String::NewSymbol("lightColor"), color);
+    }
+
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> GetLightColor(const Arguments& args)
+{
+    HandleScope scope;
+
+    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
+    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER(scope, args, 1);
+    OPTIONAL_FUNCTION(scope, args, 2);
+
+
+    unsigned int deviceIndex = args[0]->Uint32Value();
+    unsigned int lightIndex = args[1]->Uint32Value();
+    Handle<Function> callback = GetCallback(args, 2);
+
+    GetLightColorBaton* baton = new GetLightColorBaton();
+    baton->Request.data = baton;
+    baton->DeviceIndex = deviceIndex;
+    baton->LightIndex = lightIndex;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, GetLightColorAsync, GetLightColorAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
+
+
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
     NODE_SET_METHOD(target, "getVersion", GetVersion);
@@ -480,4 +545,5 @@ void InitAsyncBindings(const v8::Handle<v8::Object>& target)
     NODE_SET_METHOD(target, "getNumLights", GetNumLights);
     NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
     NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
+    NODE_SET_METHOD(target, "getLightColor", GetLightColor);
 }

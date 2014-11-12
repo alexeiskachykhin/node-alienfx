@@ -1028,11 +1028,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightColor, 'function');
         });
 
-        it('should require atleast 3 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
-            });
-
+        it('should require atleast 2 arguments', function (done) {
             assert.throws(function () {
                 extension.getLightColor();
             }, Error);
@@ -1041,38 +1037,102 @@ describe('exports: structural tests', function () {
                 extension.getLightColor(0);
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getLightColor(0, 0);
+                extension.getLightColor(null, 0, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should require second argument of type number', function (done) {
+            assert.throws(function () {
+                extension.getLightColor(0, null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should allow callback as a third argument', function (done) {
+            assert.throws(function () {
+                extension.getLightColor(0, 0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getLightColor(0, 0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getLightColorSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightColorSync, 'function');
+        });
+
+        it('should require atleast 3 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getLightColorSync(0, 0, {});
+            });
+
+            assert.throws(function () {
+                extension.getLightColorSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightColorSync(0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightColorSync(0, 0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
+                extension.getLightColorSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(null, 0, {});
+                extension.getLightColorSync(null, 0, {});
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
+                extension.getLightColorSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(0, null, {});
+                extension.getLightColorSync(0, null, {});
             }, TypeError);
         });
 
         it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
+                extension.getLightColorSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(0, 0, null);
+                extension.getLightColorSync(0, 0, null);
             }, TypeError);
         });
     });

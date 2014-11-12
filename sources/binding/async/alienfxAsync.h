@@ -48,6 +48,12 @@ struct GetLightLocationBaton : BaseBaton {
     LFX_POSITION LightLocation;
 };
 
+struct GetLightColorBaton : BaseBaton {
+    unsigned int DeviceIndex;
+    unsigned int LightIndex;
+    LFX_COLOR LightColor;
+};
+
 
 
 void InitAsyncBindings(const v8::Handle<v8::Object>& target);
