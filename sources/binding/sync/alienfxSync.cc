@@ -9,7 +9,7 @@ using namespace v8;
 using namespace std;
 
 
-Handle<Value> GetVersion(const Arguments& args)
+Handle<Value> GetVersionSync(const Arguments& args)
 {
     HandleScope scope;
 
@@ -400,7 +400,7 @@ Handle<Value> SetTiming(const Arguments& args)
 
 void InitSyncBindings(const v8::Handle<v8::Object>& target)
 {
-    NODE_SET_METHOD(target, "getVersion", GetVersion);
+    NODE_SET_METHOD(target, "getVersionSync", GetVersionSync);
     NODE_SET_METHOD(target, "initializeSync", InitializeSync);
     NODE_SET_METHOD(target, "releaseSync", ReleaseSync);
     NODE_SET_METHOD(target, "reset", Reset);

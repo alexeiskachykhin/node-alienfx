@@ -12,7 +12,12 @@ struct BaseBaton {
     LFX_RESULT Result;
 };
 
-struct InitializeBaton: BaseBaton {};
+
+struct GetVersionBaton : BaseBaton {
+    std::string Version;
+};
+
+struct InitializeBaton : BaseBaton {};
 
 struct ReleaseBaton : BaseBaton {};
 

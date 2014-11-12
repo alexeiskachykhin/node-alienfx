@@ -9,11 +9,29 @@ describe('exports: behavioral tests', function () {
 
     describe('getVersion()', function () {
 
+        it('should get api version', function (done) {
+            extension.initializeSync();
+
+            var result = extension.getVersion(function (err, data) {
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.version, 'string');
+
+                console.info('API version is: %s', data.version);
+
+                extension.releaseSync();
+                done();
+            });
+        });
+    });
+
+
+    describe('getVersionSync()', function () {
+
         it('should get api version', function () {
             extension.initializeSync();
 
             var version = {};
-            var result = extension.getVersion(version);
+            var result = extension.getVersionSync(version);
 
             assert.strictEqual(result, extension.Result.SUCCESS);
             assert.strictEqual(typeof version.result, 'string');

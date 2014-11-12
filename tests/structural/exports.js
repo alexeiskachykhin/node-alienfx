@@ -13,23 +13,56 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getVersion, 'function');
         });
 
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getVersion();
+            }, Error);
+        });
+
+        it('should allow callback as a first argument', function (done) {
+            assert.throws(function () {
+                extension.getVersion(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getVersion(done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getVersion(done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getVersionSync()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getVersionSync, 'function');
+        });
+
         it('should require atleast 1 argument', function () {
             assert.doesNotThrow(function () {
-                extension.getVersion({});
+                extension.getVersionSync({});
             });
 
             assert.throws(function () {
-                extension.getVersion();
+                extension.getVersionSync();
             }, Error);
         });
 
         it('should require first argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getVersion({});
+                extension.getVersionSync({});
             });
 
             assert.throws(function () {
-                extension.getVersion(null);
+                extension.getVersionSync(null);
             }, TypeError);
         });
     });

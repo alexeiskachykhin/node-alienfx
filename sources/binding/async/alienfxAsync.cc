@@ -36,6 +36,59 @@ Handle<Function> GetCallback(const Arguments& args, int callbackArgumentIndex)
 
 
 
+void GetVersionAsync(uv_work_t* request)
+{
+    GetVersionBaton* baton = static_cast<GetVersionBaton*>(request->data);
+
+    string version(LFX_DEF_STRING_SIZE, 0);
+
+    LFX_RESULT result = ALIENFX_API.GetVersion((char *)version.c_str(), version.size());
+
+    baton->Result = result;
+    baton->Version = version;
+}
+
+void GetVersionAsyncAfter(uv_work_t* request, int status)
+{
+    GetVersionBaton* baton = static_cast<GetVersionBaton*>(request->data);
+
+    Handle<Value> error = Null();
+    Handle<Object> data = Object::New();
+    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+
+    if (baton->Result == LFX_SUCCESS)
+    {
+        data->Set(String::NewSymbol("version"), String::New(baton->Version.c_str()));
+    }
+
+
+    Handle<Value> argv[2] { error, data };
+    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
+    baton->Callback.Dispose();
+
+    delete baton;
+}
+
+Handle<Value> GetVersion(const Arguments& args)
+{
+    HandleScope scope;
+
+    OPTIONAL_FUNCTION(scope, args, 0);
+
+
+    Handle<Function> callback = GetCallback(args, 0);
+
+    GetVersionBaton* baton = new GetVersionBaton();
+    baton->Request.data = baton;
+    baton->Callback = Persistent<Function>::New(callback);
+
+    uv_queue_work(uv_default_loop(), &baton->Request, GetVersionAsync, GetVersionAsyncAfter);
+
+    return scope.Close(Undefined());
+}
+
+
+
 void InitializeAsync(uv_work_t* request)
 {
     InitializeBaton* baton = static_cast<InitializeBaton*>(request->data);
@@ -419,6 +472,7 @@ Handle<Value> GetLightLocation(const Arguments& args)
 
 void InitAsyncBindings(const v8::Handle<v8::Object>& target)
 {
+    NODE_SET_METHOD(target, "getVersion", GetVersion);
     NODE_SET_METHOD(target, "initialize", Initialize);
     NODE_SET_METHOD(target, "release", Release);
     NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);

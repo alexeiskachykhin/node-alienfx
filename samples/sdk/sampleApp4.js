@@ -31,7 +31,7 @@ if (extension.isAvailable) {
 
     if (result === extension.Result.SUCCESS) {
         var version = {};
-        extension.getVersion(version);
+        extension.getVersionSync(version);
         console.info('SDK version: %s', version.result);
 
         extension.reset();
