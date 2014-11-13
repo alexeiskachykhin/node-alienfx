@@ -27,18 +27,18 @@ function light(colorComponent, callback) {
 
 
 if (extension.isAvailable) {
-    var result = extension.initialize();
+    var result = extension.initializeSync();
 
     if (result === extension.Result.SUCCESS) {
         var version = {};
-        extension.getVersion(version);
+        extension.getVersionSync(version);
         console.info('SDK version: %s', version.result);
 
         extension.reset();
 
         light(255, function () {
             require('./utilities').waitForKeyPress(function () {
-                extension.release();
+                extension.releaseSync();
             });
         });
     }

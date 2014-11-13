@@ -56,3 +56,33 @@ bool Contracts::RequireNumberArgument(const Arguments& args, int argumentIndex)
 
     return true;
 }
+
+bool Contracts::RequireFunctionArgument(const Arguments& args, int argumentIndex)
+{
+    HandleScope scope;
+
+    if (!args[argumentIndex]->IsFunction())
+    {
+        char exceptionMessage[64];
+        _snprintf(exceptionMessage, sizeof exceptionMessage, "Argument %d must be of type function.", argumentIndex + 1);
+
+        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
+        ThrowException(exception);
+
+        return false;
+    }
+
+    return true;
+}
+
+bool Contracts::OptionalFunctionArgument(const v8::Arguments& args, int argumentIndex)
+{
+    HandleScope scope;
+
+    if (argumentIndex >= args.Length())
+    {
+        return true;
+    }
+
+    return RequireFunctionArgument(args, argumentIndex);
+}

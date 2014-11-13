@@ -9,27 +9,58 @@ describe('exports: behavioral tests', function () {
 
     describe('getVersion()', function () {
 
+        it('should get api version', function (done) {
+            extension.initializeSync();
+
+            var result = extension.getVersion(function (err, data) {
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.version, 'string');
+
+                console.info('API version is: %s', data.version);
+
+                extension.releaseSync();
+                done();
+            });
+        });
+    });
+
+
+    describe('getVersionSync()', function () {
+
         it('should get api version', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var version = {};
-            var result = extension.getVersion(version);
+            var result = extension.getVersionSync(version);
 
             assert.strictEqual(result, extension.Result.SUCCESS);
             assert.strictEqual(typeof version.result, 'string');
 
             console.info('API version is: %s', version.result);
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
 
     describe('initialize()', function () {
 
+        it('should initialize a system', function (done) {
+            extension.initialize(function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                done();
+            });
+        });
+    });
+
+
+    describe('initializeSync()', function () {
+
         it('should initialize a system', function () {
-            var result = extension.initialize();
-            extension.release();
+            var result = extension.initializeSync();
+            extension.releaseSync();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
         });
@@ -38,9 +69,22 @@ describe('exports: behavioral tests', function () {
 
     describe('release()', function () {
 
+        it('should release a system', function (done) {
+            extension.initializeSync();
+
+            extension.release(function (err, data) {
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                done();
+            });
+        });
+    });
+
+
+    describe('releaseSync()', function () {
+
         it('should release a system', function () {
-            extension.initialize();
-            var result = extension.release();
+            extension.initializeSync();
+            var result = extension.releaseSync();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
         });
@@ -50,7 +94,7 @@ describe('exports: behavioral tests', function () {
     describe('reset()', function () {
 
         it('should reset the lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
             extension.update();
 
@@ -61,7 +105,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -69,7 +113,7 @@ describe('exports: behavioral tests', function () {
     describe('light()', function () {
 
         it('should color the lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -85,7 +129,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -93,7 +137,7 @@ describe('exports: behavioral tests', function () {
     describe('actionColor()', function () {
 
         it('should set action for lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -110,7 +154,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -118,7 +162,7 @@ describe('exports: behavioral tests', function () {
     describe('actionColorEx()', function () {
 
         it('should set action and both colors for lights', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -136,7 +180,7 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
@@ -144,9 +188,9 @@ describe('exports: behavioral tests', function () {
     describe('update()', function () {
 
         it('should send updates to a hardware', function () {
-            extension.initialize();
+            extension.initializeSync();
             var result = extension.update();
-            extension.release();
+            extension.releaseSync();
 
             assert.strictEqual(result, extension.Result.SUCCESS);
         });
@@ -156,7 +200,7 @@ describe('exports: behavioral tests', function () {
     describe('updateDefault()', function () {
 
         it('should set system power-on state', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -172,39 +216,78 @@ describe('exports: behavioral tests', function () {
                 brightness: 0xFF
             }));
 
-            extension.release();
+            extension.releaseSync();
         });
     });
 
 
     describe('getNumDevices()', function () {
 
+        it('should return a number of compatible devices', function (done) {
+            extension.initializeSync();
+
+            extension.getNumDevices(function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.numberOfDevices, 'number');
+
+                console.info('Your system has %d AlienFX compatible devices.', data.numberOfDevices);
+                
+                done();
+            });
+        });
+    });
+
+
+    describe('getNumDevicesSync()', function () {
+
         it('should return a number of compatible devices', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
-            var result = extension.getNumDevices(out);
+            var result = extension.getNumDevicesSync(out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.result, 'number');
+            assert.strictEqual(typeof out.numberOfDevices, 'number');
 
-            console.info('Your system has %d AlienFX compatible devices.', out.result);
+            console.info('Your system has %d AlienFX compatible devices.', out.numberOfDevices);
         });
     });
 
 
     describe('getDeviceDescription()', function () {
 
+        it('should get description of a device', function (done) {
+            extension.initializeSync();
+
+            extension.getDeviceDescription(0, function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.model, 'string');
+                assert.strictEqual(typeof data.type, 'number');
+
+                console.info('Description of a first device:', data);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getDeviceDescriptionSync()', function () {
+
         it('should get description of a device', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
-            var result = extension.getDeviceDescription(0, out);
+            var result = extension.getDeviceDescriptionSync(0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -218,51 +301,111 @@ describe('exports: behavioral tests', function () {
 
     describe('getNumLights()', function () {
 
+        it('should get number of lights on a device', function (done) {
+            extension.initializeSync();
+
+            extension.getNumLights(0, function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.numberOfLights, 'number');
+
+                console.info('Your device has %d lights.', data.numberOfLights);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getNumLightsSync()', function () {
+
         it('should get number of lights on a device', function () {
-            extension.initialize();
+            extension.initializeSync();
             
             var out = {};
-            var result = extension.getNumLights(0, out);
+            var result = extension.getNumLightsSync(0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.result, 'number');
+            assert.strictEqual(typeof out.numberOfLights, 'number');
 
-            console.info('Your device has %d lights.', out.result);
+            console.info('Your device has %d lights.', out.numberOfLights);
         });
     });
 
 
     describe('getLightDescription()', function () {
 
+        it('should get description of a light', function (done) {
+            extension.initializeSync();
+
+            extension.getLightDescription(0, 0, function (err, data) {
+                extension.releaseSync();
+
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(typeof data.lightDescription, 'string');
+
+                console.info('Description of the first light of the first device:', data.lightDescription);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getLightDescriptionSync()', function () {
+
         it('should get description of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
-            var result = extension.getLightDescription(0, 0, out);
+            var result = extension.getLightDescriptionSync(0, 0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(typeof out.result, 'string');
+            assert.strictEqual(typeof out.lightDescription, 'string');
 
-            console.info('Description of the first light of the first device:', out.result);
+            console.info('Description of the first light of the first device:', out.lightDescription);
         });
     });
 
 
     describe('getLightLocation()', function () {
 
+        it('should get location of a light', function (done) {
+            extension.initializeSync();
+
+            extension.getLightLocation(0, 0, function (err, data) {
+                extension.releaseSync();
+
+                /* AlienFX.dll (version 2.1.0) doesn't provide any meningfull implementation 
+                 * of GetLightLocation, so for now, this test is useless. Might fallback to .NET version
+                 * or direct communication with HID device in the future.
+                 */
+                assert.strictEqual(data.result, data.result);
+
+                console.info('Location of the first light of the first device:', data.lightLocation);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getLightLocationSync()', function () {
+
         it('should get location of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
 
             var out = {};
-            var result = extension.getLightLocation(0, 0, out);
+            var result = extension.getLightLocationSync(0, 0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             /* AlienFX.dll (version 2.1.0) doesn't provide any meningfull implementation 
@@ -278,8 +421,34 @@ describe('exports: behavioral tests', function () {
 
     describe('getLightColor()', function () {
 
+        it('should get color of a light', function (done) {
+            extension.initializeSync();
+            extension.reset();
+
+            var position = extension.Position.ALL;
+            var color = extension.Color.RED | extension.Brightness.FULL;
+
+            extension.light(position, color);
+            extension.update();
+
+            extension.getLightColor(0, 0, function (err, data) {
+                extension.releaseSync();
+
+                var actualColor = data.lightColor.blue | (data.lightColor.green << 8) | (data.lightColor.red << 16) | (data.lightColor.brightness << 24);
+                
+                assert.strictEqual(data.result, extension.Result.SUCCESS);
+                assert.strictEqual(actualColor, color);
+
+                done();
+            });
+        });
+    });
+
+
+    describe('getLightColorSync()', function () {
+
         it('should get color of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var position = extension.Position.ALL;
@@ -289,9 +458,9 @@ describe('exports: behavioral tests', function () {
             extension.update();
 
             var out = {};
-            var result = extension.getLightColor(0, 0, out);
+            var result = extension.getLightColorSync(0, 0, out);
 
-            extension.release();
+            extension.releaseSync();
 
 
             var actualColor = out.blue | (out.green << 8) | (out.red << 16) | (out.brightness << 24);
@@ -305,7 +474,7 @@ describe('exports: behavioral tests', function () {
     describe('setLightColor()', function () {
 
         it('should set color of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var color = {
@@ -320,8 +489,8 @@ describe('exports: behavioral tests', function () {
 
 
             var out = {};
-            extension.getLightColor(0, 0, out);
-            extension.release();
+            extension.getLightColorSync(0, 0, out);
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -333,7 +502,7 @@ describe('exports: behavioral tests', function () {
     describe('setLightActionColor()', function () {
 
         it('should set action of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var color = {
@@ -348,8 +517,8 @@ describe('exports: behavioral tests', function () {
 
 
             var out = {};
-            extension.getLightColor(0, 0, out);
-            extension.release();
+            extension.getLightColorSync(0, 0, out);
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -361,7 +530,7 @@ describe('exports: behavioral tests', function () {
     describe('setLightActionColorEx()', function () {
 
         it('should set action and both colors of a light', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var primaryColor = {
@@ -384,8 +553,8 @@ describe('exports: behavioral tests', function () {
 
 
             var out = {};
-            extension.getLightColor(0, 0, out);
-            extension.release();
+            extension.getLightColorSync(0, 0, out);
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);
@@ -397,13 +566,13 @@ describe('exports: behavioral tests', function () {
     describe('setTiming()', function () {
 
         it('should set timing of an action', function () {
-            extension.initialize();
+            extension.initializeSync();
             extension.reset();
 
             var result = extension.setTiming(200);
 
             extension.update();
-            extension.release();
+            extension.releaseSync();
 
 
             assert.strictEqual(result, extension.Result.SUCCESS);

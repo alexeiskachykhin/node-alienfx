@@ -13,23 +13,56 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getVersion, 'function');
         });
 
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getVersion();
+            }, Error);
+        });
+
+        it('should allow callback as a first argument', function (done) {
+            assert.throws(function () {
+                extension.getVersion(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getVersion(done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getVersion(done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getVersionSync()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getVersionSync, 'function');
+        });
+
         it('should require atleast 1 argument', function () {
             assert.doesNotThrow(function () {
-                extension.getVersion({});
+                extension.getVersionSync({});
             });
 
             assert.throws(function () {
-                extension.getVersion();
+                extension.getVersionSync();
             }, Error);
         });
 
         it('should require first argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getVersion({});
+                extension.getVersionSync({});
             });
 
             assert.throws(function () {
-                extension.getVersion(null);
+                extension.getVersionSync(null);
             }, TypeError);
         });
     });
@@ -45,14 +78,53 @@ describe('exports: structural tests', function () {
         it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.initialize();
+            }, Error);
+        });
+
+        it('should allow callback as a first argument', function (done) {
+            assert.throws(function () {
+                extension.initialize(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.initialize(function () {
+                    extension.releaseSync();
+                    done();
+                });
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.initialize(function () {
+                extension.releaseSync();
+                done();
             });
 
-            extension.release();
+            assert.strictEqual(completed, false);
         });
     });
 
 
-    describe('release()', function () {
+    describe('initializeSync()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.initializeSync, 'function');
+        });
+
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.initializeSync();
+            });
+
+            extension.releaseSync();
+        });
+    });
+
+
+    describe('release', function () {
         this.timeout(0);
 
         it('should be a function', function () {
@@ -62,6 +134,39 @@ describe('exports: structural tests', function () {
         it('should not require any arguments', function () {
             assert.doesNotThrow(function () {
                 extension.release();
+            }, Error);
+        });
+
+        it('should allow callback as a first argument', function (done) {
+            assert.throws(function () {
+                extension.release(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.release(done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.release(done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('releaseSync()', function () {
+        this.timeout(0);
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.releaseSync, 'function');
+        });
+
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.releaseSync();
             });
         });
     });
@@ -455,23 +560,55 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumDevices, 'function');
         });
 
+        it('should not require any arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getNumDevices();
+            });
+        });
+
+        it('should allow callback as a first argument', function (done) {
+            assert.throws(function () {
+                extension.getNumDevices(null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getNumDevices(done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getNumDevices(done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getNumDevicesSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getNumDevicesSync, 'function');
+        });
+
         it('should require atleast 1 argument', function () {
             assert.doesNotThrow(function () {
-                extension.getNumDevices({});
+                extension.getNumDevicesSync({});
             });
 
             assert.throws(function () {
-                extension.getNumDevices();
+                extension.getNumDevicesSync();
             }, Error);
         });
 
         it('should require first argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getNumDevices({});
+                extension.getNumDevicesSync({});
             });
 
             assert.throws(function () {
-                extension.getNumDevices(null);
+                extension.getNumDevicesSync(null);
             }, TypeError);
         });
     });
@@ -479,41 +616,87 @@ describe('exports: structural tests', function () {
 
     describe('getDeviceDescription()', function () {
 
-       it('should be a function', function () {
+        it('should be a function', function () {
             assert.equal(typeof extension.getDeviceDescription, 'function');
         });
 
-        it('should require atleast 2 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, {});
-            });
-
+        it('should require atleast 1 argument', function (done) {
             assert.throws(function () {
                 extension.getDeviceDescription();
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescription(0, done);
+            }, Error);
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getDeviceDescription(0);
+                extension.getDeviceDescription(null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescription(0, done);
+            });
+        });
+
+        it('should allow callback as a second argument', function (done) {
+            assert.throws(function () {
+                extension.getDeviceDescription(0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescription(0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getDeviceDescription(0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getDeviceDescriptionSync()', function () {
+
+       it('should be a function', function () {
+            assert.equal(typeof extension.getDeviceDescriptionSync, 'function');
+        });
+
+        it('should require atleast 2 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getDeviceDescriptionSync(0, {});
+            });
+
+            assert.throws(function () {
+                extension.getDeviceDescriptionSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getDeviceDescriptionSync(0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, {});
+                extension.getDeviceDescriptionSync(0, {});
             });
 
             assert.throws(function () {
-                extension.getDeviceDescription(null, {});
+                extension.getDeviceDescriptionSync(null, {});
             }, TypeError);
         });
 
         it('should require second argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getDeviceDescription(0, {});
+                extension.getDeviceDescriptionSync(0, {});
             });
 
             assert.throws(function () {
-                extension.getDeviceDescription(0, null);
+                extension.getDeviceDescriptionSync(0, null);
             }, TypeError);
         });
     });
@@ -525,37 +708,83 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getNumLights, 'function');
         });
 
-        it('should require atleast 2 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getNumLights(0, {});
-            });
-
+        it('should require atleast 1 argument', function (done) {
             assert.throws(function () {
                 extension.getNumLights();
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getNumLights(0, done);
+            }, Error);
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getNumLights(0);
+                extension.getNumLights(null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getNumLights(0, done);
+            });
+        });
+
+        it('should allow callback as a second argument', function (done) {
+            assert.throws(function () {
+                extension.getNumLights(0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getNumLights(0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getNumLights(0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getNumLightsSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getNumLightsSync, 'function');
+        });
+
+        it('should require atleast 2 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getNumLightsSync(0, {});
+            });
+
+            assert.throws(function () {
+                extension.getNumLightsSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getNumLightsSync(0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getNumLights(0, {});
+                extension.getNumLightsSync(0, {});
             });
 
             assert.throws(function () {
-                extension.getNumLights(null, {});
+                extension.getNumLightsSync(null, {});
             }, TypeError);
         });
 
         it('should require second argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getNumLights(0, {});
+                extension.getNumLightsSync(0, {});
             });
 
             assert.throws(function () {
-                extension.getNumLights(0, null);
+                extension.getNumLightsSync(0, null);
             }, TypeError);
         });
     });
@@ -567,11 +796,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightDescription, 'function');
         });
 
-        it('should require atleast 3 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getLightDescription(0, 0, {});
-            });
-
+        it('should require atleast 2 arguments', function (done) {
             assert.throws(function () {
                 extension.getLightDescription();
             }, Error);
@@ -580,38 +805,102 @@ describe('exports: structural tests', function () {
                 extension.getLightDescription(0);
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getLightDescription(0, 0, done);
+            });
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getLightDescription(0, 0);
+                extension.getLightDescription(null, 0, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightDescription(0, 0, done);
+            });
+        });
+
+        it('should require second argument of type number', function (done) {
+            assert.throws(function () {
+                extension.getLightDescription(0, null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightDescription(0, 0, done);
+            });
+        });
+
+        it('should allow callback as a third argument', function (done) {
+            assert.throws(function () {
+                extension.getLightDescription(0, 0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightDescription(0, 0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getLightDescription(0, 0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getLightDescriptionSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightDescriptionSync, 'function');
+        });
+
+        it('should require atleast 3 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getLightDescriptionSync(0, 0, {});
+            });
+
+            assert.throws(function () {
+                extension.getLightDescriptionSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightDescriptionSync(0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightDescriptionSync(0, 0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightDescription(0, 0, {});
+                extension.getLightDescriptionSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightDescription(null, 0, {});
+                extension.getLightDescriptionSync(null, 0, {});
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightDescription(0, 0, {});
+                extension.getLightDescriptionSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightDescription(0, null, {});
+                extension.getLightDescriptionSync(0, null, {});
             }, TypeError);
         });
 
         it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getLightDescription(0, 0, {});
+                extension.getLightDescriptionSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightDescription(0, 0, null);
+                extension.getLightDescriptionSync(0, 0, null);
             }, TypeError);
         });
     });
@@ -623,11 +912,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightLocation, 'function');
         });
 
-        it('should require atleast 3 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
-            });
-
+        it('should require atleast 2 arguments', function (done) {
             assert.throws(function () {
                 extension.getLightLocation();
             }, Error);
@@ -636,38 +921,102 @@ describe('exports: structural tests', function () {
                 extension.getLightLocation(0);
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getLightLocation(0, 0);
+                extension.getLightLocation(null, 0, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should require second argument of type number', function (done) {
+            assert.throws(function () {
+                extension.getLightLocation(0, null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should allow callback as a third argument', function (done) {
+            assert.throws(function () {
+                extension.getLightLocation(0, 0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightLocation(0, 0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getLightLocation(0, 0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getLightLocationSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightLocationSync, 'function');
+        });
+
+        it('should require atleast 3 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getLightLocationSync(0, 0, {});
+            });
+
+            assert.throws(function () {
+                extension.getLightLocationSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightLocationSync(0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightLocationSync(0, 0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
+                extension.getLightLocationSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(null, 0, {});
+                extension.getLightLocationSync(null, 0, {});
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
+                extension.getLightLocationSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(0, null, {});
+                extension.getLightLocationSync(0, null, {});
             }, TypeError);
         });
 
         it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getLightLocation(0, 0, {});
+                extension.getLightLocationSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightLocation(0, 0, 0);
+                extension.getLightLocationSync(0, 0, 0);
             }, TypeError);
         });
     });
@@ -679,11 +1028,7 @@ describe('exports: structural tests', function () {
             assert.equal(typeof extension.getLightColor, 'function');
         });
 
-        it('should require atleast 3 arguments', function () {
-            assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
-            });
-
+        it('should require atleast 2 arguments', function (done) {
             assert.throws(function () {
                 extension.getLightColor();
             }, Error);
@@ -692,38 +1037,102 @@ describe('exports: structural tests', function () {
                 extension.getLightColor(0);
             }, Error);
 
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should require first argument of type number', function (done) {
             assert.throws(function () {
-                extension.getLightColor(0, 0);
+                extension.getLightColor(null, 0, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should require second argument of type number', function (done) {
+            assert.throws(function () {
+                extension.getLightColor(0, null, utilities.functions.empty);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should allow callback as a third argument', function (done) {
+            assert.throws(function () {
+                extension.getLightColor(0, 0, null);
+            }, TypeError);
+
+            assert.doesNotThrow(function () {
+                extension.getLightColor(0, 0, done);
+            });
+        });
+
+        it('should not complete synchonously', function (done) {
+            var completed = false;
+
+            extension.getLightColor(0, 0, done);
+
+            assert.strictEqual(completed, false);
+        });
+    });
+
+
+    describe('getLightColorSync()', function () {
+
+        it('should be a function', function () {
+            assert.equal(typeof extension.getLightColorSync, 'function');
+        });
+
+        it('should require atleast 3 arguments', function () {
+            assert.doesNotThrow(function () {
+                extension.getLightColorSync(0, 0, {});
+            });
+
+            assert.throws(function () {
+                extension.getLightColorSync();
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightColorSync(0);
+            }, Error);
+
+            assert.throws(function () {
+                extension.getLightColorSync(0, 0);
             }, Error);
         });
 
         it('should require first argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
+                extension.getLightColorSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(null, 0, {});
+                extension.getLightColorSync(null, 0, {});
             }, TypeError);
         });
 
         it('should require second argument of type number', function () {
             assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
+                extension.getLightColorSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(0, null, {});
+                extension.getLightColorSync(0, null, {});
             }, TypeError);
         });
 
         it('should require third argument of type object', function () {
             assert.doesNotThrow(function () {
-                extension.getLightColor(0, 0, {});
+                extension.getLightColorSync(0, 0, {});
             });
 
             assert.throws(function () {
-                extension.getLightColor(0, 0, null);
+                extension.getLightColorSync(0, 0, null);
             }, TypeError);
         });
     });

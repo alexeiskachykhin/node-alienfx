@@ -2,40 +2,40 @@ var extension = require('bindings')('alienfx.node');
 
 
 if (extension.isAvailable) {
-    var result = extension.initialize();
+    var result = extension.initializeSync();
 
     if (result === extension.Result.SUCCESS) {
-        var numberOfDevices = {};
-        extension.getNumDevices(numberOfDevices);
+        var out = {};
+        extension.getNumDevicesSync(out);
 
-        console.info('Devices: %d', numberOfDevices.result);
+        console.info('Devices: %d', out.numberOfDevices);
 
 
-        for (var deviceIndex = 0; deviceIndex < numberOfDevices.result; deviceIndex++) {
+        for (var deviceIndex = 0; deviceIndex < out.numberOfDevices; deviceIndex++) {
             var deviceDescription = {};
-            extension.getDeviceDescription(deviceIndex, deviceDescription);
+            extension.getDeviceDescriptionSync(deviceIndex, deviceDescription);
 
             console.info('Description: %s', deviceDescription.model);
 
 
-            var numberOfLights = {};
-            extension.getNumLights(deviceIndex, numberOfLights);
+            var lights = {};
+            extension.getNumLightsSync(deviceIndex, lights);
 
-            for (var lightIndex = 0; lightIndex < numberOfLights.result; lightIndex++) {
-                var lightDescription = {};
-                result = extension.getLightDescription(deviceIndex, lightIndex, lightDescription);
+            for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
+                var light = {};
+                result = extension.getLightDescriptionSync(deviceIndex, lightIndex, light);
 
                 if (result !== extension.Result.SUCCESS) {
                     continue;
                 }
 
-                console.info('Light: %d\tDescription: %s', lightIndex, lightDescription.result);
+                console.info('Light: %d\tDescription: %s', lightIndex, light.lightDescription);
             }
         }
 
 
         require('./utilities').waitForKeyPress(function () {
-            extension.release();
+            extension.releaseSync();
         });
     }
     else {

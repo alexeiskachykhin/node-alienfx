@@ -34,15 +34,15 @@ function checkLightsColor(extension, color) {
     var result = true;
 
     var devices = {};
-    extension.getNumDevices(devices);
+    extension.getNumDevicesSync(devices);
 
-    for (var deviceIndex = 0; deviceIndex < devices.result; deviceIndex++) {
+    for (var deviceIndex = 0; deviceIndex < devices.numberOfDevices; deviceIndex++) {
         var lights = {};
-        extension.getNumLights(deviceIndex, lights);
+        extension.getNumLightsSync(deviceIndex, lights);
 
-        for (var lightIndex = 0; lightIndex < lights.result; lightIndex++) {
+        for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
             var currentColor = {};
-            extension.getLightColor(deviceIndex, lightIndex, currentColor);
+            extension.getLightColorSync(deviceIndex, lightIndex, currentColor);
 
             var isEqual =
                 (currentColor.red === color.red &&
@@ -61,7 +61,6 @@ function checkLightsColor(extension, color) {
 
 
 
-
 module.exports = exports = {
     colors: {
         NONE: {
@@ -70,6 +69,10 @@ module.exports = exports = {
             blue: 0,
             brightness: 0
         }
+    },
+
+    functions: {
+        empty: function () { }
     },
 
     ask: {
