@@ -463,7 +463,7 @@ describe('exports: behavioral tests', function () {
             extension.releaseSync();
 
 
-            var actualColor = out.blue | (out.green << 8) | (out.red << 16) | (out.brightness << 24);
+            var actualColor = out.lightColor.blue | (out.lightColor.green << 8) | (out.lightColor.red << 16) | (out.lightColor.brightness << 24);
 
             assert.strictEqual(result, extension.Result.SUCCESS);
             assert.strictEqual(actualColor, color);

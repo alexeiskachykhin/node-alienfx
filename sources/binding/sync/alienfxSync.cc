@@ -297,8 +297,11 @@ Handle<Value> GetLightColorSync(const Arguments& args)
 
     if (result == LFX_SUCCESS)
     {
+        Handle<Object> color = Object::New();
+        ColorToObject(lightColor, color);
+
         Local<Object> out = Local<Object>::Cast(args[2]);
-        ColorToObject(lightColor, out);
+        out->Set(String::NewSymbol("lightColor"), color);
     }
 
     return scope.Close(Number::New(result));
