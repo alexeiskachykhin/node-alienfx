@@ -97,6 +97,55 @@ This will allow to run unit tests with Visual Studio native debugger attached ev
 
 API Reference
 ---
+- [Functions & Properties](#functions-&-properties)
+    - [isAvailable -> Boolean](#isavailable---boolean)
+    - [initialize([callback]) -> Undefined](#initializecallback---undefined)
+    - [initializeSync() -> Number](#initializesync---number)
+    - [release([callback]) -> Undefined](#releasecallback---undefined)
+    - [releaseSync() -> Number](#releasesync---number)
+    - [getVersion([callback]) -> Undefined](#getversioncallback---undefined)
+    - [getVersionSync(*out* version) -> Number](#getversionsyncout-version---number)
+    - [reset() -> Number](#reset---number)
+    - [update() -> Number](#update---number)
+    - [updateDefault() -> Number](#updatedefault---number)
+    - [light(position, color) -> Number](#lightposition-color---number)
+    - [actionColor(position, action, color) -> Number](#actioncolorposition-action-color---number)
+    - [actionColorEx(position, action, primaryColor, secondaryColor) -> Number](#actioncolorexposition-action-primarycolor-secondarycolor---number)
+    - [getNumDevices([callback]) -> Undefined](#getnumdevicescallback---undefined)
+    - [getNumDevicesSync(*out* numberOfDevices) -> Number](#getnumdevicessyncout-numberofdevices---number)
+    - [getDeviceDescription(deviceIndex[, callback]) -> Undefined](#getdevicedescriptiondeviceindex-callback---undefined)
+    - [getDeviceDescriptionSync(deviceIndex, *out* deviceDescription) -> Number](#getdevicedescriptionsyncdeviceindex-out-devicedescription---number)
+    - [getNumLights(deviceIndex[, callback]) -> Undefined](#getnumlightsdeviceindex-callback---undefined)
+    - [getNumLightsSync(deviceIndex, *out* numberOfLights) -> Undefined](#getnumlightssyncdeviceindex-out-numberoflights---undefined)
+    - [getLightDescription(deviceIndex, lightIndex[, callback]) -> Undefined](#getlightdescriptiondeviceindex-lightindex-callback---undefined)
+    - [getLightDescriptionSync(deviceIndex, lightIndex, *out* lightDescription) -> Undefined](#getlightdescriptionsyncdeviceindex-lightindex-out-lightdescription---undefined)
+    - [getLightLocation(deviceIndex, lightIndex[, callback]) -> Undefined](#getlightlocationdeviceindex-lightindex-callback---undefined)
+    - [getLightLocationSync(deviceIndex, lightIndex, *out* lightLocation) -> Undefined](#getlightlocationsyncdeviceindex-lightindex-out-lightlocation---undefined)
+    - [getLightColor(deviceIndex, lightIndex[, callback]) -> Undefined](#getlightcolordeviceindex-lightindex-callback---undefined)
+    - [getLightColorSync(deviceIndex, lightIndex, *out* lightColor) -> Number](#getlightcolorsyncdeviceindex-lightindex-out-lightcolor---number)
+    - [setLightColor(deviceIndex, lightIndex, color) -> Number](#setlightcolordeviceindex-lightindex-color---number)
+    - [setLightActionColor(deviceIndex, lightIndex, action, color) -> Number](#setlightactioncolordeviceindex-lightindex-action-color---number)
+    - [setLightActionColorEx(deviceIndex, lightIndex, action, primaryColor, secondaryColor) -> Number](#setlightactioncolorexdeviceindex-lightindex-action-primarycolor-secondarycolor---number)
+    - [setTiming(timing) -> Number](#settimingtiming---number)
+- [Data Structures](#data-structures)
+    - [Result](#result)
+    - [Color](#color)
+    - [Brightness](#brightness)
+    - [DeviceType](#devicetype)
+    - [Position](#position)
+    - [Action](#action)
+
+### Functions & Properties
+
+#### isAvailable -> Boolean
+
+*Description*: Indicates whether AlienFX.dll is found. If its not, all other functions will fail.
+
+```javascript
+var alienfx = require('alienfx');
+alienfx.isAvailable; // Boolean
+```
+
 #### initialize([callback]) -> Undefined
 
 *Description*: Initializes Alineware AlienFX system. It must be called prior to other library calls made. If this function is not called, the system will not be initialized and the other library functions will return ```Result.NOINIT``` or ```Result.FAILURE```.
@@ -707,6 +756,144 @@ alienfx.initialize(function (err, data) {
     alienfx.update();
     alienfx.release();
 });
+```
+
+
+### Data Structures
+
+#### Result
+
+*Description*: Represents status code of an operation.
+
+*Type*: Number
+
+*Predefined values*:
+```javascript
+alienfx.Result.SUCCESS
+alienfx.Result.FAILURE
+alienfx.Result.NOINIT
+alienfx.Result.NODEVS
+alienfx.Result.NOLIGHTS
+alienfx.Result.BUFFSIZE
+```
+
+#### Color
+
+*Description*: 32-bit value as ARGB, with the alpha value corresponding to brightness.
+
+*Type*: Number
+
+*Predefined values*:
+```javascript
+alienfx.Color.OFF
+alienfx.Color.BLACK
+alienfx.Color.RED
+alienfx.Color.GREEN
+alienfx.Color.BLUE
+alienfx.Color.WHITE
+alienfx.Color.YELLOW
+alienfx.Color.ORANGE
+alienfx.Color.PINK
+alienfx.Color.CYAN
+```
+ 
+
+#### Brightness
+
+*Description*: 32-bit value represents brightness of a light. Actual brightness is encoded in 4-th byte of a value.
+
+*Type*: Number
+
+*Predefined values*:
+```javascript
+alienfx.Color.FULL
+alienfx.Color.HALF
+alienfx.Color.MIN
+```
+
+
+#### DeviceType
+
+*Description*: Represents type of AlienFX device.
+
+*Type*: Number.
+
+*Predefined values*:
+```javascript
+alienfx.DeviceType.UNKNOWN
+alienfx.DeviceType.NOTEBOOK
+alienfx.DeviceType.DESKTOP
+alienfx.DeviceType.SERVER
+alienfx.DeviceType.DISPLAY
+alienfx.DeviceType.MOUSE
+alienfx.DeviceType.KEYBOARD
+alienfx.DeviceType.GAMEPAD
+alienfx.DeviceType.SPEAKER
+alienfx.DeviceType.OTHER
+```
+
+#### Position
+
+*Description*: Represents position of a light.
+
+*Type*: Number
+
+*Predefined values*:
+```javascript
+// Near Z-plane light definitions
+alienfx.Position.FRONT_LOWER_LEFT
+alienfx.Position.FRONT_LOWER_CENTER
+alienfx.Position.FRONT_LOWER_RIGHT
+alienfx.Position.FRONT_MIDDLE_LEFT
+alienfx.Position.FRONT_MIDDLE_CENTER
+alienfx.Position.FRONT_MIDDLE_RIGHT
+alienfx.Position.FRONT_UPPER_LEFT
+alienfx.Position.FRONT_UPPER_CENTER
+alienfx.Position.FRONT_UPPER_RIGHT
+
+// Mid Z-plane light definitions
+alienfx.Position.MIDDLE_LOWER_LEFT
+alienfx.Position.MIDDLE_LOWER_CENTER
+alienfx.Position.MIDDLE_LOWER_RIGHT
+alienfx.Position.MIDDLE_MIDDLE_LEFT
+alienfx.Position.MIDDLE_MIDDLE_CENTER
+alienfx.Position.MIDDLE_MIDDLE_RIGHT
+alienfx.Position.MIDDLE_UPPER_LEFT
+alienfx.Position.MIDDLE_UPPER_CENTER
+alienfx.Position.MIDDLE_UPPER_RIGHT
+
+// Far Z-plane light definitions
+alienfx.Position.REAR_LOWER_LEFT
+alienfx.Position.REAR_LOWER_CENTER
+alienfx.Position.REAR_LOWER_RIGHT
+alienfx.Position.REAR_MIDDLE_LEFT
+alienfx.Position.REAR_MIDDLE_CENTER
+alienfx.Position.REAR_MIDDLE_RIGHT
+alienfx.Position.REAR_UPPER_LEFT
+alienfx.Position.REAR_UPPER_CENTER
+alienfx.Position.REAR_UPPER_RIGHT
+
+// Combination bit masks
+alienfx.Position.ALL
+alienfx.Position.ALL_RIGHT
+alienfx.Position.ALL_LEFT
+alienfx.Position.ALL_UPPER
+alienfx.Position.ALL_LOWER
+alienfx.Position.ALL_FRONT
+alienfx.Position.ALL_REAR
+```
+
+#### Action
+
+*Description*: Represents type of an action that can be applied to a light.
+
+*Type*: Number
+
+*Predefined values*:
+```javascript
+alienfx.Action.MORPH
+alienfx.Action.PULSE
+alienfx.Action.COLOR
 ```
 
 
