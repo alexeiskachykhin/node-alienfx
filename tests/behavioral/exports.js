@@ -98,12 +98,12 @@ describe('exports: behavioral tests', function () {
             extension.reset();
             extension.update();
 
-            assert.ok(utilities.lightsAre(extension, {
+            utilities.lightsAre(extension, {
                 red: 0x00,
                 green: 0x00,
                 blue: 0x00,
                 brightness: 0xFF
-            }));
+            });
 
             extension.releaseSync();
         });
@@ -122,12 +122,12 @@ describe('exports: behavioral tests', function () {
             extension.light(position, color);
             extension.update();
 
-            assert.ok(utilities.lightsAre(extension, {
+            utilities.lightsAre(extension, {
                 red: 0x00,
                 green: 0xFF,
                 blue: 0x00,
                 brightness: 0xFF
-            }));
+            });
 
             extension.releaseSync();
         });
@@ -147,12 +147,12 @@ describe('exports: behavioral tests', function () {
             extension.actionColor(position, action, color);
             extension.update();
 
-            assert.ok(utilities.lightsAre(extension, {
+            utilities.lightsAre(extension, {
                 red: 0x00,
                 green: 0xFF,
                 blue: 0x00,
                 brightness: 0xFF
-            }));
+            });
 
             extension.releaseSync();
         });
@@ -173,12 +173,12 @@ describe('exports: behavioral tests', function () {
             extension.actionColorEx(position, action, primaryColor, secondaryColor);
             extension.update();
 
-            assert.ok(utilities.lightsAre(extension, {
+            utilities.lightsAre(extension, {
                 red: 0x00,
                 green: 0xFF,
                 blue: 0x00,
                 brightness: 0xFF
-            }));
+            });
 
             extension.releaseSync();
         });
@@ -208,13 +208,13 @@ describe('exports: behavioral tests', function () {
 
             extension.light(position, color);
             extension.updateDefault();
-            
-            assert.ok(utilities.lightsAre(extension, {
+
+            utilities.lightsAre(extension, {
                 red: 0xFF,
                 green: 0x00,
                 blue: 0x00,
                 brightness: 0xFF
-            }));
+            });
 
             extension.releaseSync();
         });
@@ -407,7 +407,6 @@ describe('exports: behavioral tests', function () {
 
             extension.releaseSync();
 
-
             /* AlienFX.dll (version 2.1.0) doesn't provide any meningfull implementation 
              * of GetLightLocation, so for now, this test is useless. Might fallback to .NET version
              * or direct communication with HID device in the future.
@@ -433,11 +432,9 @@ describe('exports: behavioral tests', function () {
 
             extension.getLightColor(0, 0, function (err, data) {
                 extension.releaseSync();
-
-                var actualColor = data.lightColor.blue | (data.lightColor.green << 8) | (data.lightColor.red << 16) | (data.lightColor.brightness << 24);
                 
                 assert.strictEqual(data.result, extension.Result.SUCCESS);
-                assert.strictEqual(actualColor, color);
+                utilities.equalColors(data.lightColor, color);
 
                 done();
             });
@@ -460,13 +457,10 @@ describe('exports: behavioral tests', function () {
             var out = {};
             var result = extension.getLightColorSync(0, 0, out);
 
-            extension.releaseSync();
-
-
-            var actualColor = out.lightColor.blue | (out.lightColor.green << 8) | (out.lightColor.red << 16) | (out.lightColor.brightness << 24);
-
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.strictEqual(actualColor, color);
+            utilities.equalColors(out.lightColor, color);
+
+            extension.releaseSync();
         });
     });
 
@@ -488,13 +482,10 @@ describe('exports: behavioral tests', function () {
             extension.update();
 
 
-            var out = {};
-            extension.getLightColorSync(0, 0, out);
-            extension.releaseSync();
-
-
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.deepEqual(out, color);
+            utilities.lightIs(extension, color, 0, 0);
+
+            extension.releaseSync();
         });
     });
 
@@ -516,13 +507,10 @@ describe('exports: behavioral tests', function () {
             extension.update();
 
 
-            var out = {};
-            extension.getLightColorSync(0, 0, out);
-            extension.releaseSync();
-
-
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.deepEqual(out, color);
+            utilities.lightIs(extension, color, 0, 0);
+
+            extension.releaseSync();
         });
     });
 
@@ -552,13 +540,10 @@ describe('exports: behavioral tests', function () {
             extension.update();
 
 
-            var out = {};
-            extension.getLightColorSync(0, 0, out);
-            extension.releaseSync();
-
-
             assert.strictEqual(result, extension.Result.SUCCESS);
-            assert.deepEqual(out, primaryColor);
+            utilities.lightIs(extension, primaryColor, 0, 0);
+
+            extension.releaseSync();
         });
     });
 

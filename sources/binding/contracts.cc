@@ -1,5 +1,8 @@
+#include <sstream>
+
 #include "contracts.h"
 
+using namespace std;
 using namespace v8;
 
 
@@ -9,10 +12,12 @@ bool Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumb
 
     if (args.Length() < requiredNumberOfArguments)
     {
-        char exceptionMessage[32];
-        _snprintf(exceptionMessage, sizeof exceptionMessage, "Function expects %d parameters.", requiredNumberOfArguments);
+        ostringstream exceptionMessageStream;
+        exceptionMessageStream << "Function expects " << requiredNumberOfArguments << " parameters.";
 
-        Local<Value> exception = Exception::Error(String::New(exceptionMessage));
+        string exceptionMessage = exceptionMessageStream.str();
+
+        Local<Value> exception = Exception::Error(String::New(exceptionMessage.c_str()));
         ThrowException(exception);
 
         return false;
@@ -27,10 +32,12 @@ bool Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
 
     if (!args[argumentIndex]->IsObject())
     {
-        char exceptionMessage[64];
-        _snprintf(exceptionMessage, sizeof exceptionMessage, "Argument %d must be of type object.", argumentIndex + 1);
+        ostringstream exceptionMessageStream;
+        exceptionMessageStream << "Argument " << argumentIndex + 1 << " must be of type object.";
 
-        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
+        string exceptionMessage = exceptionMessageStream.str();
+
+        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage.c_str()));
         ThrowException(exception);
 
         return false;
@@ -45,10 +52,12 @@ bool Contracts::RequireNumberArgument(const Arguments& args, int argumentIndex)
 
     if (!args[argumentIndex]->IsNumber())
     {
-        char exceptionMessage[64];
-        _snprintf(exceptionMessage, sizeof exceptionMessage, "Argument %d must be of type number.", argumentIndex + 1);
+        ostringstream exceptionMessageStream;
+        exceptionMessageStream << "Argument " << argumentIndex + 1 << " must be of type number.";
 
-        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
+        string exceptionMessage = exceptionMessageStream.str();
+
+        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage.c_str()));
         ThrowException(exception);
 
         return false;
@@ -63,10 +72,12 @@ bool Contracts::RequireFunctionArgument(const Arguments& args, int argumentIndex
 
     if (!args[argumentIndex]->IsFunction())
     {
-        char exceptionMessage[64];
-        _snprintf(exceptionMessage, sizeof exceptionMessage, "Argument %d must be of type function.", argumentIndex + 1);
+        ostringstream exceptionMessageStream;
+        exceptionMessageStream << "Argument " << argumentIndex + 1 << " must be of type function.";
 
-        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage));
+        string exceptionMessage = exceptionMessageStream.str();
+
+        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage.c_str()));
         ThrowException(exception);
 
         return false;

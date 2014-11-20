@@ -1,4 +1,5 @@
 var inquirer = require('inquirer');
+var assert = require('assert');
 
 
 function checkboxPrompt(message, choices, callback) {
@@ -31,8 +32,6 @@ function promptAboutTests(choices, callback) {
 
 
 function checkLightsColor(extension, color) {
-    var result = true;
-
     var devices = {};
     extension.getNumDevicesSync(devices);
 
@@ -41,24 +40,48 @@ function checkLightsColor(extension, color) {
         extension.getNumLightsSync(deviceIndex, lights);
 
         for (var lightIndex = 0; lightIndex < lights.numberOfLights; lightIndex++) {
-            var currentColor = {};
-            extension.getLightColorSync(deviceIndex, lightIndex, currentColor);
+            checkLightColor(extension, color, deviceIndex, lightIndex);
+        }
+    }
+}
 
-            var isEqual =
-                (currentColor.red === color.red &&
-                currentColor.green === color.green &&
-                currentColor.blue === color.blue &&
-                currentColor.brightness === color.brightness);
+function checkLightColor(extension, color, deviceIndex, lightIndex) {
+    var currentColor = {};
+    extension.getLightColorSync(deviceIndex, lightIndex, currentColor);
 
-            if (!isEqual) {
-                return false;
-            }
+    assert.deepEqual(currentColor.lightColor, normalizeColor(color));
+}
+
+function normalizeColor(color) {
+    var normalizedColor;
+
+    switch (typeof color) {
+        case 'object': {
+            normalizedColor = color;
+            break;
+        }
+
+        case 'number': {
+            normalizedColor = {
+                brightness: (color & 0xFF000000) >>> 24,
+                red: (color & 0x00FF0000) >>> 16,
+                green: (color & 0x0000FF00) >>> 8,
+                blue: (color & 0x000000FF) >>> 0
+            };
+
+            break;
         }
     }
 
-    return result;
+    return normalizedColor;
 }
 
+function isEqualColors(a, b) {
+    var normalized_a = normalizeColor(a);
+    var normalized_b = normalizeColor(b);
+
+    assert.deepEqual(normalized_a, normalized_b);
+}
 
 
 module.exports = exports = {
@@ -79,5 +102,8 @@ module.exports = exports = {
         whichTestsToRun: promptAboutTests
     },
 
-    lightsAre: checkLightsColor
+    lightsAre: checkLightsColor,
+    lightIs: checkLightColor,
+
+    equalColors: isEqualColors
 };
