@@ -21,7 +21,7 @@ Handle<Value> GetVersionSync(const Arguments& args)
 
 
     LFX_RESULT result = ALIENFX_API.GetVersion(
-        (char *)version.c_str(),
+        const_cast<char*>(version.c_str()),
         version.size());
 
     if (result == LFX_SUCCESS) {
@@ -174,7 +174,7 @@ Handle<Value> GetDeviceDescriptionSync(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
         deviceIndex,
-        (char *)deviceDescription.c_str(),
+        const_cast<char*>(deviceDescription.c_str()),
         deviceDescription.size(),
         &deviceType);
 
@@ -233,7 +233,7 @@ Handle<Value> GetLightDescriptionSync(const Arguments& args)
     LFX_RESULT result = ALIENFX_API.GetLightDescription(
         deviceIndex,
         lightIndex,
-        (char *)lightDescription.c_str(),
+        const_cast<char*>(lightDescription.c_str()),
         lightDescription.size());
 
     if (result == LFX_SUCCESS)

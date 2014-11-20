@@ -42,7 +42,9 @@ void GetVersionAsync(uv_work_t* request)
 
     string version(LFX_DEF_STRING_SIZE, 0);
 
-    LFX_RESULT result = ALIENFX_API.GetVersion((char *)version.c_str(), version.size());
+    LFX_RESULT result = ALIENFX_API.GetVersion(
+        const_cast<char*>(version.c_str()), 
+        version.size());
 
     baton->Result = result;
     baton->Version = version;
@@ -235,7 +237,7 @@ void GetDeviceDescriptionAsync(uv_work_t* request)
 
     LFX_RESULT result = ALIENFX_API.GetDeviceDescription(
         baton->DeviceIndex,
-        (char *)deviceDescription.c_str(),
+        const_cast<char*>(deviceDescription.c_str()),
         deviceDescription.size(),
         &baton->DeviceType);
 
@@ -353,7 +355,7 @@ void GetLightDescriptionAsync(uv_work_t* request)
     LFX_RESULT result = ALIENFX_API.GetLightDescription(
         baton->DeviceIndex,
         baton->LightIndex,
-        (char *)lightDescription.c_str(),
+        const_cast<char*>(lightDescription.c_str()),
         lightDescription.size());
 
     baton->Result = result;
