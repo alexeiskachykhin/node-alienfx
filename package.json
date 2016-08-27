@@ -17,7 +17,7 @@
     "lightfx"
   ],
   "author": "Alexei Skachykhin <alexei.skachykhin@live.com>",
-  "license": "GPL-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/alexeiskachykhin/node-alienfx/issues"
   },
