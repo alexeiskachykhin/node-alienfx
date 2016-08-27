@@ -18,7 +18,7 @@ Compatibility
 -------------
 **Operating Systems**: Windows
 
-**Node**: 0.10.26
+**Node**: 4.4.5 (32 bit, unfortunatelly there is a bug in 64-bit version of LightFX.dll that prevents AlienFX from initializing correctly)
 
 
 Currently we are bound to operating systems that AlienFX.dll can run on. Strictly speaking it is possible to bypass [AlienFX][AlienFX] API and talk directly to the underlaying hardware, which requires us to send byte arrays to USB HID device. This will allow to support wider range of operating systems, but it is significantly harder to implement and what's more important, all of the device differences have to be handled. Awesome libraries implemented this way exist [pyalienfx][pyalienfx]. Please let me know if you really interested to see this module working on Linux. 
