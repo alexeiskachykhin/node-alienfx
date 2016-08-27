@@ -6,9 +6,9 @@ using namespace std;
 using namespace v8;
 
 
-bool Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumberOfArguments)
+bool Contracts::RequireNumberOfArguments(const v8::FunctionCallbackInfo<Value>& args, int requiredNumberOfArguments)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
     if (args.Length() < requiredNumberOfArguments)
     {
@@ -17,8 +17,8 @@ bool Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumb
 
         string exceptionMessage = exceptionMessageStream.str();
 
-        Local<Value> exception = Exception::Error(String::New(exceptionMessage.c_str()));
-        ThrowException(exception);
+        Local<Value> exception = Exception::Error(String::NewFromUtf8(isolate, exceptionMessage.c_str()));
+        isolate->ThrowException(exception);
 
         return false;
     }
@@ -26,9 +26,9 @@ bool Contracts::RequireNumberOfArguments(const Arguments& args, int requiredNumb
     return true;
 }
 
-bool Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
+bool Contracts::RequireObjectArgument(const v8::FunctionCallbackInfo<Value>& args, int argumentIndex)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
     if (!args[argumentIndex]->IsObject())
     {
@@ -37,8 +37,8 @@ bool Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
 
         string exceptionMessage = exceptionMessageStream.str();
 
-        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage.c_str()));
-        ThrowException(exception);
+        Local<Value> exception = Exception::TypeError(String::NewFromUtf8(isolate, exceptionMessage.c_str()));
+        isolate->ThrowException(exception);
 
         return false;
     }
@@ -46,9 +46,9 @@ bool Contracts::RequireObjectArgument(const Arguments& args, int argumentIndex)
     return true;
 }
 
-bool Contracts::RequireNumberArgument(const Arguments& args, int argumentIndex)
+bool Contracts::RequireNumberArgument(const v8::FunctionCallbackInfo<Value>& args, int argumentIndex)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
     if (!args[argumentIndex]->IsNumber())
     {
@@ -57,8 +57,8 @@ bool Contracts::RequireNumberArgument(const Arguments& args, int argumentIndex)
 
         string exceptionMessage = exceptionMessageStream.str();
 
-        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage.c_str()));
-        ThrowException(exception);
+        Local<Value> exception = Exception::TypeError(String::NewFromUtf8(isolate, exceptionMessage.c_str()));
+        isolate->ThrowException(exception);
 
         return false;
     }
@@ -66,9 +66,9 @@ bool Contracts::RequireNumberArgument(const Arguments& args, int argumentIndex)
     return true;
 }
 
-bool Contracts::RequireFunctionArgument(const Arguments& args, int argumentIndex)
+bool Contracts::RequireFunctionArgument(const v8::FunctionCallbackInfo<Value>& args, int argumentIndex)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
     if (!args[argumentIndex]->IsFunction())
     {
@@ -77,8 +77,8 @@ bool Contracts::RequireFunctionArgument(const Arguments& args, int argumentIndex
 
         string exceptionMessage = exceptionMessageStream.str();
 
-        Local<Value> exception = Exception::TypeError(String::New(exceptionMessage.c_str()));
-        ThrowException(exception);
+        Local<Value> exception = Exception::TypeError(String::NewFromUtf8(isolate, exceptionMessage.c_str()));
+        isolate->ThrowException(exception);
 
         return false;
     }
@@ -86,10 +86,8 @@ bool Contracts::RequireFunctionArgument(const Arguments& args, int argumentIndex
     return true;
 }
 
-bool Contracts::OptionalFunctionArgument(const v8::Arguments& args, int argumentIndex)
+bool Contracts::OptionalFunctionArgument(const v8::FunctionCallbackInfo<Value>& args, int argumentIndex)
 {
-    HandleScope scope;
-
     if (argumentIndex >= args.Length())
     {
         return true;

@@ -1,4 +1,5 @@
 #include <node.h>
+#include <uv.h>
 #include <string>
 
 #include "../contracts.h"
@@ -11,27 +12,25 @@ using namespace std;
 
 
 
-Handle<Value> Empty(const Arguments& args)
+void Empty(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
-Handle<Function> GetCallback(const Arguments& args, int callbackArgumentIndex)
+Local<Function> GetCallback(const FunctionCallbackInfo<Value>& args, int callbackArgumentIndex)
 {
-    HandleScope scope;
-    Handle<Function> callback;
+    Local<Function> callback;
 
     if (callbackArgumentIndex < args.Length())
     {
-        callback = Handle<Function>::Cast(args[callbackArgumentIndex]);
+        callback = Local<Function>::Cast(args[callbackArgumentIndex]);
     }
     else
     {
-        callback = FunctionTemplate::New(Empty)->GetFunction();
+        callback = FunctionTemplate::New(args.GetIsolate(), Empty)->GetFunction();
     }
 
-    return scope.Close(callback);
+    return callback;
 }
 
 
@@ -52,41 +51,42 @@ void GetVersionAsync(uv_work_t* request)
 
 void GetVersionAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetVersionBaton* baton = static_cast<GetVersionBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
     if (baton->Result == LFX_SUCCESS)
     {
-        data->Set(String::NewSymbol("version"), String::New(baton->Version.c_str()));
+        data->Set(String::NewFromUtf8(isolate, "version"), String::NewFromUtf8(isolate, baton->Version.c_str()));
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
-
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
+    
     delete baton;
 }
 
-Handle<Value> GetVersion(const Arguments& args)
+void GetVersion(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    OPTIONAL_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(args, 0);
 
 
-    Handle<Function> callback = GetCallback(args, 0);
+    Local<Function> callback = GetCallback(args, 0);
 
     GetVersionBaton* baton = new GetVersionBaton();
     baton->Request.data = baton;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(Isolate::GetCurrent(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetVersionAsync, GetVersionAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -102,35 +102,36 @@ void InitializeAsync(uv_work_t* request)
 
 void InitializeAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     InitializeBaton* baton = static_cast<InitializeBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> Initialize(const Arguments& args)
+void Initialize(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    OPTIONAL_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(args, 0);
 
 
-    Handle<Function> callback = GetCallback(args, 0);
+    Local<Function> callback = GetCallback(args, 0);
 
     InitializeBaton* baton = new InitializeBaton();
     baton->Request.data = baton;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, InitializeAsync, InitializeAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -146,35 +147,36 @@ void ReleaseAsync(uv_work_t* request)
 
 void ReleaseAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     ReleaseBaton* baton = static_cast<ReleaseBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> Release(const Arguments& args)
+void Release(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    OPTIONAL_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(args, 0);
 
 
-    Handle<Function> callback = GetCallback(args, 0);
+    Local<Function> callback = GetCallback(args, 0);
 
     ReleaseBaton* baton = new ReleaseBaton();
     baton->Request.data = baton;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, ReleaseAsync, ReleaseAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -190,41 +192,42 @@ void GetNumDevicesAsync(uv_work_t* request)
 
 void GetNumDevicesAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetNumDevicesBaton* baton = static_cast<GetNumDevicesBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
     
     if (baton->Result == LFX_SUCCESS)
     {
-        data->Set(String::NewSymbol("numberOfDevices"), Number::New(baton->NumberOfDevices));
+        data->Set(String::NewFromUtf8(isolate, "numberOfDevices"), Number::New(isolate, baton->NumberOfDevices));
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> GetNumDevices(const Arguments& args)
+void GetNumDevices(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    OPTIONAL_FUNCTION(scope, args, 0);
+    OPTIONAL_FUNCTION(args, 0);
 
 
-    Handle<Function> callback = GetCallback(args, 0);
+    Local<Function> callback = GetCallback(args, 0);
 
     GetNumDevicesBaton* baton = new GetNumDevicesBaton();
     baton->Request.data = baton;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetNumDevicesAsync, GetNumDevicesAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -247,46 +250,47 @@ void GetDeviceDescriptionAsync(uv_work_t* request)
 
 void GetDeviceDescriptionAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetDeviceDescriptionBaton* baton = static_cast<GetDeviceDescriptionBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
     if (baton->Result == LFX_SUCCESS)
     {
-        data->Set(String::NewSymbol("model"), String::New(baton->DeviceModel.c_str()));
-        data->Set(String::NewSymbol("type"), Number::New(baton->DeviceType));
+        data->Set(String::NewFromUtf8(isolate, "model"), String::NewFromUtf8(isolate, baton->DeviceModel.c_str()));
+        data->Set(String::NewFromUtf8(isolate, "type"), Number::New(isolate, baton->DeviceType));
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> GetDeviceDescription(const Arguments& args)
+void GetDeviceDescription(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 0);
-    OPTIONAL_FUNCTION(scope, args, 1);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_NUMBER(args, 0);
+    OPTIONAL_FUNCTION(args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
-    Handle<Function> callback = GetCallback(args, 1);
+    Local<Function> callback = GetCallback(args, 1);
 
     GetDeviceDescriptionBaton* baton = new GetDeviceDescriptionBaton();
     baton->Request.data = baton;
     baton->DeviceIndex = deviceIndex;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetDeviceDescriptionAsync, GetDeviceDescriptionAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -302,45 +306,46 @@ void GetNumLightsAsync(uv_work_t* request)
 
 void GetNumLightsAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetNumLightsBaton* baton = static_cast<GetNumLightsBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
     if (baton->Result == LFX_SUCCESS)
     {
-        data->Set(String::NewSymbol("numberOfLights"), Number::New(baton->NumberOfLights));
+        data->Set(String::NewFromUtf8(isolate, "numberOfLights"), Number::New(isolate, baton->NumberOfLights));
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> GetNumLights(const Arguments& args)
+void GetNumLights(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 0);
-    OPTIONAL_FUNCTION(scope, args, 1);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_NUMBER(args, 0);
+    OPTIONAL_FUNCTION(args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
-    Handle<Function> callback = GetCallback(args, 1);
+    Local<Function> callback = GetCallback(args, 1);
 
     GetNumLightsBaton* baton = new GetNumLightsBaton();
     baton->Request.data = baton;
     baton->DeviceIndex = deviceIndex;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetNumLightsAsync, GetNumLightsAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -364,48 +369,49 @@ void GetLightDescriptionAsync(uv_work_t* request)
 
 void GetLightDescriptionAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetLightDescriptionBaton* baton = static_cast<GetLightDescriptionBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
     if (baton->Result == LFX_SUCCESS)
     {
-        data->Set(String::NewSymbol("lightDescription"), String::New(baton->LightDescription.c_str()));
+        data->Set(String::NewFromUtf8(isolate, "lightDescription"), String::NewFromUtf8(isolate, baton->LightDescription.c_str()));
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> GetLightDescription(const Arguments& args)
+void GetLightDescription(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    OPTIONAL_FUNCTION(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    OPTIONAL_FUNCTION(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
-    Handle<Function> callback = GetCallback(args, 2);
+    Local<Function> callback = GetCallback(args, 2);
 
     GetLightDescriptionBaton* baton = new GetLightDescriptionBaton();
     baton->Request.data = baton;
     baton->DeviceIndex = deviceIndex;
     baton->LightIndex = lightIndex;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetLightDescriptionAsync, GetLightDescriptionAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -424,51 +430,52 @@ void GetLightLocationAsync(uv_work_t* request)
 
 void GetLightLocationAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetLightLocationBaton* baton = static_cast<GetLightLocationBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
     if (baton->Result == LFX_SUCCESS)
     {
-        Handle<Object> location = Object::New();
+        Local<Object> location = Object::New(isolate);
         PositionToObject(baton->LightLocation, location);
 
-        data->Set(String::NewSymbol("lightLocation"), location);
+        data->Set(String::NewFromUtf8(isolate, "lightLocation"), location);
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> GetLightLocation(const Arguments& args)
+void GetLightLocation(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    OPTIONAL_FUNCTION(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    OPTIONAL_FUNCTION(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
-    Handle<Function> callback = GetCallback(args, 2);
+    Local<Function> callback = GetCallback(args, 2);
 
     GetLightDescriptionBaton* baton = new GetLightDescriptionBaton();
     baton->Request.data = baton;
     baton->DeviceIndex = deviceIndex;
     baton->LightIndex = lightIndex;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetLightDescriptionAsync, GetLightDescriptionAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
@@ -487,65 +494,66 @@ void GetLightColorAsync(uv_work_t* request)
 
 void GetLightColorAsyncAfter(uv_work_t* request, int status)
 {
+    Isolate* isolate = Isolate::GetCurrent();
+    HandleScope scope(isolate);
+
     GetLightColorBaton* baton = static_cast<GetLightColorBaton*>(request->data);
 
-    Handle<Value> error = Null();
-    Handle<Object> data = Object::New();
-    data->Set(String::NewSymbol("result"), Number::New(baton->Result));
+    Local<Value> error = Null(isolate);
+    Local<Object> data = Object::New(isolate);
+    data->Set(String::NewFromUtf8(isolate, "result"), Number::New(isolate, baton->Result));
 
     if (baton->Result == LFX_SUCCESS)
     {
-        Handle<Object> color = Object::New();
+        Local<Object> color = Object::New(isolate);
         ColorToObject(baton->LightColor, color);
 
-        data->Set(String::NewSymbol("lightColor"), color);
+        data->Set(String::NewFromUtf8(isolate, "lightColor"), color);
     }
 
 
-    Handle<Value> argv[2] { error, data };
-    baton->Callback->Call(Context::GetCurrent()->Global(), 2, argv);
-    baton->Callback.Dispose();
+    Local<Value> argv[2] { error, data };
+    Local<Function>::New(isolate, baton->Callback)->Call(isolate->GetCurrentContext()->Global(), 2, argv);
+    baton->Callback.Reset();
 
     delete baton;
 }
 
-Handle<Value> GetLightColor(const Arguments& args)
+void GetLightColor(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    OPTIONAL_FUNCTION(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    OPTIONAL_FUNCTION(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
     unsigned int lightIndex = args[1]->Uint32Value();
-    Handle<Function> callback = GetCallback(args, 2);
+    Local<Function> callback = GetCallback(args, 2);
 
     GetLightColorBaton* baton = new GetLightColorBaton();
     baton->Request.data = baton;
     baton->DeviceIndex = deviceIndex;
     baton->LightIndex = lightIndex;
-    baton->Callback = Persistent<Function>::New(callback);
+    baton->Callback.Reset(args.GetIsolate(), callback);
 
     uv_queue_work(uv_default_loop(), &baton->Request, GetLightColorAsync, GetLightColorAsyncAfter);
 
-    return scope.Close(Undefined());
+    args.GetReturnValue().SetUndefined();
 }
 
 
 
 
-void InitAsyncBindings(const v8::Handle<v8::Object>& target)
+void InitAsyncBindings(Local<Object> exports, Local<Object> module)
 {
-    NODE_SET_METHOD(target, "getVersion", GetVersion);
-    NODE_SET_METHOD(target, "initialize", Initialize);
-    NODE_SET_METHOD(target, "release", Release);
-    NODE_SET_METHOD(target, "getNumDevices", GetNumDevices);
-    NODE_SET_METHOD(target, "getDeviceDescription", GetDeviceDescription);
-    NODE_SET_METHOD(target, "getNumLights", GetNumLights);
-    NODE_SET_METHOD(target, "getLightDescription", GetLightDescription);
-    NODE_SET_METHOD(target, "getLightLocation", GetLightLocation);
-    NODE_SET_METHOD(target, "getLightColor", GetLightColor);
+    NODE_SET_METHOD(exports, "getVersion", GetVersion);
+    NODE_SET_METHOD(exports, "initialize", Initialize);
+    NODE_SET_METHOD(exports, "release", Release);
+    NODE_SET_METHOD(exports, "getNumDevices", GetNumDevices);
+    NODE_SET_METHOD(exports, "getDeviceDescription", GetDeviceDescription);
+    NODE_SET_METHOD(exports, "getNumLights", GetNumLights);
+    NODE_SET_METHOD(exports, "getLightDescription", GetLightDescription);
+    NODE_SET_METHOD(exports, "getLightLocation", GetLightLocation);
+    NODE_SET_METHOD(exports, "getLightColor", GetLightColor);
 }

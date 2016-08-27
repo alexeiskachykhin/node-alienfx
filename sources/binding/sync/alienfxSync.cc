@@ -9,12 +9,12 @@ using namespace v8;
 using namespace std;
 
 
-Handle<Value> GetVersionSync(const Arguments& args)
+void GetVersionSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_OBJECT(scope, args, 0);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_OBJECT(args, 0);
 
 
     string version(LFX_DEF_STRING_SIZE, 0);
@@ -26,65 +26,52 @@ Handle<Value> GetVersionSync(const Arguments& args)
 
     if (result == LFX_SUCCESS) {
         Local<Object> out = Local<Object>::Cast(args[0]);
-        out->Set(String::NewSymbol("result"), String::New(version.c_str()));
+        out->Set(String::NewFromUtf8(isolate, "result"), String::NewFromUtf8(isolate, version.c_str()));
     }
 
-
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(isolate, result));
 }
 
-Handle<Value> InitializeSync(const Arguments& args)
+void InitializeSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
     LFX_RESULT result = ALIENFX_API.Initialize();
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> ReleaseSync(const Arguments& args)
+void ReleaseSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
     LFX_RESULT result = ALIENFX_API.Release();
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> Reset(const Arguments& args)
+void Reset(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
     LFX_RESULT result = ALIENFX_API.Reset();
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> Update(const Arguments& args)
+void Update(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
     LFX_RESULT result = ALIENFX_API.Update();
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> UpdateDefault(const Arguments& args)
+void UpdateDefault(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
     LFX_RESULT result = ALIENFX_API.UpdateDefault();
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> Light(const Arguments& args)
+void Light(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 2);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
 
 
     unsigned int locationMask = args[0]->Uint32Value();
@@ -92,17 +79,15 @@ Handle<Value> Light(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.Light(locationMask, colorValue);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> ActionColor(const Arguments& args)
+void ActionColor(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 3);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_NUMBER(args, 2);
 
 
     unsigned int locationMask = args[0]->Uint32Value();
@@ -111,18 +96,16 @@ Handle<Value> ActionColor(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.ActionColor(locationMask, action, colorValue);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> ActionColorEx(const Arguments& args)
+void ActionColorEx(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 4);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 3);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 4);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_NUMBER(args, 2);
+    REQUIRE_NUMBER(args, 3);
 
 
     unsigned int locationMask = args[0]->Uint32Value();
@@ -132,15 +115,15 @@ Handle<Value> ActionColorEx(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.ActionColorEx(locationMask, action, primaryColorValue, secondaryColorValue);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> GetNumDevicesSync(const Arguments& args)
+void GetNumDevicesSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_OBJECT(scope, args, 0);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_OBJECT(args, 0);
 
 
     unsigned int numberOfDevices = 0;
@@ -151,20 +134,19 @@ Handle<Value> GetNumDevicesSync(const Arguments& args)
     if (result == LFX_SUCCESS)
     {
         Local<Object> out = Local<Object>::Cast(args[0]);
-        out->Set(String::NewSymbol("numberOfDevices"), Number::New(numberOfDevices));
+        out->Set(String::NewFromUtf8(isolate, "numberOfDevices"), Number::New(isolate, numberOfDevices));
     }
 
-
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> GetDeviceDescriptionSync(const Arguments& args)
+void GetDeviceDescriptionSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_OBJECT(scope, args, 1);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 2);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_OBJECT(args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -181,21 +163,20 @@ Handle<Value> GetDeviceDescriptionSync(const Arguments& args)
     if (result == LFX_SUCCESS)
     {
         Local<Object> out = Local<Object>::Cast(args[1]);
-        out->Set(String::NewSymbol("model"), String::New(deviceDescription.c_str()));
-        out->Set(String::NewSymbol("type"), Number::New(deviceType));
+        out->Set(String::NewFromUtf8(isolate, "model"), String::NewFromUtf8(isolate, deviceDescription.c_str()));
+        out->Set(String::NewFromUtf8(isolate, "type"), Number::New(isolate, deviceType));
     }
 
-
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> GetNumLightsSync(const Arguments& args)
+void GetNumLightsSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 2);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_OBJECT(scope, args, 1);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 2);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_OBJECT(args, 1);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -207,21 +188,20 @@ Handle<Value> GetNumLightsSync(const Arguments& args)
     if (result == LFX_SUCCESS)
     {
         Local<Object> out = Local<Object>::Cast(args[1]);
-        out->Set(String::NewSymbol("numberOfLights"), Number::New(numberOfLights));
+        out->Set(String::NewFromUtf8(isolate, "numberOfLights"), Number::New(isolate, numberOfLights));
     }
 
-
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> GetLightDescriptionSync(const Arguments& args)
+void GetLightDescriptionSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_OBJECT(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 3);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_OBJECT(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -239,21 +219,20 @@ Handle<Value> GetLightDescriptionSync(const Arguments& args)
     if (result == LFX_SUCCESS)
     {
         Local<Object> out = Local<Object>::Cast(args[2]);
-        out->Set(String::NewSymbol("lightDescription"), String::New(lightDescription.c_str()));
+        out->Set(String::NewFromUtf8(isolate, "lightDescription"), String::NewFromUtf8(isolate, lightDescription.c_str()));
     }
 
-
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> GetLightLocationSync(const Arguments& args)
+void GetLightLocationSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_OBJECT(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 3);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_OBJECT(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -266,25 +245,24 @@ Handle<Value> GetLightLocationSync(const Arguments& args)
 
     if (result == LFX_SUCCESS)
     {
-        Handle<Object> location = Object::New();
+        Local<Object> location = Object::New(isolate);
         PositionToObject(lightLocation, location);
 
         Local<Object> out = Local<Object>::Cast(args[2]);
-        out->Set(String::NewSymbol("lightLocation"), location);
+        out->Set(String::NewFromUtf8(isolate, "lightLocation"), location);
     }
 
-
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> GetLightColorSync(const Arguments& args)
+void GetLightColorSync(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
+    Isolate* isolate = args.GetIsolate();
 
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_OBJECT(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 3);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_OBJECT(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -297,24 +275,22 @@ Handle<Value> GetLightColorSync(const Arguments& args)
 
     if (result == LFX_SUCCESS)
     {
-        Handle<Object> color = Object::New();
+        Local<Object> color = Object::New(isolate);
         ColorToObject(lightColor, color);
 
         Local<Object> out = Local<Object>::Cast(args[2]);
-        out->Set(String::NewSymbol("lightColor"), color);
+        out->Set(String::NewFromUtf8(isolate, "lightColor"), color);
     }
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> SetLightColor(const Arguments& args)
+void SetLightColor(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 3);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_OBJECT(scope, args, 2);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 3);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_OBJECT(args, 2);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -327,18 +303,16 @@ Handle<Value> SetLightColor(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.SetLightColor(deviceIndex, lightIndex, &lightColor);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> SetLightActionColor(const Arguments& args)
+void SetLightActionColor(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 4);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 2);
-    REQUIRE_OBJECT(scope, args, 3);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 4);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_NUMBER(args, 2);
+    REQUIRE_OBJECT(args, 3);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -351,19 +325,17 @@ Handle<Value> SetLightActionColor(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.SetLightActionColor(deviceIndex, lightIndex, action, &lightColor);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> SetLightActionColorEx(const Arguments& args)
+void SetLightActionColorEx(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 5);
-    REQUIRE_NUMBER(scope, args, 0);
-    REQUIRE_NUMBER(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 2);
-    REQUIRE_OBJECT(scope, args, 3);
-    REQUIRE_OBJECT(scope, args, 4);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 5);
+    REQUIRE_NUMBER(args, 0);
+    REQUIRE_NUMBER(args, 1);
+    REQUIRE_NUMBER(args, 2);
+    REQUIRE_OBJECT(args, 3);
+    REQUIRE_OBJECT(args, 4);
 
 
     unsigned int deviceIndex = args[0]->Uint32Value();
@@ -381,48 +353,48 @@ Handle<Value> SetLightActionColorEx(const Arguments& args)
 
     LFX_RESULT result = ALIENFX_API.SetLightActionColorEx(deviceIndex, lightIndex, action, &primaryLightColor, &secondaryLightColor);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
-Handle<Value> SetTiming(const Arguments& args)
+void SetTiming(const FunctionCallbackInfo<Value>& args)
 {
-    HandleScope scope;
-
-    REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, 1);
-    REQUIRE_NUMBER(scope, args, 0);
+    REQUIRE_NUMBER_OF_ARGUMENTS(args, 1);
+    REQUIRE_NUMBER(args, 0);
 
 
     int timing = args[0]->Int32Value();
 
     LFX_RESULT result = ALIENFX_API.SetTiming(timing);
 
-    return scope.Close(Number::New(result));
+    args.GetReturnValue().Set(Number::New(args.GetIsolate(), result));
 }
 
 
 
-void InitSyncBindings(const v8::Handle<v8::Object>& target)
+void InitSyncBindings(Local<Object> exports, Local<Object> module)
 {
-    NODE_SET_METHOD(target, "getVersionSync", GetVersionSync);
-    NODE_SET_METHOD(target, "initializeSync", InitializeSync);
-    NODE_SET_METHOD(target, "releaseSync", ReleaseSync);
-    NODE_SET_METHOD(target, "reset", Reset);
-    NODE_SET_METHOD(target, "update", Update);
-    NODE_SET_METHOD(target, "updateDefault", UpdateDefault);
-    NODE_SET_METHOD(target, "light", Light);
-    NODE_SET_METHOD(target, "actionColor", ActionColor);
-    NODE_SET_METHOD(target, "actionColorEx", ActionColorEx);
-    NODE_SET_METHOD(target, "getNumDevicesSync", GetNumDevicesSync);
-    NODE_SET_METHOD(target, "getDeviceDescriptionSync", GetDeviceDescriptionSync);
-    NODE_SET_METHOD(target, "getNumLightsSync", GetNumLightsSync);
-    NODE_SET_METHOD(target, "getLightDescriptionSync", GetLightDescriptionSync);
-    NODE_SET_METHOD(target, "getLightLocationSync", GetLightLocationSync);
-    NODE_SET_METHOD(target, "getLightColorSync", GetLightColorSync);
-    NODE_SET_METHOD(target, "setLightColor", SetLightColor);
-    NODE_SET_METHOD(target, "setLightActionColor", SetLightActionColor);
-    NODE_SET_METHOD(target, "setLightActionColorEx", SetLightActionColorEx);
-    NODE_SET_METHOD(target, "setTiming", SetTiming);
+    Isolate* isolate = exports->GetIsolate();
+
+    NODE_SET_METHOD(exports, "getVersionSync", GetVersionSync);
+    NODE_SET_METHOD(exports, "initializeSync", InitializeSync);
+    NODE_SET_METHOD(exports, "releaseSync", ReleaseSync);
+    NODE_SET_METHOD(exports, "reset", Reset);
+    NODE_SET_METHOD(exports, "update", Update);
+    NODE_SET_METHOD(exports, "updateDefault", UpdateDefault);
+    NODE_SET_METHOD(exports, "light", Light);
+    NODE_SET_METHOD(exports, "actionColor", ActionColor);
+    NODE_SET_METHOD(exports, "actionColorEx", ActionColorEx);
+    NODE_SET_METHOD(exports, "getNumDevicesSync", GetNumDevicesSync);
+    NODE_SET_METHOD(exports, "getDeviceDescriptionSync", GetDeviceDescriptionSync);
+    NODE_SET_METHOD(exports, "getNumLightsSync", GetNumLightsSync);
+    NODE_SET_METHOD(exports, "getLightDescriptionSync", GetLightDescriptionSync);
+    NODE_SET_METHOD(exports, "getLightLocationSync", GetLightLocationSync);
+    NODE_SET_METHOD(exports, "getLightColorSync", GetLightColorSync);
+    NODE_SET_METHOD(exports, "setLightColor", SetLightColor);
+    NODE_SET_METHOD(exports, "setLightActionColor", SetLightActionColor);
+    NODE_SET_METHOD(exports, "setLightActionColorEx", SetLightActionColorEx);
+    NODE_SET_METHOD(exports, "setTiming", SetTiming);
 
 
-    target->Set(String::NewSymbol("isAvailable"), Boolean::New(ALIENFX_API.IsAvailable));
+    exports->Set(String::NewFromUtf8(isolate, "isAvailable"), Boolean::New(isolate, ALIENFX_API.IsAvailable));
 }

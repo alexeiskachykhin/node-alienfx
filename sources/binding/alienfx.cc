@@ -7,10 +7,10 @@
 using namespace v8;
 
 
-void Init(Handle<Object> target) {
-    InitAsyncBindings(target);
-    InitSyncBindings(target);
-    InitObjectBindings(target);
+void Init(Local<Object> exports, Local<Object> module) {
+    InitAsyncBindings(exports, module);
+    InitSyncBindings(exports, module);
+    InitObjectBindings(exports, module);
 }
 
 NODE_MODULE(alienfx, Init)

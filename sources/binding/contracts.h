@@ -6,41 +6,41 @@
 class Contracts
 {
 public:
-    static bool RequireNumberOfArguments(const v8::Arguments& args, int requiredNumberOfArguments);
-    static bool RequireObjectArgument(const v8::Arguments& args, int argumentIndex);
-    static bool RequireNumberArgument(const v8::Arguments& args, int argumentIndex);
-    static bool RequireFunctionArgument(const v8::Arguments& args, int argumentIndex);
-    static bool OptionalFunctionArgument(const v8::Arguments& args, int argumentIndex);
+    static bool RequireNumberOfArguments(const v8::FunctionCallbackInfo<v8::Value>& args, int requiredNumberOfArguments);
+    static bool RequireObjectArgument(const v8::FunctionCallbackInfo<v8::Value>& args, int argumentIndex);
+    static bool RequireNumberArgument(const v8::FunctionCallbackInfo<v8::Value>& args, int argumentIndex);
+    static bool RequireFunctionArgument(const v8::FunctionCallbackInfo<v8::Value>& args, int argumentIndex);
+    static bool OptionalFunctionArgument(const v8::FunctionCallbackInfo<v8::Value>& args, int argumentIndex);
 };
 
 
-#define REQUIRE_NUMBER_OF_ARGUMENTS(scope, args, requiredNumberOfArguments) \
+#define REQUIRE_NUMBER_OF_ARGUMENTS(args, requiredNumberOfArguments) \
     if (!Contracts::RequireNumberOfArguments(args, requiredNumberOfArguments)) \
     { \
-        return scope.Close(Undefined()); \
+        return; \
     }
 
-#define REQUIRE_OBJECT(scope, args, argumentIndex) \
+#define REQUIRE_OBJECT(args, argumentIndex) \
     if (!Contracts::RequireObjectArgument(args, argumentIndex)) \
     { \
-        return scope.Close(Undefined()); \
+        return; \
     }
 
-#define REQUIRE_NUMBER(scope, args, argumentIndex) \
+#define REQUIRE_NUMBER(args, argumentIndex) \
     if (!Contracts::RequireNumberArgument(args, argumentIndex)) \
     { \
-        return scope.Close(Undefined()); \
+        return; \
     }
 
-#define REQUIRE_FUNCTION(scope, args, argumentIndex) \
+#define REQUIRE_FUNCTION(args, argumentIndex) \
     if (!Contracts::RequireFunctionArgument(args, argumentIndex)) \
     { \
-        return scope.Close(Undefined()); \
+        return; \
     }
 
-#define OPTIONAL_FUNCTION(scope, args, argumentIndex) \
+#define OPTIONAL_FUNCTION(args, argumentIndex) \
     if (!Contracts::OptionalFunctionArgument(args, argumentIndex)) \
     { \
-        return scope.Close(Undefined()); \
+        return; \
     }
 

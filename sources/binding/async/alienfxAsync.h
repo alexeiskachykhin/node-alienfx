@@ -1,6 +1,7 @@
 #pragma once
 
 #include <node.h>
+#include <uv.h>
 #include <string>
 
 #include "../../api/alienfxApi.h"
@@ -56,4 +57,4 @@ struct GetLightColorBaton : BaseBaton {
 
 
 
-void InitAsyncBindings(const v8::Handle<v8::Object>& target);
+void InitAsyncBindings(v8::Local<v8::Object> exports, v8::Local<v8::Object> module);
