@@ -6,7 +6,7 @@ node-alienfx
 [Node.js][Node] native extension for Dell [AlienFX][AlienFX] API.
 
 
-This module offers bindings for AlienFX API provided by AlienFX.dll. The main desing goal of this project is to keep JavaScript bindings close to their native counterparts as much as possible. It allows line-by-line porting of existing AlienFX enabled apps to [Node.js][Node]. Provided APIs feels bit alien to JavaScript so high-level wrapper around `node-alienfx` is comming soon. Stay tuned.
+This module offers bindings for AlienFX API provided by AlienFX.dll. The main design goal of this project is to keep JavaScript bindings close to their native counterparts as much as possible. It allows line-by-line porting of existing AlienFX enabled apps to [Node.js][Node]. Provided APIs feels bit alien to JavaScript so high-level wrapper around `node-alienfx` is comming soon. Stay tuned.
 
 Installation
 ------------
